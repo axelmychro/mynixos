@@ -1,0 +1,138 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+
+  "logo": {
+    "source": "nix",
+    "padding": { "top": 0, "left": 0, "right": 1 },
+    "color": {
+      "1": "#8ec5ff",
+      "2": "#dab2ff"
+    }
+  },
+
+  "display": {
+    "separator": "",
+    "key": {
+      "width": 4,
+      "type": "icon",
+      "paddingLeft": 1
+    },
+    "bar": {
+      "width": 12
+    },
+    "percent": {
+      "type": 3,
+      "color": {
+        "green": "#96f7e4",
+        "yellow": "#ffd6a8",
+        "red": "#ffccd3"
+      }
+    }
+  },
+
+  "modules": [
+    {
+      "type": "title",
+      "format": "\u001b[38;2;142;197;255mendmin\u001b[0m@\u001b[38;2;218;178;255m{2}\u001b[0m"
+    },
+
+    { "type": "separator", "times": 15 },
+
+    /* i use nix btw */
+    {
+      "type": "os",
+      "keyColor": "#80B3FF",
+      "format": " \u001b[38;2;142;197;255m\u001b[0m \u001b[38;2;218;178;255m{2}\u001b[0m {8}"
+    },
+    {
+      "type": "packages",
+      "keyIcon": " ",
+      "format": "   \u001b[38;2;142;197;255m󰏗\u001b[0m {1} (Nix)"
+    },
+    {
+      "type": "shell",
+      "keyIcon": " ",
+      "format": "   \u001b[38;2;142;197;255m\u001b[0m {1} {4}"
+    },
+
+    /* system-atic nightmare */
+    {
+      "type": "custom",
+      "key": "Computer",
+      "keyIcon": "󰍹",
+      "keyColor": "#dab2ff",
+      "format": " \u001b[38;2;218;178;255mWhatever abhorrent machine I'm on\u001b[0m"
+    },
+    {
+      "type": "display",
+      "keyIcon": " ",
+      "format": "   \u001b[38;2;218;178;255m\u001b[0m {1}×{2} {3}Hz"
+    },
+    {
+      "type": "cpu",
+      "keyIcon": " ",
+      "format": "   \u001b[38;2;218;178;255m\u001b[0m {name}"
+    },
+    {
+      "type": "gpu",
+      "hideType": "integrated",
+      "keyIcon": " ",
+      "format": "   \u001b[38;2;218;178;255m󰈈\u001b[0m {name}"
+    },
+    // {
+    //   "type": "gpu",
+    //   "hideType": "discrete",
+    //   "keyIcon": " ",
+    //   "format": "   \u001b[38;2;218;178;255m󰈈\u001b[0m {name}"
+    // },
+    {
+      "type": "memory",
+      "keyIcon": " ",
+      "format": "   \u001b[38;2;218;178;255m\u001b[0m {1} / {2}"
+    },
+    {
+      "type": "memory",
+      "keyIcon": " ",
+      "percent": {
+        "green": 30,
+        "yellow": 60
+      },
+      "format": "    {4} {3}"
+    },
+    {
+      "type": "disk",
+      "keyIcon": " ",
+      "format": "   \u001b[38;2;218;178;255m\u001b[0m {1} / {2}"
+    },
+    {
+      "type": "disk",
+      "keyIcon": " ",
+      "percent": {
+        "green": 30,
+        "yellow": 60
+      },
+      "format": "    {13} {3}"
+    },
+    // {
+    //   "type": "battery",
+    //   "keyIcon": " ",
+    //   "format": "   \u001b[38;2;218;178;255m\u001b[0m Li-ion ({4}) {5}"
+    // },
+    // {
+    //   "type": "battery",
+    //   "keyIcon": " ",
+    //   "percent": {
+    //     "type": 2
+    //   },
+    //   "format": "    {10}"
+    // },
+
+    {
+      "type": "custom",
+      "key": "pwsh",
+      "keyIcon": "󰭺",
+      "keyColor": "#8ec5ff",
+      "format": "drink water, it's pretty good"
+    }
+  ]
+}

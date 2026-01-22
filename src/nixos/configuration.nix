@@ -19,33 +19,26 @@
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
   networking.hostName = "prts-nix"; # Define your hostname.
-
-  # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
-
-  # Set your time zone.
   time.timeZone = "Asia/Jakarta";
+  i18n.defaultLocale = "en_US.UTF-8";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
-
+  services.dbus.enable = true;
   # Enable the X11 windowing system.
-  # services.xserver.enable = true;
   services.xserver = {
     enable = true;
-    displayManager.lightdm.enable = true;
-    desktopManager.xfce.enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
   };
-  services.xserver.videoDrivers = ["intel"];
+  services.xserver.displayManager.gdm.wayland = true;
+
+  
+  
+  services.gnome.gnome-keyring.enable = true;
 
   
 
@@ -59,10 +52,10 @@
   # Enable sound.
   # services.pulseaudio.enable = true;
   # OR
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  # };
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
@@ -80,19 +73,26 @@
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
+
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
   ];
 
   environment.systemPackages = with pkgs; [
-    vim neovim  # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    swaylock swayidle waybar wofi
+
+    foot nano vim
     wget curl rsync openssh git
     ripgrep fd tree bat fzf which eza
     btop htop duf ncdu fastfetch oh-my-posh
     zip unzip p7zip xz
 
+    wl-clipboard mako
+
     librewolf vscodium
   ];
+
+  programs.foot.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -136,6 +136,5 @@
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "25.11"; # Did you read the comment?
-
 }
 

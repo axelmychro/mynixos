@@ -80,14 +80,18 @@
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+  ];
+
   environment.systemPackages = with pkgs; [
     vim neovim  # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget curl rsync openssh git
     ripgrep fd tree bat fzf which eza
-    btop htop duf ncdu fastfetch
+    btop htop duf ncdu fastfetch oh-my-posh
     zip unzip p7zip xz
 
-    librewolf
+    librewolf vscodium
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

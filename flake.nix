@@ -15,38 +15,48 @@
       url = "github:kamadorueda/alejandra/4.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
   };
 
-  outputs = {
-    nixpkgs,
-    home-manager,
-    nix-flatpak,
-    alejandra,
-    ...
-  }: let
-    system = "x86_64-linux";
-    dotconfig = ./dotconfig;
-  in {
-    nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
-      modules = [
-        ./hosts/mychro/configuration.nix
-        home-manager.nixosModules.default
-        nix-flatpak.nixosModules.nix-flatpak
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            backupFileExtension = "backup";
-            users.axel = ./home/axel.nix;
-            extraSpecialArgs = {
-              inherit dotconfig;
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      nix-flatpak,
+      alejandra,
+      ...
+    }@inputs:
+    let
+      system = "x86_64-linux";
+      dotconfig = ./dotconfig;
+    in
+    {
+      nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
+
+        modules = [
+          ./hosts/mychro/configuration.nix
+          home-manager.nixosModules.default
+          nix-flatpak.nixosModules.nix-flatpak
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "backup";
+              users.axel = ./home/axel.nix;
+              extraSpecialArgs = {
+                inherit dotconfig;
+              };
             };
-          };
-        }
-        {
-          environment.systemPackages = [alejandra.defaultPackage.${system}];
-        }
-      ];
+          }
+          {
+            environment.systemPackages = [ alejandra.defaultPackage.${system} ];
+          }
+          {
+
+            nixpkgs.overlays = [ inputs.millennium.overlays.default ];
+          }
+        ];
+      };
     };
-  };
 }

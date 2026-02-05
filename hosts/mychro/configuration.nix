@@ -1,16 +1,15 @@
 {
-  config,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     ./hardware-configuration.nix
 
     ../../modules/global/gui/index.nix
     ../../modules/global/hardware/index.nix
-
-    ../../modules/scope/programs/index.nix
-    ../../modules/scope/services/index.nix
+    ../../modules/global/programs/index.nix
+    ../../modules/global/services/index.nix
   ];
 
   nix = {
@@ -18,7 +17,7 @@
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 14d";
+      options = "--delete-older-than 7d";
     };
   };
 
@@ -50,11 +49,15 @@
     direnv
     just
     xdg-utils
+    nil
   ];
 
   users.users.axel = {
     isNormalUser = true;
-    extraGroups = ["wheel" "video"];
+    extraGroups = [
+      "wheel"
+      "video"
+    ];
   };
 
   system.stateVersion = "25.11";

@@ -1,9 +1,13 @@
 {
-  config,
   pkgs,
   dotconfig,
   ...
-}: {
+}:
+{
+  imports = [
+    ../modules/scope/programs/index.nix
+  ];
+
   home = {
     username = "axel";
     homeDirectory = "/home/axel";
@@ -18,17 +22,15 @@
   programs = {
     bash = {
       enable = true;
-
       shellAliases = {
         bb = "exec bash";
+        x = "exit";
 
-        maintenance = "codium /etc/nixos/ && exit";
+        maintenance = "zeditor /etc/nixos/ && exit";
         lookatthis = "fd -t f . /etc/nixos -E flake.lock -E result -x sh -c 'echo \"--- {} ---\"; bat --style=plain --paging=never \"{}\"'";
-        kingdomcome = "sudo nixos-rebuild switch --flake /home/axel/src/github/axelmychro/mynixos#mychro && reboot";
+        kingdomcome = "sudo nixos-rebuild switch --flake /etc/nixos#mychro && reboot";
         oopsmybad = "sudo nixos-rebuild switch --rollback && reboot";
-        ihaveamnesia = "cd /etc/nixos && sudo nix flake update && sudo nixos-rebuild switch --flake .#mychro && reboot";
-
-        ricenow = "codium ~ && exit";
+        ihaveamnesia = "nix flake update --extra-experimental-features nix-command && sudo nixos-rebuild switch --flake /etc/nixos#mychro && reboot";
 
         wd = "waydroid show-full-ui";
         wdx = "waydroid session stop";
@@ -40,9 +42,21 @@
         fastfetch
       '';
     };
+
     direnv = {
       enable = true;
       nix-direnv.enable = true;
+    };
+
+    git = {
+      enable = true;
+      settings = {
+        user = {
+          name = "Axel";
+          email = "axelmychro@gmail.com";
+        };
+        init.defaultBranch = "main";
+      };
     };
   };
 

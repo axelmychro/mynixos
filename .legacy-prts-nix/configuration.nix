@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -36,9 +36,12 @@
     nerd-fonts.fira-code
   ];
 
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "steam" "steam-unwrapped"
-  ];
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "steam"
+      "steam-unwrapped"
+    ];
 
   programs = {
     steam = {
@@ -46,11 +49,31 @@
     };
   };
   environment.systemPackages = with pkgs; [
-    alacritty nano vim
-    wget curl rsync openssh git
-    ripgrep fd tree bat fzf which eza
-    btop htop duf ncdu fastfetch oh-my-posh
-    zip unzip p7zip xz
+    alacritty
+    nano
+    vim
+    wget
+    curl
+    rsync
+    openssh
+    git
+    ripgrep
+    fd
+    tree
+    bat
+    fzf
+    which
+    eza
+    btop
+    htop
+    duf
+    ncdu
+    fastfetch
+    oh-my-posh
+    zip
+    unzip
+    p7zip
+    xz
   ];
 
   boot.loader.grub = {

@@ -52,13 +52,16 @@
     nil
   ];
 
-  users.users.axel = {
-    isNormalUser = true;
-    extraGroups = [
-      "users"
-      "wheel"
-      "video"
-    ];
+  users = {
+    motd = "drop windows rn before it drop you twin";
+    users.axel = {
+      isNormalUser = true;
+      extraGroups = [
+        "users"
+        "wheel"
+        "video"
+      ];
+    };
   };
 
   system.stateVersion = "25.11";

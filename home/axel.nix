@@ -51,15 +51,15 @@
 
     configFile = {
       "kitty" = {
-        source = ./dotconfig/kitty;
+        source = ../dotconfig/kitty;
         recursive = true;
       };
       "fastfetch" = {
-        source = ./dotconfig/fastfetch;
+        source = ../dotconfig/fastfetch;
         recursive = true;
       };
       "oh-my-posh/catppuccin_frappe.omp.jsonc" = {
-        source = ./dotconfig/oh-my-posh/catppuccin_frappe.omp.jsonc;
+        source = ../dotconfig/oh-my-posh/catppuccin_frappe.omp.jsonc;
         recursive = true;
       };
     };

@@ -27,56 +27,6 @@
     dnsovertls = "true";
   };
 
-  services.opensnitch = {
-    enable = true;
-
-    settings = {
-      DefaultAction = "allow";
-      DefaultDuration = "always";
-      ProcMonitorMethod = "ebpf";
-    };
-
-    rules = {
-      cloudflare-warp = {
-        name = "cloudflare-warp";
-        enabled = true;
-        action = "allow";
-        duration = "always";
-        operator = {
-          type = "simple";
-          sensitive = false;
-          operand = "process.path";
-          data = "${lib.getBin pkgs.cloudflare-warp}/bin/warp-svc";
-        };
-      };
-
-      systemd-resolved = {
-        name = "systemd-resolved";
-        enabled = true;
-        action = "allow";
-        duration = "always";
-        operator = {
-          type = "simple";
-          sensitive = false;
-          operand = "process.path";
-          data = "${lib.getBin pkgs.systemd}/lib/systemd/systemd-resolved";
-        };
-      };
-
-      flatpak = {
-        name = "flatpak";
-        enabled = true;
-        action = "allow";
-        duration = "always";
-        operator = {
-          type = "simple";
-          operand = "process.path";
-          data = "${pkgs.flatpak}/bin/flatpak";
-        };
-      };
-    };
-  };
-
   services.cloudflare-warp.enable = true;
   systemd.user.services.warp-connect = {
     description = "Connect to Cloudflare WARP on login";

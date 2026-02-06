@@ -28,9 +28,12 @@
 
         maintenance = "zeditor /etc/nixos/ && exit";
         lookatthis = "fd -t f . /etc/nixos -E flake.lock -E result -x sh -c 'echo \"--- {} ---\"; bat --style=plain --paging=never \"{}\"'";
+
         kingdomcome = "sudo nixos-rebuild switch --flake /etc/nixos#mychro && reboot";
-        oopsmybad = "sudo nixos-rebuild switch --rollback && reboot";
+        watchpaintdry = "sudo nixos-rebuild dry-run --flake /etc/nixos#mychro";
         ihaveamnesia = "nix flake update --extra-experimental-features nix-command && sudo nixos-rebuild switch --flake /etc/nixos#mychro && reboot";
+
+        oopsmybad = "sudo nixos-rebuild switch --rollback && reboot";
 
         wd = "waydroid show-full-ui";
         wdx = "waydroid session stop";

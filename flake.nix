@@ -35,7 +35,7 @@
       nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
 
         modules = [
-          ./hosts/mychro/configuration.nix
+          ./nixos/configuration.nix
           home-manager.nixosModules.default
           nix-flatpak.nixosModules.nix-flatpak
           {
@@ -43,7 +43,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               backupFileExtension = "backup";
-              users.axel = ./home/axel.nix;
+              users.axel = ./home-manager/axel.nix;
               extraSpecialArgs = {
                 inherit dotconfig;
               };
@@ -53,7 +53,6 @@
             environment.systemPackages = [ alejandra.defaultPackage.${system} ];
           }
           {
-
             nixpkgs.overlays = [ inputs.millennium.overlays.default ];
           }
         ];

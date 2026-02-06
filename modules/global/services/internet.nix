@@ -62,6 +62,18 @@
           data = "${lib.getBin pkgs.systemd}/lib/systemd/systemd-resolved";
         };
       };
+
+      services.opensnitch.rules.flatpak = {
+        name = "flatpak";
+        enabled = true;
+        action = "allow";
+        duration = "always";
+        operator = {
+          type = "simple";
+          operand = "process.path";
+          data = "${pkgs.flatpak}/bin/flatpak";
+        };
+      };
     };
   };
 

@@ -1,11 +1,11 @@
 {
-  config,
   pkgs,
   ...
-}: {
+}:
+{
   networking = {
     firewall.enable = true;
-    nameservers = ["1.1.1.1"];
+    nameservers = [ "1.1.1.1" ];
   };
   services.cloudflare-warp.enable = true;
 
@@ -16,7 +16,7 @@
       ExecStart = "${pkgs.cloudflare-warp}/bin/warp-cli --accept-tos connect";
       RemainderAfterExit = true;
     };
-    wantedBy = ["default.target"];
-    after = ["network.target"];
+    wantedBy = [ "default.target" ];
+    after = [ "network.target" ];
   };
 }

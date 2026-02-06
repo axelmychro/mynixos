@@ -31,7 +31,7 @@
     enable = true;
 
     settings = {
-      DefaultAction = "deny";
+      DefaultAction = "allow";
       DefaultDuration = "always";
       ProcMonitorMethod = "ebpf";
     };

@@ -56,7 +56,6 @@
     motd = "drop windows rn before it drop you twin";
     users.axel = {
       isNormalUser = true;
-      group = "users";
       extraGroups = [
         "wheel"
       ];

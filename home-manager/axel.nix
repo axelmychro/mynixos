@@ -31,9 +31,11 @@
 
         kingdomcome = "sudo nixos-rebuild switch --flake /etc/nixos#mychro && reboot";
         watchpaintdry = "sudo nixos-rebuild dry-run --flake /etc/nixos#mychro";
-        ihaveamnesia = "nix flake update --extra-experimental-features nix-command && sudo nixos-rebuild switch --flake /etc/nixos#mychro && reboot";
+        letspentest = "sudo nixos-rebuild test --flake /etc/nixos#mychro";
 
         oopsmybad = "sudo nixos-rebuild switch --rollback && reboot";
+
+        ihaveamnesia = "nix flake update --extra-experimental-features nix-command && sudo nixos-rebuild switch --flake /etc/nixos#mychro && reboot";
 
         wd = "waydroid show-full-ui";
         wdx = "waydroid session stop";

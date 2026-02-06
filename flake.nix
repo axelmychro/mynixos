@@ -23,12 +23,10 @@
     nix-flatpak,
     alejandra,
     ...
-  }:
-   let
+  }: let
     system = "x86_64-linux";
-    # dotconfig = ../dotconfig;
-  in 
-  {
+    dotconfig = ./dotconfig;
+  in {
     nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
       modules = [
         ./hosts/mychro/configuration.nix
@@ -40,9 +38,9 @@
             useUserPackages = true;
             backupFileExtension = "backup";
             users.axel = ./home/axel.nix;
-            # extraSpecialArgs = {
-            #   inherit dotconfig;
-            # };
+            extraSpecialArgs = {
+              inherit dotconfig;
+            };
           };
         }
         {

@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   ...
 }:
@@ -28,9 +29,39 @@
 
   services.opensnitch = {
     enable = true;
+
     settings = {
+      LogFile = /dev/stdout;
       DefaultOption = "deny";
       ProcMonitorMethod = "ebpf";
+    };
+
+    rules = {
+      cloudflare-warp = {
+        name = "cloudflare-warp";
+        enabled = true;
+        action = "allow";
+        duration = "always";
+        operator = {
+          type = "simple";
+          sensitive = false;
+          operand = "process.path";
+          data = "${lib.getBin pkgs.cloudflare-warp}/bin/warp-svc";
+        };
+      };
+
+      systemd-resolved = {
+        name = "systemd-resolved";
+        enabled = true;
+        action = "allow";
+        duration = "always";
+        operator = {
+          type = "simple";
+          sensitive = false;
+          operand = "process.path";
+          data = "${lib.getBin pkgs.systemd}/lib/systemd/systemd-resolved";
+        };
+      };
     };
   };
 

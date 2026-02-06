@@ -63,7 +63,7 @@
         };
       };
 
-      services.opensnitch.rules.flatpak = {
+      flatpak = {
         name = "flatpak";
         enabled = true;
         action = "allow";

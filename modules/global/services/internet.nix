@@ -31,8 +31,8 @@
     enable = true;
 
     settings = {
-      LogFile = "/dev/stdout";
-      DefaultOption = "deny";
+      DefaultAction = "deny";
+      DefaultDuration = "always";
       ProcMonitorMethod = "ebpf";
     };
 

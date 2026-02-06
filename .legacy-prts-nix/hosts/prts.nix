@@ -1,4 +1,7 @@
-{ config, lib, pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 {
   networking.hostName = "prts-nix";
   networking.networkmanager.enable = true;
@@ -7,17 +10,21 @@
 
   users.users.axel = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
   };
 
   services.xserver.videoDrivers = [ "intel" ];
 
   environment = {
     sessionVariables = {
-      ELECTRON_DISABLE_GPU=1;
+      ELECTRON_DISABLE_GPU = 1;
     };
     systemPackages = with pkgs; [
-      librewolf vscodium
+      librewolf
+      vscodium
     ];
   };
 }

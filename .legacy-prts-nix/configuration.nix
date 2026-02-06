@@ -22,7 +22,10 @@
     };
 
   };
-  xdg.portal.enable = true;
+  xdg = {
+    enable = true;
+    portal.enable = true;
+  };
 
   services.pipewire = {
     enable = true;

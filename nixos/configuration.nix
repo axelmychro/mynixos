@@ -55,6 +55,7 @@
   users.users.axel = {
     isNormalUser = true;
     extraGroups = [
+      "users"
       "wheel"
       "video"
     ];

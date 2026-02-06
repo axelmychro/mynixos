@@ -65,6 +65,8 @@
     };
   };
 
+  services.opensnitch-ui.enable = true;
+
   xdg = {
     enable = true;
 

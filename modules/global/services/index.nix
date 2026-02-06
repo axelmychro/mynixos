@@ -1,8 +1,7 @@
 { ... }:
 {
   imports = [
-    ./cloudflare.nix
-    ./flatpak.nix
-    ./overlays.nix
+    ./internet.nix
+    ./package-manager.nix
   ];
 }

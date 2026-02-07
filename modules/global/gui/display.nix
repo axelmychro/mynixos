@@ -6,12 +6,15 @@
   services = {
     xserver = {
       enable = true;
-      # videoDrivers = [ "nvidia" ];
+      videoDrivers = [
+        "intel"
+        "nvidia"
+      ];
     };
     displayManager.sddm = {
       enable = true;
       wayland.enable = true;
-      theme = "catppuccin-frappe-blue";
+      theme = "catppuccin-frappe-mauve";
     };
   };
 
@@ -23,12 +26,12 @@
   environment.systemPackages = with pkgs; [
     (catppuccin-sddm.override {
       flavor = "frappe";
-      accent = "blue";
+      accent = "mauve";
       font = "UbuntuSans Nerd Font";
       fontSize = "16";
       userIcon = true;
-      loginBackground = false;
-      # background = "${./wallpaper.png}";
+      loginBackground = true;
+      background = "${./wallpaper.png}";
     })
   ];
 }

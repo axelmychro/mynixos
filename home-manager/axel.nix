@@ -38,6 +38,9 @@
     };
   };
 
+  home.file = {
+    ".wakatime.cfg".source = dotconfig + /wakatime/wakatime.cfg;
+  };
   xdg = {
     enable = true;
 
@@ -50,10 +53,8 @@
         source = dotconfig + /fastfetch;
         recursive = true;
       };
-      "oh-my-posh/catppuccin_frappe.omp.jsonc" = {
-        source = dotconfig + /oh-my-posh/catppuccin_frappe.omp.jsonc;
-        recursive = true;
-      };
+      "oh-my-posh/catppuccin_frappe.omp.jsonc".source =
+        dotconfig + /oh-my-posh/catppuccin_frappe.omp.jsonc;
     };
   };
 

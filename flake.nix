@@ -29,7 +29,7 @@
     }@inputs:
     let
       system = "x86_64-linux";
-      dotconfig = ./home-manager/dotconfig;
+      dotconfig = ./home-manager/config;
     in
     {
       nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {

@@ -11,5 +11,6 @@
     tldr
     cmatrix
     bat
+    wakatime-cli
   ];
 }

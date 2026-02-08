@@ -6,10 +6,10 @@
   imports = [
     ./hardware-configuration.nix
 
-    ../modules/global/gui/index.nix
-    ../modules/global/hardware/index.nix
-    ../modules/global/programs/index.nix
-    ../modules/global/services/index.nix
+    ./modules/gui/index.nix
+    ./modules/hardware/index.nix
+    ./modules/programs/index.nix
+    ./modules/services/index.nix
   ];
 
   nix = {

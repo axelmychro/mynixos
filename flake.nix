@@ -1,5 +1,5 @@
 {
-  # description = "my chemical rebuild";
+  description = "my chemical rebuild";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
@@ -29,15 +29,13 @@
     }@inputs:
     let
       system = "x86_64-linux";
-      dotconfig = ./dotconfig;
+      dotconfig = ./home-manager/dotconfig;
     in
     {
       nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
-
         modules = [
           ./nixos/configuration.nix
           home-manager.nixosModules.default
-          nix-flatpak.nixosModules.nix-flatpak
           {
             home-manager = {
               useGlobalPkgs = true;
@@ -49,6 +47,7 @@
               };
             };
           }
+          nix-flatpak.nixosModules.nix-flatpak
           {
             environment.systemPackages = [ alejandra.defaultPackage.${system} ];
           }

@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./modules/bash/script.nix
     ./modules/programs/index.nix
   ];
 
@@ -20,38 +21,6 @@
   };
 
   programs = {
-    bash = {
-      enable = true;
-      shellAliases = {
-        bb = "exec bash";
-        x = "exit";
-
-        maintenance = "zeditor /etc/nixos/ && exit";
-        lookatthis = "fd -t f . /etc/nixos -E flake.lock -E result -x sh -c 'echo \"--- {} ---\"; bat --style=plain --paging=never \"{}\"'";
-
-        kingdomcome = "sudo nixos-rebuild switch --flake /etc/nixos#mychro && reboot";
-        watchpaintdry = "sudo nixos-rebuild dry-run --flake /etc/nixos#mychro";
-        letspentest = "sudo nixos-rebuild test --flake /etc/nixos#mychro";
-
-        oopsmybad = "sudo nixos-rebuild switch --rollback && reboot";
-
-        ihaveamnesia = "nix flake update --extra-experimental-features nix-command && sudo nixos-rebuild switch --flake /etc/nixos#mychro && reboot";
-
-        wd = "waydroid show-full-ui";
-        wdx = "waydroid session stop";
-      };
-
-      initExtra = ''
-        mkcd() {
-          mkdir -p "$1" && cd "$1"
-        }
-
-        eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/catppuccin_frappe.omp.jsonc)"
-        clear -x
-        fastfetch
-      '';
-    };
-
     direnv = {
       enable = true;
       nix-direnv.enable = true;

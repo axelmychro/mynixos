@@ -10,6 +10,7 @@
 
       "nix"
       "toml"
+      "ini"
     ];
     userSettings = {
       prettier = {

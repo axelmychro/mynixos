@@ -13,6 +13,7 @@
   };
   environment.systemPackages = with pkgs; [
     heroic
+    osu-lazer-bin
   ];
   services.flatpak.packages = [
     "com.vysp3r.ProtonPlus"

@@ -44,13 +44,23 @@
         ];
         keyboard.numlockOnStartup = "on";
       };
+      shortcuts = {
+        kwin = {
+          "Window Fullscreen" = "";
+          "Window Maximize" = "F11";
+        };
+        "services/kitty.desktop" = {
+          "_launch" = "Meta+Return";
+
+        };
+      };
       kwin.titlebarButtons = {
         left = [
           "close"
           "maximize"
           "minimize"
         ];
-        right = [ ];
+        right = [ ]; # note: null value is actually default. leave an empty string instead
       };
       overrideConfig = true;
     };

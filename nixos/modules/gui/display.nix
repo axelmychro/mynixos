@@ -31,7 +31,7 @@
       fontSize = "16";
       userIcon = true;
       loginBackground = true;
-      background = "${./wallpaper.png}";
+      background = ./login.png;
     })
   ];
 }

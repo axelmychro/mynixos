@@ -1,5 +1,6 @@
 {
   pkgs,
+  username,
   dotconfig,
   ...
 }:
@@ -7,11 +8,11 @@
   imports = [
     ./modules/bash/script.nix
     ./modules/programs/index.nix
+    ./modules/plasma/plasma.nix
   ];
 
   home = {
-    username = "axel";
-    homeDirectory = "/home/axel";
+    homeDirectory = "/home/${username}";
 
     packages = with pkgs; [
       kitty

@@ -9,6 +9,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     nix-flatpak.url = "github:gmodena/nix-flatpak";
 
     alejandra = {
@@ -20,19 +26,23 @@
   };
 
   outputs =
-    {
+    inputs@{
       nixpkgs,
       home-manager,
+      plasma-manager,
       nix-flatpak,
       alejandra,
       ...
-    }@inputs:
+    }:
     let
+      username = "axel";
       system = "x86_64-linux";
       dotconfig = ./home-manager/config;
     in
     {
       nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
+        inherit system;
+
         modules = [
           ./nixos/configuration.nix
           home-manager.nixosModules.default
@@ -40,10 +50,11 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
+              sharedModules = [ plasma-manager.homeModules.plasma-manager ];
               backupFileExtension = "backup";
-              users.axel = ./home-manager/axel.nix;
+              users."${username}" = import ./home-manager/${username}.nix;
               extraSpecialArgs = {
-                inherit dotconfig;
+                inherit username dotconfig;
               };
             };
           }

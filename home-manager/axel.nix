@@ -7,8 +7,8 @@
 {
   imports = [
     ./modules/bash/script.nix
-    ./modules/programs/index.nix
     ./modules/plasma/plasma.nix
+    ./modules/programs/index.nix
   ];
 
   home = {

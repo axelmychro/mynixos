@@ -19,6 +19,13 @@
       };
       workspace = {
         wallpaper = ./desktop.jpg;
+        cursor = {
+          animationTime = 5;
+          cursorFeedback = "Bouncing";
+          size = 36;
+          taskManagerFeedback = true;
+          theme = "Breeze_Light";
+        };
       };
       input = {
         mice = [

@@ -31,7 +31,7 @@
       fontSize = "16";
       userIcon = true;
       loginBackground = true;
-      background = ./login.png;
+      background = ./assets/login.png;
     })
   ];
 }

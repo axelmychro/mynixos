@@ -1,0 +1,1300 @@
+
+--- /etc/nixos/flake.nix ---
+{
+  description = "my chemical rebuild";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+
+    home-manager = {
+      url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
+
+    alejandra = {
+      url = "github:kamadorueda/alejandra/4.0.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
+  };
+
+  outputs =
+    inputs@{
+      nixpkgs,
+      home-manager,
+      plasma-manager,
+      nix-flatpak,
+      alejandra,
+      ...
+    }:
+    let
+      system = "x86_64-linux";
+      username = "axel";
+      dotconfig = ./home-manager/config;
+    in
+    {
+      nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit username; };
+
+        modules = [
+          ./nixos/configuration.nix
+          home-manager.nixosModules.default
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              sharedModules = [ plasma-manager.homeModules.plasma-manager ];
+              backupFileExtension = "backup";
+              users.${username} = import ./home-manager/home.nix;
+              extraSpecialArgs = {
+                inherit username dotconfig;
+              };
+            };
+          }
+          nix-flatpak.nixosModules.nix-flatpak
+          {
+            environment.systemPackages = [ alejandra.defaultPackage.${system} ];
+          }
+          {
+            nixpkgs.overlays = [ inputs.millennium.overlays.default ];
+          }
+        ];
+      };
+    };
+}
+
+--- /etc/nixos/home-manager/home.nix ---
+{
+  username,
+  dotconfig,
+  ...
+}:
+{
+  imports = [
+    ./modules/bash/script.nix
+    ./modules/plasma-manager/plasma.nix
+    ./modules/programs/index.nix
+  ];
+
+  home.homeDirectory = "/home/${username}";
+
+  programs = {
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    git = {
+      enable = true;
+      settings = {
+        user = {
+          name = "Axel";
+          email = "axelmychro@gmail.com";
+        };
+        init.defaultBranch = "main";
+      };
+    };
+  };
+
+  home.file = {
+    ".wakatime.cfg".source = dotconfig + /wakatime/wakatime.cfg;
+  };
+  xdg = {
+    enable = true;
+
+    configFile = {
+      "fastfetch" = {
+        source = dotconfig + /fastfetch;
+        recursive = true;
+      };
+    };
+  };
+
+  home.stateVersion = "24.11";
+}
+
+--- /etc/nixos/home-manager/modules/bash/script.nix ---
+{ ... }:
+{
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      bb = "exec bash";
+      x = "exit";
+
+      wd = "waydroid show-full-ui";
+      wdx = "waydroid session stop";
+    };
+
+    initExtra = builtins.readFile ./script.sh;
+  };
+}
+
+--- /etc/nixos/home-manager/modules/bash/script.sh ---
+#!/usr/bin/env bash
+
+my() {
+  case "$1" in
+    "" | help | -h | --help)
+      cat << 'EOF'
+usage: my <command>
+
+commands:
+  drun
+  test
+  switch
+  undo
+  update
+  look
+EOF
+      ;;
+    switch)
+      git add /etc/nixos &&
+        sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
+        reboot
+      ;;
+    drun)
+      sudo nixos-rebuild dry-run --flake /etc/nixos#mychro
+      ;;
+    test)
+      git add /etc/nixos &&
+        sudo nixos-rebuild test --flake /etc/nixos#mychro
+      ;;
+    undo)
+      sudo nixos-rebuild switch --rollback && reboot
+      ;;
+    update)
+      git add /etc/nixos &&
+        nix flake update --extra-experimental-features nix-command &&
+        sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
+        reboot
+      ;;
+    purge)
+      echo "my: clean: deleting generations older than 3 days"
+      sudo nix-collect-garbage --delete-older-than 3d
+      nix-collect-garbage -d
+
+      echo "my: clean: running store gc"
+      sudo nix-store --gc
+
+      echo "my: clean: optimising store"
+      sudo nix-store --optimise
+
+      echo "my: clean: complete"
+      ;;
+    overview)
+      rm /etc/nixos/overview &&
+        fd -t f . /etc/nixos \
+          -E flake.lock \
+          -E hardware-configuration.nix \
+          -E '*.md' \
+          -E '*.txt' \
+          -E '*.cfg' \
+          -E '*.jpg' \
+          -E '*.png' |
+        while read -r file; do
+          printf "\n--- %s ---\n" "$file" >> /etc/nixos/overview
+          bat -pp "$file" >> /etc/nixos/overview
+        done
+      ;;
+    *)
+      echo "my: $1: command not found"
+      return 1
+      ;;
+  esac
+}
+_my_complete() {
+  local cmds="drun test switch undo update purge look"
+  COMPREPLY=($(compgen -W "$cmds" -- "${COMP_WORDS[1]}"))
+}
+complete -F _my_complete my
+
+rm() {
+  for arg in "$@"; do
+    [[ "$arg" == "/" ]] && {
+      echo "idiot."
+      return 1
+    }
+  done
+  command rm "$@"
+}
+
+mcd() {
+  [[ -z "$1" ]] && return 1
+  mkdir -p -- "$1" && cd -- "$1" || return
+}
+
+eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/config.jsonc)"
+
+[[ $- == *i* ]] && clear
+[[ $SHLVL -eq 1 ]] && fastfetch
+
+--- /etc/nixos/home-manager/modules/plasma-manager/controlling/index.nix ---
+{ ... }:
+{
+  imports = [
+    ./input-output.nix
+    ./keybind.nix
+    ./power.nix
+  ];
+}
+
+--- /etc/nixos/home-manager/modules/plasma-manager/controlling/input-output.nix ---
+{ ... }:
+{
+  programs.plasma = {
+    input = {
+      mice = [
+        {
+          vendorId = "046d";
+          productId = "c077";
+          name = "Logitech USB Optical Mouse";
+          enable = true;
+          acceleration = -0.2;
+          accelerationProfile = "none";
+          leftHanded = false;
+          middleButtonEmulation = false;
+          naturalScroll = false;
+          scrollSpeed = 1;
+        }
+      ];
+      keyboard.numlockOnStartup = "on";
+    };
+  };
+}
+
+--- /etc/nixos/home-manager/modules/plasma-manager/controlling/keybind.nix ---
+{ ... }:
+{
+  programs.plasma = {
+    shortcuts = {
+      kwin = {
+        "Window Fullscreen" = "";
+        "Window Maximize" = "F11";
+      };
+      "services/kitty.desktop" = {
+        "_launch" = "Meta+Return";
+      };
+    };
+  };
+}
+
+--- /etc/nixos/home-manager/modules/plasma-manager/controlling/power.nix ---
+{ ... }:
+{
+  programs.plasma = {
+    powerdevil = {
+      AC = {
+        powerButtonAction = "nothing";
+        turnOffDisplay = {
+          idleTimeout = 300;
+          idleTimeoutWhenLocked = "immediately"; # 300 + 0 = "immediately"
+        };
+        # autoSuspend = {
+        #   action = "shutDown";
+        #   idleTimeout = 1200; # 20 mins
+        # };
+      };
+      battery = {
+        powerButtonAction = "nothing";
+        autoSuspend = {
+          action = "sleep";
+          idleTimeout = 900;
+        };
+      };
+      lowBattery = {
+        whenLaptopLidClosed = "shutDown";
+      };
+    };
+  };
+}
+
+--- /etc/nixos/home-manager/modules/plasma-manager/interface/desktop.nix ---
+{ ... }:
+let
+  sans = "UbuntuSans Nerd Font";
+  code = "FiraCode Nerd Font";
+in
+{
+  programs.plasma = {
+    workspace = {
+      wallpaper = ../assets/desktop.jpg;
+      lookAndFeel = null;
+      colorScheme = "CatppuccinFrappe";
+      theme = null; # plasma style. null = default
+      windowDecorations = {
+        theme = "Breeze";
+        library = "org.kde.breeze";
+      };
+      iconTheme = "breeze-dark";
+      cursor = {
+        animationTime = 5;
+        cursorFeedback = "Bouncing";
+        size = 36;
+        taskManagerFeedback = true;
+        theme = "Breeze_Light";
+      };
+      soundTheme = "ocean";
+    };
+
+    kscreenlocker.appearance = {
+      wallpaper = ../assets/lock.jpg;
+      alwaysShowClock = true;
+      showMediaControls = true; # for spotify too
+    };
+    fonts = {
+      general = {
+        family = sans;
+        pointSize = 12;
+      };
+      fixedWidth = {
+        family = code;
+        pointSize = 12;
+      };
+      small = {
+        family = sans;
+        pointSize = 10;
+      };
+      toolbar = {
+        family = sans;
+        pointSize = 12;
+      };
+      menu = {
+        family = sans;
+        pointSize = 12;
+      };
+      windowTitle = {
+        family = sans;
+        pointSize = 12;
+      };
+    };
+  };
+}
+
+--- /etc/nixos/home-manager/modules/plasma-manager/interface/index.nix ---
+{ ... }:
+{
+  imports = [
+    ./desktop.nix
+    ./panels.nix
+    ./window.nix
+  ];
+}
+
+--- /etc/nixos/home-manager/modules/plasma-manager/interface/panels.nix ---
+{ ... }:
+let
+  browser = "app.zen_browser.zen.desktop";
+  editor = "dev.zed.Zed.desktop";
+in
+{
+  programs.plasma = {
+    panels = [
+      {
+        alignment = "right";
+        floating = false;
+        height = 48;
+        hiding = "none";
+        lengthMode = "fill";
+        location = "right";
+        widgets = [
+          {
+            kickoff = {
+              icon = "nix-snowflake";
+            };
+          }
+          "org.kde.plasma.pager"
+          {
+            iconTasks = {
+              launchers = [
+                "applications:${browser}"
+                "applications:${editor}"
+              ];
+            };
+          }
+          {
+            systemTray = {
+              items = {
+                shown = [
+                  "org.kde.plasma.networkmanagement"
+                  "org.kde.plasma.battery"
+                ];
+                hidden = [
+                  "org.kde.plasma.clipboard"
+                  "org.kde.plasma.volume"
+                  "org.kde.plasma.bluetooth"
+                  "org.kde.plasma.mediacontrol"
+                  "org.kde.plasma.brightness"
+                ];
+              };
+            };
+          }
+          "org.kde.plasma.showdesktop"
+        ];
+      }
+    ];
+  };
+}
+
+--- /etc/nixos/home-manager/modules/plasma-manager/interface/window.nix ---
+{ ... }:
+{
+  programs.plasma = {
+    kwin.titlebarButtons = {
+      left = [
+        "close"
+        "maximize"
+        "minimize"
+      ];
+      right = [ ]; # note: null value is actually default. leave an empty string instead
+    };
+  };
+}
+
+--- /etc/nixos/home-manager/modules/plasma-manager/plasma.nix ---
+{ ... }:
+{
+  # Quick Catppuccin Frappe Mauve config
+  # Once generated, cannot be configured. stick with plasma management in the long term
+  # xdg.configFile = {
+  #   "kdeglobals".source = ./config/kdeglobals;
+  #   "kwinrc".source = ./config/kwinrc;
+  # };
+
+  programs = {
+    kate.enable = false; # we have zeditor
+    okular.enable = false; # we have libreoffice
+    konsole.enable = false; # we have kitty
+
+    plasma = {
+      enable = true;
+      overrideConfig = true;
+      session = {
+        general.askForConfirmationOnLogout = false;
+        sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
+      };
+      kscreenlocker = {
+        lockOnResume = true; # resume = after sleep
+        timeout = 5; # minutes before screen is locked
+      };
+      krunner = {
+        activateWhenTypingOnDesktop = true;
+        historyBehavior = "disabled";
+        position = "top";
+      };
+    };
+  };
+  imports = [
+    ./controlling/index.nix
+    ./interface/index.nix
+  ];
+}
+
+--- /etc/nixos/home-manager/modules/programs/fastfetch.nix ---
+{ ... }:
+{
+  programs.fastfetch = {
+    enable = true;
+
+    settings = {
+      logo = {
+        source = "~/.config/fastfetch/nix.txt";
+        padding = {
+          top = 0;
+          left = 0;
+          right = 2;
+        };
+        color = {
+          "1" = "#ffffff";
+        };
+      };
+
+      display = {
+        color = {
+          keys = "#ACB0BE";
+          output = "#eeeeee";
+        };
+        separator = "";
+        key = {
+          width = 12;
+          type = "string";
+        };
+        percent = {
+          color = {
+            green = "#8CAAEE";
+            yellow = "#dada00";
+            red = "#F4B8E4";
+          };
+        };
+      };
+
+      modules = [
+        {
+          type = "kernel";
+          format = "{1} {2} {4}";
+        }
+        {
+          type = "os";
+          format = "{2} {8}";
+        }
+        {
+          type = "wm";
+          format = "{2} ({3})";
+        }
+        {
+          type = "terminal";
+          format = "{1} {6}";
+        }
+        {
+          type = "display";
+          key = "Display";
+          format = "{1}×{2} {3}Hz";
+        }
+        {
+          type = "cpu";
+          keyIcon = " ";
+          format = " {name}";
+        }
+        {
+          type = "gpu";
+          hideType = "integrated";
+          keyIcon = " ";
+          format = "󰈈 {name}";
+        }
+        # If you ever want to show the discrete GPU instead / additionally:
+        # {
+        #   type = "gpu";
+        #   hideType = "discrete";
+        #   keyIcon = " ";
+        #   format = "   󰈈 {name}";
+        # }
+        {
+          type = "memory";
+          format = " {3} {1} of {2}";
+        }
+        {
+          type = "disk";
+          key = "Storage";
+          format = " {3} {1} of {2}";
+        }
+        {
+          type = "battery";
+          key = "Battery";
+          format = " {4} {5}";
+        }
+        # The commented one with progress bar style:
+        # {
+        #   type = "battery";
+        #   keyIcon = " ";
+        #   percent = {
+        #     type = 2;
+        #   };
+        #   format = "    {10}";
+        # }
+      ];
+    };
+  };
+}
+
+--- /etc/nixos/home-manager/modules/programs/index.nix ---
+{ ... }:
+{
+  imports = [
+    ./fastfetch.nix
+    ./kitty.nix
+    ./oh-my-posh.nix
+    ./zed.nix
+  ];
+}
+
+--- /etc/nixos/home-manager/modules/programs/kitty.nix ---
+{ ... }:
+{
+  programs.kitty = {
+    enable = true;
+    settings = {
+      foreground = "#c6d0f5";
+      background = "#303446";
+      selection_foreground = "#303446";
+      selection_background = "#f2d5cf";
+
+      cursor = "#f2d5cf";
+      cursor_text_color = "#303446";
+
+      url_color = "#f2d5cf";
+
+      active_border_color = "#babbf1";
+      inactive_border_color = "#737994";
+      bell_border_color = "#e5c890";
+      active_tab_foreground = "#232634";
+      active_tab_background = "#ca9ee6";
+      inactive_tab_foreground = "#c6d0f5";
+      inactive_tab_background = "#292c3c";
+      tab_bar_background = "#232634";
+
+      color0 = "#51576d";
+      color8 = "#626880"; # Black
+      color1 = "#e78284";
+      color9 = "#e78284"; # Red
+      color2 = "#a6d189";
+      color10 = "#a6d189"; # Green
+      color3 = "#e5c890";
+      color11 = "#e5c890"; # Yellow
+      color4 = "#8caaee";
+      color12 = "#8caaee"; # Blue
+      color5 = "#f4b8e4";
+      color13 = "#f4b8e4"; # Magenta
+      color6 = "#81c8be";
+      color14 = "#81c8be"; # Cyan
+      color7 = "#b5bfe2";
+      color15 = "#a5adce"; # White
+
+      font_family = "FiraCode Nerd Font";
+      font_size = "12";
+      cursor_shape = "underline";
+      scrollback_lines = 10000;
+      repaint_delay = 30;
+      input_delay = 5;
+      remember_window_size = "no";
+      initial_window_width = "128c";
+      initial_window_height = "32c";
+      window_padding_width = 8;
+      background_opacity = "0.9";
+
+      wayland_titlebar_color = "system";
+    };
+  };
+}
+
+--- /etc/nixos/home-manager/modules/programs/oh-my-posh.nix ---
+{ ... }:
+{
+  programs.oh-my-posh = {
+    enable = true;
+
+    settings = {
+      palette = {
+        os = "#ffffff";
+        closer = "p:os";
+        blue = "#8CAAEE";
+        mauve = "#ca9ee6";
+        lavender = "#BABBF1";
+      };
+
+      blocks = [
+        {
+          alignment = "left";
+          type = "prompt";
+
+          segments = [
+            {
+              type = "os";
+              style = "plain";
+              foreground = "p:os";
+              template = " ";
+            }
+
+            {
+              type = "session";
+              style = "plain";
+              foreground = "p:mauve";
+              template = "endmin ";
+            }
+
+            {
+              type = "path";
+              style = "plain";
+              foreground = "p:mauve";
+              template = "{{ .Path }} ";
+              options = {
+                folder_icon = " ";
+                home_icon = "~";
+                style = "agnoster_short";
+              };
+            }
+
+            {
+              type = "git";
+              style = "plain";
+              foreground = "p:lavender";
+              template = "{{ .HEAD }} ";
+              options = {
+                branch_icon = " ";
+                cherry_pick_icon = " ";
+                commit_icon = " ";
+                fetch_status = false;
+                fetch_upstream_icon = false;
+                merge_icon = " ";
+                no_commits_icon = " ";
+                rebase_icon = " ";
+                revert_icon = " ";
+                tag_icon = " ";
+              };
+            }
+
+            {
+              type = "text";
+              style = "plain";
+              foreground = "p:closer";
+              template = "";
+            }
+          ];
+        }
+      ];
+
+      console_title_template = "Paypal me $30.000";
+      final_space = true;
+      version = 5;
+    };
+  };
+}
+
+--- /etc/nixos/home-manager/modules/programs/zed.nix ---
+{ ... }:
+{
+  programs.zed-editor = {
+    enable = true;
+    extensions = [
+      "catppuccin"
+      "catppuccin-icons"
+      "git-firefly"
+      "wakatime"
+
+      "nix"
+      "toml"
+      "ini"
+    ];
+    userSettings = {
+      prettier = {
+        allowed = true;
+
+        trailingComma = "none";
+        tabWidth = 2;
+        semi = false;
+        singleQuote = true;
+      };
+      languages = {
+        Nix = {
+          language_servers = [ "nixd" ];
+          formatter = {
+            external.command = "nixfmt";
+          };
+        };
+        "Shell Script" = {
+          formatter.external = {
+            command = "shfmt";
+            arguments = [
+              "-i"
+              "2"
+              "-ci"
+              "-sr"
+            ];
+          };
+        };
+      };
+
+      disable_ai = true;
+
+      terminal = {
+        toolbar.breadcrumbs = false;
+        cursor_shape = "underline";
+      };
+
+      project_panel = {
+        drag_and_drop = true;
+        hide_hidden = false;
+        hide_root = true;
+        indent_size = 20.0;
+        git_status = true;
+        folder_icons = true;
+        file_icons = true;
+        entry_spacing = "standard";
+        hide_gitignore = false;
+        default_width = 240.0;
+        dock = "right";
+      };
+
+      bottom_dock_layout = "full";
+
+      tabs = {
+        close_position = "left";
+        file_icons = true;
+        git_status = true;
+      };
+
+      tab_bar.show = true;
+
+      title_bar = {
+        show_menus = false;
+        show_branch_icon = true;
+      };
+
+      show_whitespaces = "all";
+      use_auto_surround = true;
+      use_autoclose = true;
+      ensure_final_newline_on_save = true;
+      remove_trailing_whitespace_on_save = true;
+      format_on_save = "on";
+
+      indent_guides = {
+        background_coloring = "disabled";
+        coloring = "fixed";
+        line_width = 2;
+        active_line_width = 4;
+      };
+
+      preferred_line_length = 80;
+      auto_indent_on_paste = true;
+      auto_indent = true;
+      tab_size = 2;
+
+      toolbar.breadcrumbs = true;
+
+      autosave.after_delay.milliseconds = 0;
+
+      selection_highlight = true;
+      rounded_selection = true;
+      hide_mouse = "on_typing_and_movement";
+
+      cursor_shape = "underline";
+      cursor_blink = true;
+      multi_cursor_modifier = "alt";
+
+      ui_font_size = 20.0;
+      ui_font_family = "UbuntuSans Nerd Font";
+
+      buffer_line_height = "comfortable";
+      buffer_font_size = 20.0;
+      buffer_font_family = "FiraCode Nerd Font";
+      buffer_font_features.calt = true;
+
+      restore_on_startup = "launchpad";
+
+      session = {
+        trust_all_worktrees = false;
+        restore_unsaved_buffers = true;
+      };
+
+      when_closing_with_no_tabs = "close_window";
+      on_last_window_closed = "quit_app";
+
+      redact_private_values = true;
+      use_system_prompts = false;
+      use_system_path_prompts = false;
+
+      icon_theme = {
+        mode = "system";
+        light = "Catppuccin Latte";
+        dark = "Catppuccin Frappé";
+      };
+
+      theme = {
+        mode = "system";
+        light = "Catppuccin Latte";
+        dark = "Catppuccin Frappé";
+      };
+
+      telemetry = {
+        diagnostics = false;
+        metrics = false;
+      };
+    };
+
+  };
+}
+
+--- /etc/nixos/nixos/configuration.nix ---
+{
+  pkgs,
+  username,
+  ...
+}:
+{
+  imports = [
+    ./hardware-configuration.nix
+
+    ./modules/hardware/index.nix
+    ./modules/programs/index.nix
+    ./modules/services/index.nix
+    ./modules/workspace/index.nix
+  ];
+
+  nix = {
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      auto-optimise-store = true;
+    };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+  };
+
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    kernelModules = [ "ideapad_laptop" ];
+  };
+
+  zramSwap.enable = true;
+  # 50% by default
+
+  services.fwupd.enable = true;
+  #fwupd is an open-source daemon for managing the installation of firmware updates on Linux-based systems
+
+  networking = {
+    hostName = "mychro";
+    networkmanager.enable = true;
+  };
+  time.timeZone = "Asia/Jakarta";
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  nixpkgs.config.allowUnfree = true;
+
+  programs = {
+    nix-ld.enable = true;
+    appimage.enable = true;
+  };
+  environment.systemPackages = with pkgs; [
+    direnv
+    just
+    xdg-utils
+  ];
+
+  users = {
+    motd = "drop windows rn before it drop you twin";
+    users.${username} = {
+      isNormalUser = true;
+      extraGroups = [
+        "wheel"
+      ];
+    };
+  };
+
+  system = {
+    stateVersion = "25.11";
+    nixos.label = "fallen-angel";
+  };
+}
+
+--- /etc/nixos/nixos/modules/hardware/audio.nix ---
+{ ... }:
+{
+  services.pipewire = {
+    enable = true;
+    audio.enable = true;
+    alsa.enable = true;
+    jack.enable = true;
+    pulse.enable = true;
+  };
+}
+
+--- /etc/nixos/nixos/modules/hardware/graphics.nix ---
+{
+  config,
+  pkgs,
+  ...
+}:
+{
+  hardware = {
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+    nvidia = {
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      modesetting.enable = true;
+      open = true;
+      nvidiaSettings = true;
+      powerManagement = {
+        enable = true;
+        finegrained = true;
+      };
+      prime = {
+        offload = {
+          enable = true;
+          enableOffloadCmd = true;
+        };
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
+      };
+    };
+  };
+  environment.systemPackages = with pkgs; [
+    nvtopPackages.nvidia
+  ];
+}
+
+--- /etc/nixos/nixos/modules/hardware/index.nix ---
+{ ... }:
+{
+  imports = [
+    ./audio.nix
+    ./graphics.nix
+    ./profiling.nix
+  ];
+}
+
+--- /etc/nixos/nixos/modules/hardware/profiling.nix ---
+{
+  ...
+}:
+{
+  services = {
+    thermald.enable = true;
+    power-profiles-daemon.enable = true;
+    # tlp = {
+    #   enable = true;
+    #   settings = {
+    #     START_CHARGE_THRESH_BAT0 = 0;
+    #     STOP_CHARGE_THRESH_BAT0 = 1;
+    #   };
+    # };
+  };
+}
+
+--- /etc/nixos/nixos/modules/programs/cli.nix ---
+{ pkgs, ... }:
+{
+  environment.systemPackages = with pkgs; [
+    tldr
+
+    wget
+    curl
+
+    zip
+    unzip
+
+    tree
+    fd
+    ripgrep
+    bat
+
+    btop
+    ncdu
+    gdu
+
+    cmatrix
+    wakatime-cli
+  ];
+}
+
+--- /etc/nixos/nixos/modules/programs/development.nix ---
+{ pkgs, ... }:
+{
+  environment.systemPackages = with pkgs; [
+    # nil
+    nixd
+    # nixfmt
+    nixfmt-rfc-style
+
+    shfmt
+    shellcheck
+
+    micro
+    vim
+
+    git
+    nodejs_20
+    pnpm
+  ];
+}
+
+--- /etc/nixos/nixos/modules/programs/games.nix ---
+{
+  pkgs,
+  ...
+}:
+{
+  programs = {
+    steam = {
+      enable = true;
+      package = pkgs.millennium-steam;
+      gamescopeSession.enable = true;
+    };
+    gamemode.enable = true;
+  };
+  environment.systemPackages = with pkgs; [
+    heroic
+    osu-lazer-bin
+  ];
+  services.flatpak.packages = [
+    "com.vysp3r.ProtonPlus"
+  ];
+}
+
+--- /etc/nixos/nixos/modules/programs/index.nix ---
+{ ... }:
+{
+  imports = [
+    ./cli.nix
+    ./development.nix
+    ./games.nix
+    ./multimedia.nix
+    ./utilities.nix
+    ./web.nix
+  ];
+}
+
+--- /etc/nixos/nixos/modules/programs/multimedia.nix ---
+{
+  pkgs,
+  ...
+}:
+{
+  environment.systemPackages = with pkgs; [
+    libreoffice
+    zathura
+    spotify
+  ];
+}
+
+--- /etc/nixos/nixos/modules/programs/utilities.nix ---
+{ ... }:
+{
+  virtualisation.waydroid.enable = true;
+}
+
+--- /etc/nixos/nixos/modules/programs/web.nix ---
+{
+  pkgs,
+  ...
+}:
+{
+  environment.systemPackages = with pkgs; [
+    librewolf
+    zoom-us
+  ];
+  services.flatpak.packages = [
+    "app.zen_browser.zen"
+  ];
+}
+
+--- /etc/nixos/nixos/modules/services/index.nix ---
+{ ... }:
+{
+  imports = [
+    ./internet.nix
+    ./package-manager.nix
+  ];
+}
+
+--- /etc/nixos/nixos/modules/services/internet.nix ---
+{
+  pkgs,
+  ...
+}:
+{
+  networking = {
+    firewall = {
+      enable = true;
+      allowPing = false;
+      logReversePathDrops = true;
+    };
+    nameservers = [
+      "1.1.1.1"
+    ];
+  };
+
+  services.cloudflare-warp.enable = true;
+  systemd.user.services.warp-connect = {
+    description = "Connect to Cloudflare WARP on login";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.cloudflare-warp}/bin/warp-cli --accept-tos connect";
+      RemainderAfterExit = true;
+    };
+    wantedBy = [ "default.target" ];
+    after = [ "network.target" ];
+  };
+}
+
+--- /etc/nixos/nixos/modules/services/package-manager.nix ---
+{
+  pkgs,
+  ...
+}:
+{
+  services.flatpak.enable = true;
+  systemd.services.flatpak-repo = {
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.flatpak ];
+    script = "flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo";
+  };
+}
+
+--- /etc/nixos/nixos/modules/workspace/desktop.nix ---
+{ pkgs, ... }:
+{
+  services.desktopManager.plasma6.enable = true;
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [
+    # kate
+    khelpcenter
+    # okular
+    # konsole
+  ];
+}
+
+--- /etc/nixos/nixos/modules/workspace/display.nix ---
+{
+  pkgs,
+  ...
+}:
+{
+  services = {
+    xserver = {
+      enable = true;
+      videoDrivers = [
+        "intel"
+        "nvidia"
+      ];
+    };
+    displayManager.sddm = {
+      enable = true;
+      wayland.enable = true;
+      theme = "catppuccin-frappe-mauve";
+    };
+  };
+
+  fonts.packages = with pkgs; [
+    nerd-fonts.ubuntu-sans
+    nerd-fonts.fira-code
+  ];
+
+  environment.systemPackages = with pkgs; [
+    (catppuccin-sddm.override {
+      flavor = "frappe";
+      accent = "mauve";
+      font = "UbuntuSans Nerd Font";
+      fontSize = "16";
+      userIcon = true;
+      loginBackground = true;
+      background = ./assets/login.png;
+    })
+  ];
+}
+
+--- /etc/nixos/nixos/modules/workspace/index.nix ---
+{ ... }:
+{
+  imports = [
+    ./desktop.nix
+    ./display.nix
+  ];
+}

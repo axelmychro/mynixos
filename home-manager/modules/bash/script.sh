@@ -71,7 +71,7 @@ EOF
   esac
 }
 _my_complete() {
-  local cmds="drun test switch undo update purge look"
+  local cmds="drun test switch undo update purge overview"
   COMPREPLY=($(compgen -W "$cmds" -- "${COMP_WORDS[1]}"))
 }
 complete -F _my_complete my

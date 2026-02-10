@@ -8,7 +8,7 @@
   # };
 
   programs = {
-    kate.enable = false; # we have codium and zeditor
+    kate.enable = false; # we have zeditor
     okular.enable = false; # we have libreoffice
     konsole.enable = false; # we have kitty
 

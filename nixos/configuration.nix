@@ -28,9 +28,12 @@
     };
   };
 
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    kernelModules = [ "ideapad_laptop" ];
   };
 
   zramSwap.enable = true;
@@ -69,5 +72,8 @@
     };
   };
 
-  system.stateVersion = "25.11";
+  system = {
+    stateVersion = "25.11";
+    nixos.label = "fallen-angel";
+  };
 }

@@ -4,10 +4,11 @@
     # nixfmt
     nixfmt-rfc-style
     nixd
+    micro
     vim
+
     git
     nodejs_20
     pnpm
-    vscodium
   ];
 }

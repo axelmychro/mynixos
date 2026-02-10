@@ -23,11 +23,8 @@ in
         theme = "Breeze_Light";
       };
       soundTheme = "ocean";
-      splashScreen = {
-        engine = "none";
-        theme = "None";
-      };
     };
+
     kscreenlocker.appearance = {
       wallpaper = ../assets/lock.jpg;
       alwaysShowClock = true;

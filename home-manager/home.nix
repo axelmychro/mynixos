@@ -1,5 +1,4 @@
 {
-  pkgs,
   username,
   dotconfig,
   ...
@@ -11,14 +10,7 @@
     ./modules/programs/index.nix
   ];
 
-  home = {
-    homeDirectory = "/home/${username}";
-
-    packages = with pkgs; [
-      fastfetch
-      oh-my-posh
-    ];
-  };
+  home.homeDirectory = "/home/${username}";
 
   programs = {
     direnv = {
@@ -49,8 +41,6 @@
         source = dotconfig + /fastfetch;
         recursive = true;
       };
-      "oh-my-posh/catppuccin_frappe.omp.jsonc".source =
-        dotconfig + /oh-my-posh/catppuccin_frappe.omp.jsonc;
     };
   };
 

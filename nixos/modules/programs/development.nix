@@ -1,9 +1,14 @@
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
+    # nil
+    nixd
     # nixfmt
     nixfmt-rfc-style
-    nixd
+
+    shfmt
+    shellcheck
+
     micro
     vim
 

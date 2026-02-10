@@ -59,7 +59,6 @@
     direnv
     just
     xdg-utils
-    nil
   ];
 
   users = {

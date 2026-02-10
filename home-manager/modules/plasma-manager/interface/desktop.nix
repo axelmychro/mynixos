@@ -7,6 +7,13 @@ in
   programs.plasma = {
     workspace = {
       wallpaper = ../assets/desktop.jpg;
+      lookAndFeel = null;
+      colorScheme = "CatppuccinFrappe";
+      theme = null; # plasma style. null = default
+      windowDecorations = {
+        theme = "Breeze";
+        library = "org.kde.breeze";
+      };
       iconTheme = "breeze-dark";
       cursor = {
         animationTime = 5;
@@ -15,11 +22,16 @@ in
         taskManagerFeedback = true;
         theme = "Breeze_Light";
       };
+      soundTheme = "ocean";
+      splashScreen = {
+        engine = "none";
+        theme = "None";
+      };
     };
     kscreenlocker.appearance = {
       wallpaper = ../assets/lock.jpg;
       alwaysShowClock = true;
-      showMediaControls = true;
+      showMediaControls = true; # for spotify too
     };
     fonts = {
       general = {

@@ -7,5 +7,4 @@
     okular
     konsole
   ];
-
 }

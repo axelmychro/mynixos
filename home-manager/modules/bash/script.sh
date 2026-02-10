@@ -7,12 +7,13 @@ my() {
 usage: my <command>
 
 commands:
+  switch
   drun
   test
-  switch
   undo
   update
-  look
+  purge
+  overview
 EOF
       ;;
     switch)

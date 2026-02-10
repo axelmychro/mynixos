@@ -57,7 +57,7 @@ mcd() {
   mkdir -p -- "$1" && cd -- "$1"
 }
 
-eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/catppuccin_frappe.omp.jsonc)"
+eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/config.jsonc)"
 
 [[ $- == *i* ]] && clear
 [[ $SHLVL -eq 1 ]] && fastfetch

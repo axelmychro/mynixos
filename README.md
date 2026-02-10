@@ -20,6 +20,7 @@
 - [Arknights](https://www.arknights.global) (login screen)
 - [ﾒｰﾍﾞ](https://www.pixiv.net/en/artworks/118789197) (lock screen)
 - [T4B4Ko](https://x.com/t4b4ko/status/1968375351547204009) (desktop)
+- [4DBug](https://github.com/4DBug/nix-ansi) (nix ansi fastfetch logo)
 
 ## note
 

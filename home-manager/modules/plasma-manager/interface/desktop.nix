@@ -16,6 +16,11 @@ in
         theme = "Breeze_Light";
       };
     };
+    kscreenlocker.appearance = {
+      wallpaper = ../assets/lock.jpg;
+      alwaysShowClock = true;
+      showMediaControls = true;
+    };
     fonts = {
       general = {
         family = sans;

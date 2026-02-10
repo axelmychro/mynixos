@@ -7,7 +7,7 @@
 {
   imports = [
     ./modules/bash/script.nix
-    ./modules/plasma/plasma.nix
+    ./modules/plasma-manager/plasma.nix
     ./modules/programs/index.nix
   ];
 

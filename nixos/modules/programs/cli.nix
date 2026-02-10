@@ -1,16 +1,24 @@
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    wget
-    unzip
-    ripgrep
-    fd
-    tree
-    btop
-    curl
     tldr
-    cmatrix
+
+    wget
+    curl
+
+    zip
+    unzip
+
+    tree
+    fd
+    ripgrep
     bat
+
+    btop
+    ncdu
+    gdu
+
+    cmatrix
     wakatime-cli
   ];
 }

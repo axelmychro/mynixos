@@ -35,13 +35,14 @@
       ...
     }:
     let
-      username = "axel";
       system = "x86_64-linux";
+      username = "axel";
       dotconfig = ./home-manager/config;
     in
     {
       nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit username; };
 
         modules = [
           ./nixos/configuration.nix

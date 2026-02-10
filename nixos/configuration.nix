@@ -1,5 +1,6 @@
 {
   pkgs,
+  username,
   ...
 }:
 {
@@ -60,7 +61,7 @@
 
   users = {
     motd = "drop windows rn before it drop you twin";
-    users.axel = {
+    users.${username} = {
       isNormalUser = true;
       extraGroups = [
         "wheel"

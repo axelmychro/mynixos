@@ -15,7 +15,6 @@
     homeDirectory = "/home/${username}";
 
     packages = with pkgs; [
-      kitty
       fastfetch
       oh-my-posh
     ];
@@ -46,10 +45,6 @@
     enable = true;
 
     configFile = {
-      "kitty" = {
-        source = dotconfig + /kitty;
-        recursive = true;
-      };
       "fastfetch" = {
         source = dotconfig + /fastfetch;
         recursive = true;

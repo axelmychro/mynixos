@@ -1,4 +1,7 @@
 { ... }:
 {
-  imports = [ ./development/index.nix ];
+  imports = [
+    ./kitty.nix
+    ./zed.nix
+  ];
 }

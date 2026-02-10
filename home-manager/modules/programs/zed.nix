@@ -21,6 +21,25 @@
         semi = false;
         singleQuote = true;
       };
+      languages = {
+        Nix = {
+          language_servers = [ "nixd" ];
+          formatter = {
+            external.command = "nixfmt";
+          };
+        };
+        "Shell Script" = {
+          formatter.external = {
+            command = "shfmt";
+            arguments = [
+              "-i"
+              "2"
+              "-ci"
+              "-sr"
+            ];
+          };
+        };
+      };
 
       disable_ai = true;
 

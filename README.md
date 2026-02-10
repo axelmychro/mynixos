@@ -1,13 +1,26 @@
 # axelmychro/mynixos#mychro
 
-credits:
+## credits
+
+### modules
 
 - [Nix](https://nixos.org)
+  - options (nixos, home-manager): https://mynixos.com
+  - nixpkgs: https://search.nixos.org/packages
 - [Nix community](https://github.com/nix-community)
-- [Catppuccin](https://catppuccin.com/)
-- [T4B4Ko](https://x.com/t4b4ko/status/1968375351547204009) (desktop wallpaper))
-- [Arknights](https://www.arknights.global) (login screen wallpaper)
+  - plasma-manager
+    - options: https://nix-community.github.io/plasma-manager/options.xhtml
+    - examples:
+      - https://nixos.wiki/wiki/Plasma-Manager
+      - https://github.com/nix-community/plasma-manager/blob/trunk/examples/home.nix
 
-# note2myself
+### theming
+
+- [Catppuccin](https://catppuccin.com/)
+- [Arknights](https://www.arknights.global) (login screen)
+- [ﾒｰﾍﾞ](https://www.pixiv.net/en/artworks/118789197) (lock screen)
+- [T4B4Ko](https://x.com/t4b4ko/status/1968375351547204009) (desktop)
+
+## note
 
 if forgor: git commit --amend --date="Tue Feb 3 22:54 2026 +0700" --no-edit

@@ -53,7 +53,7 @@
               useUserPackages = true;
               sharedModules = [ plasma-manager.homeModules.plasma-manager ];
               backupFileExtension = "backup";
-              users."${username}" = import ./home-manager/${username}.nix;
+              users.${username} = import ./home-manager/home.nix;
               extraSpecialArgs = {
                 inherit username dotconfig;
               };

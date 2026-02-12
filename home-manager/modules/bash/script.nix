@@ -1,5 +1,7 @@
 { ... }:
 {
+  import = [ ./functions/index.nix ];
+
   programs.bash = {
     enable = true;
     shellAliases = {

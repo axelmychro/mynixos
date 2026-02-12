@@ -9,6 +9,9 @@
     shfmt
     shellcheck
 
+    clang-tools
+    gcc
+
     micro
     vim
 

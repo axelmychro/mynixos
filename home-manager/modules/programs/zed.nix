@@ -24,9 +24,7 @@
       languages = {
         Nix = {
           language_servers = [ "nixd" ];
-          formatter = {
-            external.command = "nixfmt";
-          };
+          formatter.external.command = "nixfmt";
         };
         "Shell Script" = {
           formatter.external = {
@@ -38,6 +36,14 @@
               "-sr"
             ];
           };
+        };
+        "C++" = {
+          language_servers = [ "clangd" ];
+          formatter.external.command = "clang-format";
+        };
+        "C" = {
+          language_servers = [ "clangd" ];
+          formatter.external.command = "clang-format";
         };
       };
 

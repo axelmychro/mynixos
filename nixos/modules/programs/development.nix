@@ -1,6 +1,13 @@
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
+    micro
+    vim
+
+    git
+    nodejs_20
+    pnpm
+
     # nil
     nixd
     # nixfmt
@@ -12,11 +19,9 @@
     clang-tools
     gcc
 
-    micro
-    vim
+    python3
+    pyright
+    ruff
 
-    git
-    nodejs_20
-    pnpm
   ];
 }

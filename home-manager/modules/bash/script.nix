@@ -1,6 +1,6 @@
 { ... }:
 {
-  import = [ ./functions/index.nix ];
+  imports = [ ./functions/index.nix ];
 
   programs.bash = {
     enable = true;

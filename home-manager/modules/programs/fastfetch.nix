@@ -1,5 +1,12 @@
-{ ... }:
+{ dotconfig, ... }:
 {
+  xdg.configFile = {
+    "fastfetch" = {
+      source = dotconfig + /fastfetch;
+      recursive = true;
+    };
+  };
+
   programs.fastfetch = {
     enable = true;
 

@@ -4,13 +4,14 @@
   ...
 }:
 {
+  home.homeDirectory = "/home/${username}";
+
   imports = [
     ./modules/bash/script.nix
+    ./modules/mimeapps/index.nix
     ./modules/plasma-manager/plasma.nix
     ./modules/programs/index.nix
   ];
-
-  home.homeDirectory = "/home/${username}";
 
   programs = {
     direnv = {
@@ -33,16 +34,7 @@
   home.file = {
     ".wakatime.cfg".source = dotconfig + /wakatime/wakatime.cfg;
   };
-  xdg = {
-    enable = true;
-
-    configFile = {
-      "fastfetch" = {
-        source = dotconfig + /fastfetch;
-        recursive = true;
-      };
-    };
-  };
+  xdg.enable = true;
 
   home.stateVersion = "24.11";
 }

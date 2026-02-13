@@ -16,7 +16,7 @@
         powerProfile = "balanced";
         turnOffDisplay = {
           idleTimeout = 300;
-          idleTimeoutWhenLocked = 15;
+          idleTimeoutWhenLocked = 20;
         };
         whenLaptopLidClosed = "doNothing";
       };
@@ -34,13 +34,13 @@
         powerProfile = "powerSaving";
         turnOffDisplay = {
           idleTimeout = 300;
-          idleTimeoutWhenLocked = 15;
+          idleTimeoutWhenLocked = 20;
         };
         whenLaptopLidClosed = "sleep";
       };
       lowBattery = {
         autoSuspend = {
-          action = "shutDowm";
+          action = "shutDown";
           idleTimeout = 300; # 20 mins
         };
         dimDisplay = {

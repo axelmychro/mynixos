@@ -28,6 +28,13 @@
         historyBehavior = "disabled";
         position = "top";
       };
+
+      configFile.kdeglobals = {
+        General = {
+          TerminalApplication = "kitty";
+          TerminalService = "kitty.desktop";
+        };
+      };
     };
   };
   imports = [

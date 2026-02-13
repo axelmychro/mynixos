@@ -13,6 +13,7 @@
     fd
     ripgrep
     bat
+    imagemagick
 
     btop
     ncdu

@@ -3,24 +3,57 @@
   programs.plasma = {
     powerdevil = {
       AC = {
-        powerButtonAction = "nothing";
-        turnOffDisplay = {
-          idleTimeout = 300;
-          idleTimeoutWhenLocked = "immediately"; # 300 + 0 = "immediately"
-        };
-        # autoSuspend = {
-        #   action = "shutDown";
-        #   idleTimeout = 1200; # 20 mins
-        # };
-      };
-      battery = {
-        powerButtonAction = "nothing";
         autoSuspend = {
           action = "sleep";
-          idleTimeout = 900;
+          idleTimeout = 1200; # 20 mins
         };
+        dimDisplay = {
+          enable = true;
+          idleTimeout = 600; # 20 mins
+        };
+        displayBrightness = null;
+        powerButtonAction = "nothing";
+        powerProfile = "balanced";
+        turnOffDisplay = {
+          idleTimeout = 300;
+          idleTimeoutWhenLocked = 15;
+        };
+        whenLaptopLidClosed = "doNothing";
+      };
+      battery = {
+        autoSuspend = {
+          action = "sleep";
+          idleTimeout = 600; # 10 mins
+        };
+        dimDisplay = {
+          enable = true;
+          idleTimeout = 150;
+        };
+        displayBrightness = null;
+        powerButtonAction = "nothing";
+        powerProfile = "powerSaving";
+        turnOffDisplay = {
+          idleTimeout = 300;
+          idleTimeoutWhenLocked = 15;
+        };
+        whenLaptopLidClosed = "sleep";
       };
       lowBattery = {
+        autoSuspend = {
+          action = "shutDowm";
+          idleTimeout = 300; # 20 mins
+        };
+        dimDisplay = {
+          enable = true;
+          idleTimeout = 75;
+        };
+        displayBrightness = null;
+        powerButtonAction = "shutDown";
+        powerProfile = "powerSaving";
+        turnOffDisplay = {
+          idleTimeout = 150;
+          idleTimeoutWhenLocked = "immediately";
+        };
         whenLaptopLidClosed = "shutDown";
       };
     };

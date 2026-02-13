@@ -18,18 +18,18 @@
           type = "prompt";
 
           segments = [
-            {
-              type = "os";
-              style = "plain";
-              foreground = "p:os";
-              template = " ";
-            }
+            # {
+            #   type = "os";
+            #   style = "plain";
+            #   foreground = "p:os";
+            #   template = " ";
+            # }
 
             {
               type = "session";
               style = "plain";
-              foreground = "p:mauve";
-              template = "endmin ";
+              foreground = "p:os";
+              template = "PRTS ";
             }
 
             {
@@ -67,7 +67,7 @@
               type = "text";
               style = "plain";
               foreground = "p:closer";
-              template = "";
+              template = " ";
             }
           ];
         }

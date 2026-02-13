@@ -24,6 +24,24 @@ in
       };
       soundTheme = "ocean";
     };
+    desktop.widgets = [
+      {
+        digitalClock = {
+          position = {
+            horizontal = 16;
+            vertical = 16;
+          };
+          size = {
+            width = 128;
+            height = 128;
+          };
+          date.format = {
+            custom = "ddd, d MMM";
+          };
+          calendar.firstDayOfWeek = "monday";
+        };
+      }
+    ];
 
     kscreenlocker.appearance = {
       wallpaper = ../assets/lock.jpg;

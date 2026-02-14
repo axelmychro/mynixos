@@ -7,7 +7,7 @@ _: {
           productId = "c077";
           name = "Logitech USB Optical Mouse";
           enable = true;
-          acceleration = -0.2;
+          acceleration = 1;
           accelerationProfile = "none";
           leftHanded = false;
           middleButtonEmulation = false;

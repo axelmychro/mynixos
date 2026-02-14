@@ -11,7 +11,6 @@
       wd = "waydroid show-full-ui";
       wdx = "waydroid session stop";
     };
-
-    initExtra = builtins.readFile ./script.sh;
+    initExtra = builtins.readFile ./init.sh;
   };
 }

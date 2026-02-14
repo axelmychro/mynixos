@@ -73,7 +73,7 @@
         }
       ];
 
-      console_title_template = "Paypal me $30.000";
+      console_title_template = "PRTS";
       final_space = true;
       version = 5;
     };

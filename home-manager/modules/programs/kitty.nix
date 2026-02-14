@@ -2,6 +2,8 @@
 {
   programs.kitty = {
     enable = true;
+    shellIntegration.enableBashIntegration = false;
+
     settings = {
       foreground = "#c6d0f5";
       background = "#303446";

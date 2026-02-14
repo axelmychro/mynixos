@@ -7,6 +7,7 @@
   home = {
     homeDirectory = "/home/${username}";
     stateVersion = "24.11";
+
     file.".wakatime.cfg".source = dotconfig + /wakatime/wakatime.cfg;
   };
   xdg.enable = true;
@@ -16,23 +17,4 @@
     ./modules/mimeapps/index.nix
     ./modules/programs/index.nix
   ];
-
-  programs = {
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
-    git = {
-      enable = true;
-      settings = {
-        user = {
-          name = "Axel";
-          email = "axelmychro@gmail.com";
-        };
-        init.defaultBranch = "main";
-      };
-    };
-  };
-
 }

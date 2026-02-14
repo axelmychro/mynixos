@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   imports = [
     ./cli.nix
     ./development.nix

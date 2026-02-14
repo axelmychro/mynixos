@@ -16,6 +16,12 @@ commands:
   overview
 EOF
       ;;
+    status)
+      fd -e nix -E hardware-configuration.nix -x nixfmt {}
+      nix run nixpkgs#deadnix -- /etc/nixos
+      nix run nixpkgs#statix -- check /etc/nixos
+      echo "my: status: done"
+      ;;
     switch)
       git add /etc/nixos &&
         sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
@@ -37,33 +43,64 @@ EOF
         sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
         reboot
       ;;
-    purge)
-      echo "my: clean: deleting generations older than 3 days"
+    prune)
+      echo "my: prune: delete generations older than 3 days"
       sudo nix-collect-garbage --delete-older-than 3d
       nix-collect-garbage -d
-
-      echo "my: clean: running store gc"
+      echo "my: prune: collect store garbage"
       sudo nix-store --gc
-
-      echo "my: clean: optimising store"
+      echo "my: prune: optimise store"
       sudo nix-store --optimise
-
-      echo "my: clean: complete"
+      echo "my: prune: done"
+      ;;
+    purge)
+      echo "my: purge: delete previous generation(s)"
+      sudo nix-collect-garbage -d
+      nix-collect-garbage -d
+      echo "my: purge: collect store garbage"
+      sudo nix-store --gc
+      echo "my: purge: optimise store"
+      sudo nix-store --optimise
+      echo "my: purge: done"
       ;;
     overview)
-      rm /etc/nixos/overview &&
-        fd -t f . /etc/nixos \
-          -E flake.lock \
-          -E hardware-configuration.nix \
-          -E '*.md' \
-          -E '*.txt' \
-          -E '*.cfg' \
-          -E '*.jpg' \
-          -E '*.png' |
-        while read -r file; do
-          printf "\n--- %s ---\n" "$file" >> /etc/nixos/overview
-          bat -pp "$file" >> /etc/nixos/overview
-        done
+      local root="/etc/nixos"
+      local out="/etc/nixos/overview.md"
+      rm -f "$out"
+      {
+        echo "# Overview"
+        echo
+        echo "Generated on: $(date)"
+        echo
+
+        fd -t f -e nix -e sh . "$root" \
+          -E hardware-configuration.nix -E flake.lock | sort |
+          while read -r file; do
+            rel_dir=$(dirname "${file#$root/}")
+            filename=$(basename "$file")
+            ext="${file##*.}"
+            lang="nix"
+            [[ "$ext" == "sh" ]] && lang="bash"
+
+            if [[ "$rel_dir" != "$last_dir" ]]; then
+              if [[ "$rel_dir" == "." ]]; then
+                echo "## mynixos"
+                echo
+              else
+                echo "## ./${rel_dir}"
+                echo
+              fi
+              last_dir="$rel_dir"
+            fi
+            echo "### $filename"
+            echo "\`\`\`$lang"
+            cat "$file"
+            echo ""
+            echo "\`\`\`"
+            echo ""
+          done
+      } > "$out"
+      echo "my: overview: created $out"
       ;;
     *)
       echo "my: $1: command not found"
@@ -72,7 +109,7 @@ EOF
   esac
 }
 _my_complete() {
-  local cmds="drun test switch undo update purge overview"
+  local cmds="status switch test drun undo update purge overview"
   mapfile -t COMPREPLY < <(compgen -W "$cmds" -- "${COMP_WORDS[1]}")
 }
 complete -F _my_complete my

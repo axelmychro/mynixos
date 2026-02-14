@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   xdg.mimeApps.defaultApplications = {
     "text/plain" = [ "dev.zed.Zed.desktop" ];
     "text/markdown" = [ "dev.zed.Zed.desktop" ];

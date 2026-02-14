@@ -1,4 +1,4 @@
-{ ... }:
+_:
 let
   browser = "app.zen_browser.zen.desktop";
   editor = "dev.zed.Zed.desktop";

@@ -1,7 +1,4 @@
-{
-  ...
-}:
-{
+_: {
   services = {
     thermald.enable = true;
     power-profiles-daemon.enable = true;

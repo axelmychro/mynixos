@@ -1,28 +1,24 @@
+# Overview
+\nGenerated on: Sat Feb 14 01:39:28 PM WIB 2026
 
---- /etc/nixos/flake.nix ---
+## mynixos
+### flake.nix
+```nix
 {
   description = "my chemical rebuild";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-
     nix-flatpak.url = "github:gmodena/nix-flatpak";
-
-    alejandra = {
-      url = "github:kamadorueda/alejandra/4.0.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
   };
@@ -33,11 +29,11 @@
       home-manager,
       plasma-manager,
       nix-flatpak,
-      alejandra,
       ...
     }:
     let
       system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
       username = "axel";
       dotconfig = ./home-manager/config;
     in
@@ -48,7 +44,7 @@
 
         modules = [
           ./nixos/configuration.nix
-          home-manager.nixosModules.default
+          home-manager.nixosModules.home-manager
           {
             home-manager = {
               useGlobalPkgs = true;
@@ -63,30 +59,33 @@
           }
           nix-flatpak.nixosModules.nix-flatpak
           {
-            environment.systemPackages = [ alejandra.defaultPackage.${system} ];
-          }
-          {
             nixpkgs.overlays = [ inputs.millennium.overlays.default ];
           }
         ];
       };
+      formatter.${system} = pkgs.nixfmt-rfc-style;
     };
 }
 
---- /etc/nixos/home-manager/home.nix ---
+```
+
+## ./home-manager
+### home.nix
+```nix
 {
   username,
   dotconfig,
   ...
 }:
 {
+  home.homeDirectory = "/home/${username}";
+
   imports = [
     ./modules/bash/script.nix
+    ./modules/mimeapps/index.nix
     ./modules/plasma-manager/plasma.nix
     ./modules/programs/index.nix
   ];
-
-  home.homeDirectory = "/home/${username}";
 
   programs = {
     direnv = {
@@ -109,39 +108,88 @@
   home.file = {
     ".wakatime.cfg".source = dotconfig + /wakatime/wakatime.cfg;
   };
-  xdg = {
-    enable = true;
-
-    configFile = {
-      "fastfetch" = {
-        source = dotconfig + /fastfetch;
-        recursive = true;
-      };
-    };
-  };
+  xdg.enable = true;
 
   home.stateVersion = "24.11";
 }
 
---- /etc/nixos/home-manager/modules/bash/script.nix ---
-{ ... }:
-{
-  programs.bash = {
-    enable = true;
-    shellAliases = {
-      bb = "exec bash";
-      x = "exit";
+```
 
-      wd = "waydroid show-full-ui";
-      wdx = "waydroid session stop";
-    };
+## ./home-manager/modules/bash/functions
+### cpprun.sh
+```bash
+# shellcheck shell=bash
 
-    initExtra = builtins.readFile ./script.sh;
-  };
+cpprun() {
+  [ -z "$1" ] && {
+    echo "usage: cpprun <file.cpp>"
+    return 1
+  }
+  [ ! -f "$1" ] && {
+    echo "cpprun: file not found: $1"
+    return 1
+  }
+  [[ "$1" != *.cpp ]] && {
+    echo "cpprun: only .cpp files allowed"
+    return 1
+  }
+  file="${1%.*}"
+  g++ "$1" -Wall -Wextra -std=c++20 -o "$file" && "./$file"
 }
 
---- /etc/nixos/home-manager/modules/bash/script.sh ---
-#!/usr/bin/env bash
+```
+
+### crun.sh
+```bash
+# shellcheck shell=bash
+
+crun() {
+  [ -z "$1" ] && {
+    echo "usage: crun <file.c>"
+    return 1
+  }
+  [ ! -f "$1" ] && {
+    echo "crun: file not found: $1"
+    return 1
+  }
+  [[ "$1" != *.c ]] && {
+    echo "crun: only .c files allowed"
+    return 1
+  }
+  file="${1%.*}"
+  gcc "$1" -Wall -Wextra -std=c23 -o "$file" && "./$file"
+}
+
+```
+
+### index.nix
+```nix
+_:
+{
+  programs.bash.initExtra = ''
+    ${builtins.readFile ./my.sh}
+
+    ${builtins.readFile ./cpprun.sh}
+    ${builtins.readFile ./crun.sh}
+  '';
+}
+
+```
+
+### mcd.sh
+```bash
+# shellcheck shell=bash
+
+mcd() {
+  [[ -z "$1" ]] && return 1
+  mkdir -p -- "$1" && cd -- "$1" || return
+}
+
+```
+
+### my.sh
+```bash
+# shellcheck shell=bash
 
 my() {
   case "$1" in
@@ -194,19 +242,40 @@ EOF
       echo "my: clean: complete"
       ;;
     overview)
-      rm /etc/nixos/overview &&
-        fd -t f . /etc/nixos \
-          -E flake.lock \
-          -E hardware-configuration.nix \
-          -E '*.md' \
-          -E '*.txt' \
-          -E '*.cfg' \
-          -E '*.jpg' \
-          -E '*.png' |
-        while read -r file; do
-          printf "\n--- %s ---\n" "$file" >> /etc/nixos/overview
-          bat -pp "$file" >> /etc/nixos/overview
-        done
+      local root="/etc/nixos"
+      local out="/etc/nixos/overview.md"
+      rm -f "$out"
+      {
+        echo "# Overview"
+        echo "\nGenerated on: $(date)"
+        echo ""
+
+        fd -t f -e nix -e sh . "$root" \
+          -E hardware-configuration.nix -E flake.lock | sort |
+          while read -r file; do
+            rel_dir=$(dirname "${file#$root/}")
+            filename=$(basename "$file")
+            ext="${file##*.}"
+            lang="nix"
+            [[ "$ext" == "sh" ]] && lang="bash"
+
+            if [[ "$rel_dir" != "$last_dir" ]]; then
+              if [[ "$rel_dir" == "." ]]; then
+                echo "## mynixos"
+              else
+                echo "## ./${rel_dir}"
+              fi
+              last_dir="$rel_dir"
+            fi
+            echo "### $filename"
+            echo "\`\`\`$lang"
+            cat "$file"
+            echo ""
+            echo "\`\`\`"
+            echo ""
+          done
+      } > "$out"
+      echo "my: overview: created $out"
       ;;
     *)
       echo "my: $1: command not found"
@@ -215,10 +284,16 @@ EOF
   esac
 }
 _my_complete() {
-  local cmds="drun test switch undo update purge overview"
-  COMPREPLY=($(compgen -W "$cmds" -- "${COMP_WORDS[1]}"))
+  local cmds="switch test drun undo update purge overview"
+  mapfile -t COMPREPLY < <(compgen -W "$cmds" -- "${COMP_WORDS[1]}")
 }
 complete -F _my_complete my
+
+```
+
+### rm.sh
+```bash
+# shellcheck shell=bash
 
 rm() {
   for arg in "$@"; do
@@ -230,18 +305,130 @@ rm() {
   command rm "$@"
 }
 
-mcd() {
-  [[ -z "$1" ]] && return 1
-  mkdir -p -- "$1" && cd -- "$1" || return
-}
+```
 
-eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/config.jsonc)"
+## ./home-manager/modules/bash
+### init.sh
+```bash
+#!/usr/bin/env bash
 
 [[ $- == *i* ]] && clear
 [[ $SHLVL -eq 1 ]] && fastfetch
+# eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/config.json)"
 
---- /etc/nixos/home-manager/modules/plasma-manager/controlling/index.nix ---
-{ ... }:
+```
+
+### script.nix
+```nix
+_:
+{
+  imports = [ ./functions/index.nix ];
+
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      bb = "exec bash";
+      x = "exit";
+
+      wd = "waydroid show-full-ui";
+      wdx = "waydroid session stop";
+    };
+    initExtra = builtins.readFile ./init.sh;
+  };
+}
+
+```
+
+## ./home-manager/modules/mimeapps
+### documents.nix
+```nix
+_:
+{
+  xdg.mimeApps.defaultApplications = {
+    "text/plain" = [ "dev.zed.Zed.desktop" ];
+    "text/markdown" = [ "dev.zed.Zed.desktop" ];
+    "text/x-cmake" = [ "dev.zed.Zed.desktop" ];
+    "application/json" = [ "dev.zed.Zed.desktop" ];
+    "application/x-yaml" = [ "dev.zed.Zed.desktop" ];
+    "application/x-docbook+xml" = [ "dev.zed.Zed.desktop" ];
+
+    "application/pdf" = [ "org.pwmt.zathura-pdf-mupdf.desktop" ];
+  };
+}
+
+```
+
+### index.nix
+```nix
+_:
+{
+  xdg.mimeApps.enable = true;
+  imports = [
+    ./documents.nix
+    ./internet.nix
+    ./multimedia.nix
+  ];
+}
+
+```
+
+### internet.nix
+```nix
+_:
+{
+  xdg.mimeApps.defaultApplications = {
+    "x-scheme-handler/http" = [ "app.zen_browser.zen.desktop" ];
+    "x-scheme-handler/https" = [ "app.zen_browser.zen.desktop" ];
+    "x-scheme-handler/geo" = [ "openstreetmap-geo-handler.desktop" ];
+  };
+}
+
+```
+
+### multimedia.nix
+```nix
+_:
+{
+  xdg.mimeApps.defaultApplications = {
+    "image/jpeg" = [ "com.interversehq.qView.desktop" ];
+    "image/png" = [ "com.interversehq.qView.desktop" ];
+    "image/webp" = [ "com.interversehq.qView.desktop" ];
+    "image/avif" = [ "com.interversehq.qView.desktop" ];
+    "image/bmp" = [ "com.interversehq.qView.desktop" ];
+    "image/heif" = [ "com.interversehq.qView.desktop" ];
+
+    "video/mp4" = [ "org.kde.haruna.desktop" ];
+    "video/webm" = [ "org.kde.haruna.desktop" ];
+    "video/quicktime" = [ "org.kde.haruna.desktop" ];
+    "video/x-matroska" = [ "org.kde.haruna.desktop" ];
+    "video/avi" = [ "org.kde.haruna.desktop" ];
+    "video/x-msvideo" = [ "org.kde.haruna.desktop" ];
+    "video/mpeg" = [ "org.kde.haruna.desktop" ];
+    "video/ogg" = [ "org.kde.haruna.desktop" ];
+    "video/3gp" = [ "org.kde.haruna.desktop" ];
+    "video/3gpp" = [ "org.kde.haruna.desktop" ];
+    "video/divx" = [ "org.kde.haruna.desktop" ];
+    "video/mp2t" = [ "org.kde.haruna.desktop" ];
+    "video/mp4v-es" = [ "org.kde.haruna.desktop" ];
+    "video/msvideo" = [ "org.kde.haruna.desktop" ];
+    "video/vnd.divx" = [ "org.kde.haruna.desktop" ];
+    "video/x-avi" = [ "org.kde.haruna.desktop" ];
+    "video/x-m4v" = [ "org.kde.haruna.desktop" ];
+    "video/x-mpeg2" = [ "org.kde.haruna.desktop" ];
+    "video/x-ms-wmv" = [ "org.kde.haruna.desktop" ];
+    "video/x-ogm" = [ "org.kde.haruna.desktop" ];
+    "video/x-ogm+ogg" = [ "org.kde.haruna.desktop" ];
+    "video/x-theora" = [ "org.kde.haruna.desktop" ];
+    "video/x-theora+ogg" = [ "org.kde.haruna.desktop" ];
+  };
+}
+
+```
+
+## ./home-manager/modules/plasma-manager/controlling
+### index.nix
+```nix
+_:
 {
   imports = [
     ./input-output.nix
@@ -250,8 +437,11 @@ eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/config.jsonc)"
   ];
 }
 
---- /etc/nixos/home-manager/modules/plasma-manager/controlling/input-output.nix ---
-{ ... }:
+```
+
+### input-output.nix
+```nix
+_:
 {
   programs.plasma = {
     input = {
@@ -274,8 +464,11 @@ eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/config.jsonc)"
   };
 }
 
---- /etc/nixos/home-manager/modules/plasma-manager/controlling/keybind.nix ---
-{ ... }:
+```
+
+### keybind.nix
+```nix
+_:
 {
   programs.plasma = {
     shortcuts = {
@@ -290,38 +483,78 @@ eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/config.jsonc)"
   };
 }
 
---- /etc/nixos/home-manager/modules/plasma-manager/controlling/power.nix ---
-{ ... }:
+```
+
+### power.nix
+```nix
+_:
 {
   programs.plasma = {
     powerdevil = {
       AC = {
-        powerButtonAction = "nothing";
-        turnOffDisplay = {
-          idleTimeout = 300;
-          idleTimeoutWhenLocked = "immediately"; # 300 + 0 = "immediately"
-        };
-        # autoSuspend = {
-        #   action = "shutDown";
-        #   idleTimeout = 1200; # 20 mins
-        # };
-      };
-      battery = {
-        powerButtonAction = "nothing";
         autoSuspend = {
           action = "sleep";
-          idleTimeout = 900;
+          idleTimeout = 1200; # 20 mins
         };
+        dimDisplay = {
+          enable = true;
+          idleTimeout = 600; # 20 mins
+        };
+        displayBrightness = null;
+        powerButtonAction = "nothing";
+        powerProfile = "balanced";
+        turnOffDisplay = {
+          idleTimeout = 300;
+          idleTimeoutWhenLocked = 20;
+        };
+        whenLaptopLidClosed = "doNothing";
+      };
+      battery = {
+        autoSuspend = {
+          action = "sleep";
+          idleTimeout = 600; # 10 mins
+        };
+        dimDisplay = {
+          enable = true;
+          idleTimeout = 150;
+        };
+        displayBrightness = null;
+        powerButtonAction = "nothing";
+        powerProfile = "powerSaving";
+        turnOffDisplay = {
+          idleTimeout = 300;
+          idleTimeoutWhenLocked = 20;
+        };
+        whenLaptopLidClosed = "sleep";
       };
       lowBattery = {
+        autoSuspend = {
+          action = "shutDown";
+          idleTimeout = 300; # 20 mins
+        };
+        dimDisplay = {
+          enable = true;
+          idleTimeout = 75;
+        };
+        displayBrightness = null;
+        powerButtonAction = "shutDown";
+        powerProfile = "powerSaving";
+        turnOffDisplay = {
+          idleTimeout = 150;
+          idleTimeoutWhenLocked = "immediately";
+        };
         whenLaptopLidClosed = "shutDown";
       };
     };
   };
 }
 
---- /etc/nixos/home-manager/modules/plasma-manager/interface/desktop.nix ---
-{ ... }:
+```
+
+## ./home-manager/modules/plasma-manager/interface
+### desktop.nix
+```nix
+_:
 let
   sans = "UbuntuSans Nerd Font";
   code = "FiraCode Nerd Font";
@@ -347,6 +580,24 @@ in
       };
       soundTheme = "ocean";
     };
+    desktop.widgets = [
+      {
+        digitalClock = {
+          position = {
+            horizontal = 16;
+            vertical = 16;
+          };
+          size = {
+            width = 128;
+            height = 128;
+          };
+          date.format = {
+            custom = "ddd, d MMM";
+          };
+          calendar.firstDayOfWeek = "monday";
+        };
+      }
+    ];
 
     kscreenlocker.appearance = {
       wallpaper = ../assets/lock.jpg;
@@ -382,8 +633,11 @@ in
   };
 }
 
---- /etc/nixos/home-manager/modules/plasma-manager/interface/index.nix ---
-{ ... }:
+```
+
+### index.nix
+```nix
+_:
 {
   imports = [
     ./desktop.nix
@@ -392,8 +646,11 @@ in
   ];
 }
 
---- /etc/nixos/home-manager/modules/plasma-manager/interface/panels.nix ---
-{ ... }:
+```
+
+### panels.nix
+```nix
+_:
 let
   browser = "app.zen_browser.zen.desktop";
   editor = "dev.zed.Zed.desktop";
@@ -447,8 +704,11 @@ in
   };
 }
 
---- /etc/nixos/home-manager/modules/plasma-manager/interface/window.nix ---
-{ ... }:
+```
+
+### window.nix
+```nix
+_:
 {
   programs.plasma = {
     kwin.titlebarButtons = {
@@ -462,8 +722,12 @@ in
   };
 }
 
---- /etc/nixos/home-manager/modules/plasma-manager/plasma.nix ---
-{ ... }:
+```
+
+## ./home-manager/modules/plasma-manager
+### plasma.nix
+```nix
+_:
 {
   # Quick Catppuccin Frappe Mauve config
   # Once generated, cannot be configured. stick with plasma management in the long term
@@ -493,6 +757,13 @@ in
         historyBehavior = "disabled";
         position = "top";
       };
+
+      configFile.kdeglobals = {
+        General = {
+          TerminalApplication = "kitty";
+          TerminalService = "kitty.desktop";
+        };
+      };
     };
   };
   imports = [
@@ -501,9 +772,20 @@ in
   ];
 }
 
---- /etc/nixos/home-manager/modules/programs/fastfetch.nix ---
-{ ... }:
+```
+
+## ./home-manager/modules/programs
+### fastfetch.nix
+```nix
+{ dotconfig, ... }:
 {
+  xdg.configFile = {
+    "fastfetch" = {
+      source = dotconfig + /fastfetch;
+      recursive = true;
+    };
+  };
+
   programs.fastfetch = {
     enable = true;
 
@@ -607,22 +889,30 @@ in
   };
 }
 
---- /etc/nixos/home-manager/modules/programs/index.nix ---
-{ ... }:
+```
+
+### index.nix
+```nix
+_:
 {
   imports = [
+    ./zed/index.nix
     ./fastfetch.nix
     ./kitty.nix
     ./oh-my-posh.nix
-    ./zed.nix
   ];
 }
 
---- /etc/nixos/home-manager/modules/programs/kitty.nix ---
-{ ... }:
+```
+
+### kitty.nix
+```nix
+_:
 {
   programs.kitty = {
     enable = true;
+    shellIntegration.enableBashIntegration = false;
+
     settings = {
       foreground = "#c6d0f5";
       background = "#303446";
@@ -677,8 +967,11 @@ in
   };
 }
 
---- /etc/nixos/home-manager/modules/programs/oh-my-posh.nix ---
-{ ... }:
+```
+
+### oh-my-posh.nix
+```nix
+_:
 {
   programs.oh-my-posh = {
     enable = true;
@@ -698,18 +991,18 @@ in
           type = "prompt";
 
           segments = [
-            {
-              type = "os";
-              style = "plain";
-              foreground = "p:os";
-              template = " ";
-            }
+            # {
+            #   type = "os";
+            #   style = "plain";
+            #   foreground = "p:os";
+            #   template = " ";
+            # }
 
             {
               type = "session";
               style = "plain";
-              foreground = "p:mauve";
-              template = "endmin ";
+              foreground = "p:os";
+              template = "PRTS ";
             }
 
             {
@@ -747,151 +1040,225 @@ in
               type = "text";
               style = "plain";
               foreground = "p:closer";
-              template = "";
+              template = " ";
             }
           ];
         }
       ];
 
-      console_title_template = "Paypal me $30.000";
+      console_title_template = "PRTS";
       final_space = true;
       version = 5;
     };
   };
 }
 
---- /etc/nixos/home-manager/modules/programs/zed.nix ---
-{ ... }:
+```
+
+## ./home-manager/modules/programs/zed
+### editor.nix
+```nix
+_:
+{
+  programs.zed-editor.userSettings = {
+    show_whitespaces = "all";
+
+    selection_highlight = true;
+    rounded_selection = true;
+
+    indent_guides = {
+      background_coloring = "disabled";
+      coloring = "fixed";
+      line_width = 2;
+      active_line_width = 4;
+    };
+
+    buffer_font_size = 20.0;
+    buffer_font_family = "FiraCode Nerd Font";
+    buffer_font_features.calt = true;
+    buffer_line_height = "comfortable";
+  };
+}
+
+```
+
+### index.nix
+```nix
+_:
 {
   programs.zed-editor = {
     enable = true;
+
     extensions = [
-      "catppuccin"
-      "catppuccin-icons"
       "git-firefly"
       "wakatime"
 
-      "nix"
-      "toml"
-      "ini"
     ];
+
     userSettings = {
-      prettier = {
-        allowed = true;
-
-        trailingComma = "none";
-        tabWidth = 2;
-        semi = false;
-        singleQuote = true;
-      };
-      languages = {
-        Nix = {
-          language_servers = [ "nixd" ];
-          formatter = {
-            external.command = "nixfmt";
-          };
-        };
-        "Shell Script" = {
-          formatter.external = {
-            command = "shfmt";
-            arguments = [
-              "-i"
-              "2"
-              "-ci"
-              "-sr"
-            ];
-          };
-        };
-      };
-
       disable_ai = true;
-
-      terminal = {
-        toolbar.breadcrumbs = false;
-        cursor_shape = "underline";
+      telemetry = {
+        diagnostics = false;
+        metrics = false;
       };
-
-      project_panel = {
-        drag_and_drop = true;
-        hide_hidden = false;
-        hide_root = true;
-        indent_size = 20.0;
-        git_status = true;
-        folder_icons = true;
-        file_icons = true;
-        entry_spacing = "standard";
-        hide_gitignore = false;
-        default_width = 240.0;
-        dock = "right";
-      };
-
-      bottom_dock_layout = "full";
-
-      tabs = {
-        close_position = "left";
-        file_icons = true;
-        git_status = true;
-      };
-
-      tab_bar.show = true;
-
-      title_bar = {
-        show_menus = false;
-        show_branch_icon = true;
-      };
-
-      show_whitespaces = "all";
-      use_auto_surround = true;
-      use_autoclose = true;
-      ensure_final_newline_on_save = true;
-      remove_trailing_whitespace_on_save = true;
+      autosave.after_delay.milliseconds = 0;
       format_on_save = "on";
 
-      indent_guides = {
-        background_coloring = "disabled";
-        coloring = "fixed";
-        line_width = 2;
-        active_line_width = 4;
-      };
-
-      preferred_line_length = 80;
-      auto_indent_on_paste = true;
-      auto_indent = true;
-      tab_size = 2;
-
-      toolbar.breadcrumbs = true;
-
-      autosave.after_delay.milliseconds = 0;
-
-      selection_highlight = true;
-      rounded_selection = true;
-      hide_mouse = "on_typing_and_movement";
-
-      cursor_shape = "underline";
-      cursor_blink = true;
-      multi_cursor_modifier = "alt";
-
-      ui_font_size = 20.0;
-      ui_font_family = "UbuntuSans Nerd Font";
-
-      buffer_line_height = "comfortable";
-      buffer_font_size = 20.0;
-      buffer_font_family = "FiraCode Nerd Font";
-      buffer_font_features.calt = true;
-
       restore_on_startup = "launchpad";
-
       session = {
         trust_all_worktrees = false;
         restore_unsaved_buffers = true;
       };
 
+      prettier = {
+        allowed = true;
+        trailingComma = "none";
+        tabWidth = 2;
+        semi = false;
+        singleQuote = true;
+      };
+
+      use_auto_surround = true;
+      use_autoclose = true;
+      ensure_final_newline_on_save = true;
+      remove_trailing_whitespace_on_save = true;
+
+      auto_indent = true;
+      auto_indent_on_paste = true;
+
+      cursor_blink = true;
+      cursor_shape = "underline";
+      hide_mouse = "on_typing_and_movement";
+      multi_cursor_modifier = "alt";
+
       when_closing_with_no_tabs = "close_window";
       on_last_window_closed = "quit_app";
+
+      tab_size = 2;
+      preferred_line_length = 80;
 
       redact_private_values = true;
       use_system_prompts = false;
       use_system_path_prompts = false;
+    };
+  };
+
+  imports = [
+    ./editor.nix
+    ./languages.nix
+    ./layout.nix
+    ./theme.nix
+  ];
+}
+
+```
+
+### languages.nix
+```nix
+_:
+{
+  programs.zed-editor = {
+    extensions = [
+      "nix"
+      "toml"
+      "ini"
+    ];
+
+    userSettings.languages = {
+      "Nix" = {
+        language_servers = [ "nixd" ];
+        formatter.external.command = "nixfmt";
+      };
+
+      "Shell Script" = {
+        formatter.external = {
+          command = "shfmt";
+          arguments = [
+            "-i"
+            "2"
+            "-ci"
+            "-sr"
+          ];
+        };
+      };
+
+      "C" = {
+        language_servers = [ "clangd" ];
+        formatter.external.command = "clang-format";
+      };
+      "C++" = {
+        language_servers = [ "clangd" ];
+        formatter.external.command = "clang-format";
+      };
+
+      "Python" = {
+        language_servers = [
+          "pyright"
+          "ruff"
+        ];
+        formatter.language_server.name = "ruff";
+      };
+    };
+  };
+}
+
+```
+
+### layout.nix
+```nix
+_:
+{
+  programs.zed-editor.userSettings = {
+    title_bar = {
+      show_menus = false;
+      show_branch_icon = true;
+    };
+
+    project_panel = {
+      drag_and_drop = true;
+      hide_hidden = false;
+      hide_root = true;
+      indent_size = 20.0;
+      git_status = true;
+      folder_icons = true;
+      file_icons = true;
+      entry_spacing = "standard";
+      hide_gitignore = false;
+      default_width = 240.0;
+      dock = "right";
+    };
+
+    tab_bar.show = true;
+    tabs = {
+      close_position = "left";
+      file_icons = true;
+      git_status = true;
+    };
+    toolbar.breadcrumbs = true;
+
+    bottom_dock_layout = "full";
+    terminal = {
+      toolbar.breadcrumbs = false;
+      font_family = "FiraCode Nerd Font";
+      cursor_shape = "underline";
+    };
+  };
+}
+
+```
+
+### theme.nix
+```nix
+_:
+{
+  programs.zed-editor = {
+    extensions = [
+      "catppuccin"
+      "catppuccin-icons"
+    ];
+    userSettings = {
+      ui_font_size = 20.0;
+      ui_font_family = "UbuntuSans Nerd Font";
 
       icon_theme = {
         mode = "system";
@@ -904,17 +1271,15 @@ in
         light = "Catppuccin Latte";
         dark = "Catppuccin Frappé";
       };
-
-      telemetry = {
-        diagnostics = false;
-        metrics = false;
-      };
     };
-
   };
 }
 
---- /etc/nixos/nixos/configuration.nix ---
+```
+
+## ./nixos
+### configuration.nix
+```nix
 {
   pkgs,
   username,
@@ -994,8 +1359,12 @@ in
   };
 }
 
---- /etc/nixos/nixos/modules/hardware/audio.nix ---
-{ ... }:
+```
+
+## ./nixos/modules/hardware
+### audio.nix
+```nix
+_:
 {
   services.pipewire = {
     enable = true;
@@ -1006,7 +1375,10 @@ in
   };
 }
 
---- /etc/nixos/nixos/modules/hardware/graphics.nix ---
+```
+
+### graphics.nix
+```nix
 {
   config,
   pkgs,
@@ -1042,8 +1414,11 @@ in
   ];
 }
 
---- /etc/nixos/nixos/modules/hardware/index.nix ---
-{ ... }:
+```
+
+### index.nix
+```nix
+_:
 {
   imports = [
     ./audio.nix
@@ -1052,7 +1427,10 @@ in
   ];
 }
 
---- /etc/nixos/nixos/modules/hardware/profiling.nix ---
+```
+
+### profiling.nix
+```nix
 {
   ...
 }:
@@ -1070,7 +1448,11 @@ in
   };
 }
 
---- /etc/nixos/nixos/modules/programs/cli.nix ---
+```
+
+## ./nixos/modules/programs
+### cli.nix
+```nix
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
@@ -1086,6 +1468,7 @@ in
     fd
     ripgrep
     bat
+    imagemagick
 
     btop
     ncdu
@@ -1096,10 +1479,20 @@ in
   ];
 }
 
---- /etc/nixos/nixos/modules/programs/development.nix ---
+```
+
+### development.nix
+```nix
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
+    micro
+    vim
+
+    git
+    nodejs_20
+    pnpm
+
     # nil
     nixd
     # nixfmt
@@ -1108,16 +1501,20 @@ in
     shfmt
     shellcheck
 
-    micro
-    vim
+    clang-tools
+    gcc
 
-    git
-    nodejs_20
-    pnpm
+    python3
+    pyright
+    ruff
+
   ];
 }
 
---- /etc/nixos/nixos/modules/programs/games.nix ---
+```
+
+### games.nix
+```nix
 {
   pkgs,
   ...
@@ -1140,8 +1537,11 @@ in
   ];
 }
 
---- /etc/nixos/nixos/modules/programs/index.nix ---
-{ ... }:
+```
+
+### index.nix
+```nix
+_:
 {
   imports = [
     ./cli.nix
@@ -1153,26 +1553,43 @@ in
   ];
 }
 
---- /etc/nixos/nixos/modules/programs/multimedia.nix ---
+```
+
+### multimedia.nix
+```nix
 {
   pkgs,
   ...
 }:
 {
   environment.systemPackages = with pkgs; [
+    qview
+    feh
+    haruna
+
     libreoffice
     zathura
     spotify
   ];
 }
 
---- /etc/nixos/nixos/modules/programs/utilities.nix ---
-{ ... }:
+```
+
+### utilities.nix
+```nix
+{ pkgs, ... }:
 {
   virtualisation.waydroid.enable = true;
+  environment.systemPackages = with pkgs; [
+    keyd
+    peazip
+  ];
 }
 
---- /etc/nixos/nixos/modules/programs/web.nix ---
+```
+
+### web.nix
+```nix
 {
   pkgs,
   ...
@@ -1187,8 +1604,12 @@ in
   ];
 }
 
---- /etc/nixos/nixos/modules/services/index.nix ---
-{ ... }:
+```
+
+## ./nixos/modules/services
+### index.nix
+```nix
+_:
 {
   imports = [
     ./internet.nix
@@ -1196,7 +1617,10 @@ in
   ];
 }
 
---- /etc/nixos/nixos/modules/services/internet.nix ---
+```
+
+### internet.nix
+```nix
 {
   pkgs,
   ...
@@ -1226,7 +1650,10 @@ in
   };
 }
 
---- /etc/nixos/nixos/modules/services/package-manager.nix ---
+```
+
+### package-manager.nix
+```nix
 {
   pkgs,
   ...
@@ -1240,7 +1667,11 @@ in
   };
 }
 
---- /etc/nixos/nixos/modules/workspace/desktop.nix ---
+```
+
+## ./nixos/modules/workspace
+### desktop.nix
+```nix
 { pkgs, ... }:
 {
   services.desktopManager.plasma6.enable = true;
@@ -1252,7 +1683,10 @@ in
   ];
 }
 
---- /etc/nixos/nixos/modules/workspace/display.nix ---
+```
+
+### display.nix
+```nix
 {
   pkgs,
   ...
@@ -1291,11 +1725,17 @@ in
   ];
 }
 
---- /etc/nixos/nixos/modules/workspace/index.nix ---
-{ ... }:
+```
+
+### index.nix
+```nix
+_:
 {
   imports = [
     ./desktop.nix
     ./display.nix
   ];
 }
+
+```
+

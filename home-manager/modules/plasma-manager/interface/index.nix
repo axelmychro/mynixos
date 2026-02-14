@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   imports = [
     ./desktop.nix
     ./panels.nix

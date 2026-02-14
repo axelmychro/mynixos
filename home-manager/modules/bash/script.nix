@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   imports = [ ./functions/index.nix ];
 
   programs.bash = {

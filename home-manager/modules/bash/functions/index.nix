@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   programs.bash.initExtra = ''
     ${builtins.readFile ./my.sh}
 

@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   # Quick Catppuccin Frappe Mauve config
   # Once generated, cannot be configured. stick with plasma management in the long term
   # xdg.configFile = {

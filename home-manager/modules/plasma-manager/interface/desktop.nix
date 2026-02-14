@@ -1,4 +1,4 @@
-{ ... }:
+_:
 let
   sans = "UbuntuSans Nerd Font";
   code = "FiraCode Nerd Font";

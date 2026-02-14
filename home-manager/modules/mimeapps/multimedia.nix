@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   xdg.mimeApps.defaultApplications = {
     "image/jpeg" = [ "com.interversehq.qView.desktop" ];
     "image/png" = [ "com.interversehq.qView.desktop" ];

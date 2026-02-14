@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   programs.zed-editor.userSettings = {
     title_bar = {
       show_menus = false;

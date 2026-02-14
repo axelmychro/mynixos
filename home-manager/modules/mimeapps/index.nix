@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   xdg.mimeApps.enable = true;
   imports = [
     ./documents.nix

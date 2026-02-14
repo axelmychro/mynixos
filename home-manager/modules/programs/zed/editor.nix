@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   programs.zed-editor.userSettings = {
     show_whitespaces = "all";
 

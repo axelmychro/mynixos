@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   programs.kitty = {
     enable = true;
     shellIntegration.enableBashIntegration = false;

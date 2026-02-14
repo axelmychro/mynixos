@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   imports = [
     ./zed/index.nix
     ./fastfetch.nix

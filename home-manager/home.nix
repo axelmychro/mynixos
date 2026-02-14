@@ -4,8 +4,12 @@
   ...
 }:
 {
-  home.homeDirectory = "/home/${username}";
-
+  home = {
+    homeDirectory = "/home/${username}";
+    stateVersion = "24.11";
+    file.".wakatime.cfg".source = dotconfig + /wakatime/wakatime.cfg;
+  };
+  xdg.enable = true;
   imports = [
     ./modules/bash/script.nix
     ./modules/mimeapps/index.nix
@@ -31,10 +35,4 @@
     };
   };
 
-  home.file = {
-    ".wakatime.cfg".source = dotconfig + /wakatime/wakatime.cfg;
-  };
-  xdg.enable = true;
-
-  home.stateVersion = "24.11";
 }

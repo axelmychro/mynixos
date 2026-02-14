@@ -3,24 +3,16 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-
     nix-flatpak.url = "github:gmodena/nix-flatpak";
-
-    alejandra = {
-      url = "github:kamadorueda/alejandra/4.0.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
   };
@@ -31,11 +23,11 @@
       home-manager,
       plasma-manager,
       nix-flatpak,
-      alejandra,
       ...
     }:
     let
       system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
       username = "axel";
       dotconfig = ./home-manager/config;
     in
@@ -46,7 +38,7 @@
 
         modules = [
           ./nixos/configuration.nix
-          home-manager.nixosModules.default
+          home-manager.nixosModules.home-manager
           {
             home-manager = {
               useGlobalPkgs = true;
@@ -61,12 +53,10 @@
           }
           nix-flatpak.nixosModules.nix-flatpak
           {
-            environment.systemPackages = [ alejandra.defaultPackage.${system} ];
-          }
-          {
             nixpkgs.overlays = [ inputs.millennium.overlays.default ];
           }
         ];
       };
+      formatter.${system} = pkgs.nixfmt-rfc-style;
     };
 }

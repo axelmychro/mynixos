@@ -1,6 +1,6 @@
 _: {
   imports = [
-    ./input-output.nix
+    ./iodevice.nix
     ./keybind.nix
     ./power.nix
   ];

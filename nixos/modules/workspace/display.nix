@@ -7,7 +7,6 @@
     xserver = {
       enable = true;
       videoDrivers = [
-        "intel"
         "nvidia"
       ];
     };

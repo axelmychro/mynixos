@@ -1,9 +1,29 @@
 {
-  pkgs,
   username,
   ...
 }:
 {
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    kernelModules = [ "ideapad_laptop" ];
+  };
+
+  networking = {
+    hostName = "mychro";
+    networkmanager.enable = true;
+  };
+  time.timeZone = "Asia/Jakarta";
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  nixpkgs.config.allowUnfree = true;
+  programs = {
+    nix-ld.enable = true;
+    appimage.enable = true;
+  };
+
   imports = [
     ./hardware-configuration.nix
 
@@ -24,42 +44,11 @@
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 7d";
+      options = "--delete-older-than 3d";
     };
   };
-
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
-    kernelModules = [ "ideapad_laptop" ];
-  };
-
-  zramSwap.enable = true;
-  # 50% by default
-
-  services.fwupd.enable = true;
-  #fwupd is an open-source daemon for managing the installation of firmware updates on Linux-based systems
-
-  networking = {
-    hostName = "mychro";
-    networkmanager.enable = true;
-  };
-  time.timeZone = "Asia/Jakarta";
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  nixpkgs.config.allowUnfree = true;
-
-  programs = {
-    nix-ld.enable = true;
-    appimage.enable = true;
-  };
-  environment.systemPackages = with pkgs; [
-    direnv
-    just
-    xdg-utils
-  ];
+  services.fwupd.enable = true; # linux FOSS firmware update daemon
+  zramSwap.enable = true; # 50% by default
 
   users = {
     motd = "drop windows rn before it drop you twin";

@@ -30,8 +30,8 @@
       font = "UbuntuSans Nerd Font";
       fontSize = "16";
       userIcon = true;
-      loginBackground = true;
       background = ./assets/login.png;
+      loginBackground = true;
     })
   ];
 }

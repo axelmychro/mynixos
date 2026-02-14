@@ -8,9 +8,7 @@
     nodejs_20
     pnpm
 
-    # nil
     nixd
-    # nixfmt
     nixfmt-rfc-style
 
     shfmt
@@ -22,6 +20,5 @@
     python3
     pyright
     ruff
-
   ];
 }

@@ -10,6 +10,7 @@
 
     libreoffice
     zathura
+
     spotify
   ];
 }

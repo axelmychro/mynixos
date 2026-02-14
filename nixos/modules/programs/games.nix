@@ -3,6 +3,9 @@
   ...
 }:
 {
+  services.flatpak.packages = [
+    "com.vysp3r.ProtonPlus"
+  ];
   programs = {
     steam = {
       enable = true;
@@ -14,8 +17,5 @@
   environment.systemPackages = with pkgs; [
     heroic
     osu-lazer-bin
-  ];
-  services.flatpak.packages = [
-    "com.vysp3r.ProtonPlus"
   ];
 }

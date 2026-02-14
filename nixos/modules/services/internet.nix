@@ -1,12 +1,8 @@
-{
-  pkgs,
-  ...
-}:
-{
+_: {
   networking = {
     firewall = {
       enable = true;
-      allowPing = false;
+      allowPing = true;
       logReversePathDrops = true;
     };
     nameservers = [
@@ -14,15 +10,15 @@
     ];
   };
 
-  services.cloudflare-warp.enable = true;
-  systemd.user.services.warp-connect = {
-    description = "Connect to Cloudflare WARP on login";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.cloudflare-warp}/bin/warp-cli --accept-tos connect";
-      RemainderAfterExit = true;
-    };
-    wantedBy = [ "default.target" ];
-    after = [ "network.target" ];
+  services.resolved = {
+    enable = true;
+    extraConfig = ''
+      [Resolve]
+      DNS=1.1.1.1#cloudflare-dns.com 1.0.0.1#cloudflare-dns.com
+      FallbackDNS=9.9.9.9#dns.quad9.net
+      DNSOverTLS=yes
+      DNSSEC=yes
+      Domains=~.
+    '';
   };
 }

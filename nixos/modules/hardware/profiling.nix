@@ -1,7 +1,7 @@
 _: {
   services = {
     thermald.enable = true;
-    power-profiles-daemon.enable = true;
+    power-profiles-daemon.enable = true; # pp daemon conflicts with tlp
     # tlp = {
     #   enable = true;
     #   settings = {

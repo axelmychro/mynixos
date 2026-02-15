@@ -29,7 +29,6 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       username = "axel";
-      dotconfig = ./home-manager/config;
     in
     {
       nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
@@ -47,7 +46,7 @@
               backupFileExtension = "backup";
               users.${username} = import ./home-manager/home.nix;
               extraSpecialArgs = {
-                inherit username dotconfig;
+                inherit username;
               };
             };
           }

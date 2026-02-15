@@ -4,5 +4,6 @@ _: {
     ./documents.nix
     ./internet.nix
     ./multimedia.nix
+    ./utilities.nix
   ];
 }

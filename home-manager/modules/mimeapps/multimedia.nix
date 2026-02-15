@@ -7,6 +7,13 @@ _: {
     "image/bmp" = [ "com.interversehq.qView.desktop" ];
     "image/heif" = [ "com.interversehq.qView.desktop" ];
 
+    "audio/vnd.rn-realaudio" = [ "org.kde.haruna.desktop" ];
+    "audio/x-ms-wma" = [ "org.kde.haruna.desktop" ];
+    "audio/x-musepack" = [ "org.kde.haruna.desktop" ];
+    "audio/x-pn-realaudio" = [ "org.kde.haruna.desktop" ];
+    "audio/x-scpls" = [ "org.kde.haruna.desktop" ];
+    "audio/x-speex" = [ "org.kde.haruna.desktop" ];
+
     "video/mp4" = [ "org.kde.haruna.desktop" ];
     "video/webm" = [ "org.kde.haruna.desktop" ];
     "video/quicktime" = [ "org.kde.haruna.desktop" ];

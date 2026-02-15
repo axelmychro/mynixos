@@ -26,8 +26,12 @@ EOF
       ;;
     switch)
       git add /etc/nixos &&
+        fd -e nix -E hardware-configuration.nix -x nixfmt {} &&
+        nix run nixpkgs#deadnix -- /etc/nixos &&
+        nix run nixpkgs#statix -- check /etc/nixos &&
         sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
-        reboot
+        my overview
+      reboot
       ;;
     drun)
       sudo nixos-rebuild dry-run --flake /etc/nixos#mychro
@@ -41,7 +45,7 @@ EOF
       ;;
     update)
       git add /etc/nixos &&
-        nix flake update --extra-experimental-features nix-command &&
+        nix flake update &&
         sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
         reboot
       ;;

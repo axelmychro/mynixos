@@ -5,7 +5,6 @@
 {
   home = {
     homeDirectory = "/home/${username}";
-    shell.enableBashIntegration = true;
     stateVersion = "24.11";
   };
   xdg.enable = true;

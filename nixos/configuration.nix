@@ -4,12 +4,18 @@
   ...
 }:
 {
+  system = {
+    stateVersion = "25.11";
+    nixos.label = "fallen-angel";
+  };
+
   boot = {
+    kernelPackages = pkgs.linuxPackages_6_12;
+    kernelModules = [ "ideapad_laptop" ];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    kernelModules = [ "ideapad_laptop" ];
   };
 
   networking = {
@@ -24,15 +30,6 @@
     nix-ld.enable = true;
     appimage.enable = true;
   };
-
-  imports = [
-    ./hardware-configuration.nix
-
-    ./modules/hardware/index.nix
-    ./modules/programs/index.nix
-    ./modules/services/index.nix
-    ./modules/workspace/index.nix
-  ];
 
   nix = {
     settings = {
@@ -51,16 +48,19 @@
   services.fwupd.enable = true; # linux FOSS firmware update daemon
   zramSwap.enable = true; # 50% by default
 
+  imports = [
+    ./hardware-configuration.nix
+
+    ./modules/hardware/index.nix
+    ./modules/programs/index.nix
+    ./modules/services/index.nix
+    ./modules/workspace/index.nix
+  ];
+
   users.users.${username} = {
     isNormalUser = true;
     extraGroups = [
       "wheel"
     ];
-    shell = pkgs.bash;
-  };
-
-  system = {
-    stateVersion = "25.11";
-    nixos.label = "fallen-angel";
   };
 }

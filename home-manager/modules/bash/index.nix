@@ -1,4 +1,5 @@
 _: {
+  home.shell.enableBashIntegration = true;
   imports = [ ./functions/index.nix ];
   programs.bash = {
     enable = true;

@@ -1,7 +1,9 @@
 # Overview
-\nGenerated on: Sat Feb 14 01:39:28 PM WIB 2026
+
+Generated on: Sun Feb 15 06:09:29 PM WIB 2026
 
 ## mynixos
+
 ### flake.nix
 ```nix
 {
@@ -35,7 +37,6 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       username = "axel";
-      dotconfig = ./home-manager/config;
     in
     {
       nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
@@ -53,7 +54,7 @@
               backupFileExtension = "backup";
               users.${username} = import ./home-manager/home.nix;
               extraSpecialArgs = {
-                inherit username dotconfig;
+                inherit username;
               };
             };
           }
@@ -70,52 +71,31 @@
 ```
 
 ## ./home-manager
+
 ### home.nix
 ```nix
 {
   username,
-  dotconfig,
   ...
 }:
 {
-  home.homeDirectory = "/home/${username}";
-
-  imports = [
-    ./modules/bash/script.nix
-    ./modules/mimeapps/index.nix
-    ./modules/plasma-manager/plasma.nix
-    ./modules/programs/index.nix
-  ];
-
-  programs = {
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
-    git = {
-      enable = true;
-      settings = {
-        user = {
-          name = "Axel";
-          email = "axelmychro@gmail.com";
-        };
-        init.defaultBranch = "main";
-      };
-    };
-  };
-
-  home.file = {
-    ".wakatime.cfg".source = dotconfig + /wakatime/wakatime.cfg;
+  home = {
+    homeDirectory = "/home/${username}";
+    stateVersion = "24.11";
   };
   xdg.enable = true;
-
-  home.stateVersion = "24.11";
+  imports = [
+    ./modules/bash/index.nix
+    ./modules/plasma-manager/plasma.nix
+    ./modules/mimeapps/index.nix
+    ./modules/programs/index.nix
+  ];
 }
 
 ```
 
 ## ./home-manager/modules/bash/functions
+
 ### cpprun.sh
 ```bash
 # shellcheck shell=bash
@@ -164,13 +144,14 @@ crun() {
 
 ### index.nix
 ```nix
-_:
-{
+_: {
   programs.bash.initExtra = ''
     ${builtins.readFile ./my.sh}
 
     ${builtins.readFile ./cpprun.sh}
     ${builtins.readFile ./crun.sh}
+    ${builtins.readFile ./mcd.sh}
+    ${builtins.readFile ./rm.sh}
   '';
 }
 
@@ -198,19 +179,31 @@ my() {
 usage: my <command>
 
 commands:
+  status
   switch
   drun
   test
   undo
   update
+  prune
   purge
   overview
 EOF
       ;;
+    status)
+      fd -e nix -E hardware-configuration.nix -x nixfmt {}
+      nix run nixpkgs#deadnix -- /etc/nixos
+      nix run nixpkgs#statix -- check /etc/nixos
+      echo "my: status: done"
+      ;;
     switch)
       git add /etc/nixos &&
+        fd -e nix -E hardware-configuration.nix -x nixfmt {} &&
+        nix run nixpkgs#deadnix -- /etc/nixos &&
+        nix run nixpkgs#statix -- check /etc/nixos &&
         sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
-        reboot
+        my overview
+      reboot
       ;;
     drun)
       sudo nixos-rebuild dry-run --flake /etc/nixos#mychro
@@ -224,22 +217,29 @@ EOF
       ;;
     update)
       git add /etc/nixos &&
-        nix flake update --extra-experimental-features nix-command &&
+        nix flake update &&
         sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
         reboot
       ;;
-    purge)
-      echo "my: clean: deleting generations older than 3 days"
+    prune)
+      echo "my: prune: delete generations older than 3 days"
       sudo nix-collect-garbage --delete-older-than 3d
       nix-collect-garbage -d
-
-      echo "my: clean: running store gc"
+      echo "my: prune: collect store garbage"
       sudo nix-store --gc
-
-      echo "my: clean: optimising store"
+      echo "my: prune: optimise store"
       sudo nix-store --optimise
-
-      echo "my: clean: complete"
+      echo "my: prune: done"
+      ;;
+    purge)
+      echo "my: purge: delete previous generation(s)"
+      sudo nix-collect-garbage -d
+      nix-collect-garbage -d
+      echo "my: purge: collect store garbage"
+      sudo nix-store --gc
+      echo "my: purge: optimise store"
+      sudo nix-store --optimise
+      echo "my: purge: done"
       ;;
     overview)
       local root="/etc/nixos"
@@ -247,8 +247,9 @@ EOF
       rm -f "$out"
       {
         echo "# Overview"
-        echo "\nGenerated on: $(date)"
-        echo ""
+        echo
+        echo "Generated on: $(date)"
+        echo
 
         fd -t f -e nix -e sh . "$root" \
           -E hardware-configuration.nix -E flake.lock | sort |
@@ -262,8 +263,10 @@ EOF
             if [[ "$rel_dir" != "$last_dir" ]]; then
               if [[ "$rel_dir" == "." ]]; then
                 echo "## mynixos"
+                echo
               else
                 echo "## ./${rel_dir}"
+                echo
               fi
               last_dir="$rel_dir"
             fi
@@ -284,7 +287,7 @@ EOF
   esac
 }
 _my_complete() {
-  local cmds="switch test drun undo update purge overview"
+  local cmds="status switch test drun undo update purge overview"
   mapfile -t COMPREPLY < <(compgen -W "$cmds" -- "${COMP_WORDS[1]}")
 }
 complete -F _my_complete my
@@ -308,22 +311,12 @@ rm() {
 ```
 
 ## ./home-manager/modules/bash
-### init.sh
-```bash
-#!/usr/bin/env bash
 
-[[ $- == *i* ]] && clear
-[[ $SHLVL -eq 1 ]] && fastfetch
-# eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/config.json)"
-
-```
-
-### script.nix
+### index.nix
 ```nix
-_:
-{
+_: {
+  home.shell.enableBashIntegration = true;
   imports = [ ./functions/index.nix ];
-
   programs.bash = {
     enable = true;
     shellAliases = {
@@ -339,11 +332,21 @@ _:
 
 ```
 
+### init.sh
+```bash
+## !/usr/bin/env bash
+
+[[ $- == *i* ]] && clear
+[[ $SHLVL -eq 1 ]] && fastfetch
+# eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/config.json)"
+
+```
+
 ## ./home-manager/modules/mimeapps
+
 ### documents.nix
 ```nix
-_:
-{
+_: {
   xdg.mimeApps.defaultApplications = {
     "text/plain" = [ "dev.zed.Zed.desktop" ];
     "text/markdown" = [ "dev.zed.Zed.desktop" ];
@@ -360,13 +363,13 @@ _:
 
 ### index.nix
 ```nix
-_:
-{
+_: {
   xdg.mimeApps.enable = true;
   imports = [
     ./documents.nix
     ./internet.nix
     ./multimedia.nix
+    ./utilities.nix
   ];
 }
 
@@ -374,12 +377,10 @@ _:
 
 ### internet.nix
 ```nix
-_:
-{
+_: {
   xdg.mimeApps.defaultApplications = {
     "x-scheme-handler/http" = [ "app.zen_browser.zen.desktop" ];
     "x-scheme-handler/https" = [ "app.zen_browser.zen.desktop" ];
-    "x-scheme-handler/geo" = [ "openstreetmap-geo-handler.desktop" ];
   };
 }
 
@@ -387,8 +388,7 @@ _:
 
 ### multimedia.nix
 ```nix
-_:
-{
+_: {
   xdg.mimeApps.defaultApplications = {
     "image/jpeg" = [ "com.interversehq.qView.desktop" ];
     "image/png" = [ "com.interversehq.qView.desktop" ];
@@ -396,6 +396,13 @@ _:
     "image/avif" = [ "com.interversehq.qView.desktop" ];
     "image/bmp" = [ "com.interversehq.qView.desktop" ];
     "image/heif" = [ "com.interversehq.qView.desktop" ];
+
+    "audio/vnd.rn-realaudio" = [ "org.kde.haruna.desktop" ];
+    "audio/x-ms-wma" = [ "org.kde.haruna.desktop" ];
+    "audio/x-musepack" = [ "org.kde.haruna.desktop" ];
+    "audio/x-pn-realaudio" = [ "org.kde.haruna.desktop" ];
+    "audio/x-scpls" = [ "org.kde.haruna.desktop" ];
+    "audio/x-speex" = [ "org.kde.haruna.desktop" ];
 
     "video/mp4" = [ "org.kde.haruna.desktop" ];
     "video/webm" = [ "org.kde.haruna.desktop" ];
@@ -425,13 +432,56 @@ _:
 
 ```
 
+### utilities.nix
+```nix
+_: {
+  xdg.mimeApps.defaultApplications = {
+    "application/gzip" = [ "peazip.desktop" ];
+    "application/vnd.ms-cab-compressed" = [ "peazip.desktop" ];
+    "application/vnd.rar" = [ "peazip.desktop" ];
+    "application/x-7z-compressed" = [ "peazip.desktop" ];
+    "application/x-archive" = [ "peazip.desktop" ];
+    "application/x-bzip" = [ "peazip.desktop" ];
+    "application/x-bzip-compressed-tar" = [ "peazip.desktop" ];
+    "application/x-cd-image" = [ "peazip.desktop" ];
+    "application/x-compress" = [ "peazip.desktop" ];
+    "application/x-compressed-tar" = [ "peazip.desktop" ];
+    "application/x-cpio" = [ "peazip.desktop" ];
+    "application/x-cpio-compressed" = [ "peazip.desktop" ];
+    "application/x-docbook+xml" = [ " dev.zed.Zed.desktop" ];
+    "application/x-iso9660-appimage" = [ "peazip.desktop" ];
+    "application/x-lha" = [ "peazip.desktop" ];
+    "application/x-lrzip-compressed-tar" = [ "peazip.desktop" ];
+    "application/x-lz4-compressed-tar" = [ "peazip.desktop" ];
+    "application/x-lzip-compressed-tar" = [ "peazip.desktop" ];
+    "application/x-lzma" = [ "peazip.desktop" ];
+    "application/x-lzma-compressed-tar" = [ "peazip.desktop" ];
+    "application/x-rar" = [ "peazip.desktop" ];
+    "application/x-source-rpm" = [ "peazip.desktop" ];
+    "application/x-tar" = [ "peazip.desktop" ];
+    "application/x-tarz" = [ "peazip.desktop" ];
+    "application/x-tzo" = [ "peazip.desktop" ];
+    "application/x-xar" = [ "peazip.desktop" ];
+    "application/x-xz" = [ "peazip.desktop" ];
+    "application/x-xz-compressed-tar" = [ "peazip.desktop" ];
+    "application/x-yaml" = [ " dev.zed.Zed.desktop" ];
+    "application/x-zstd-compressed-tar" = [ "peazip.desktop" ];
+    "application/zip" = [ "peazip.desktop" ];
+    "application/zstd" = [ "peazip.desktop" ];
+
+    "x-scheme-handler/geo" = [ "openstreetmap-geo-handler.desktop" ];
+  };
+}
+
+```
+
 ## ./home-manager/modules/plasma-manager/controlling
+
 ### index.nix
 ```nix
-_:
-{
+_: {
   imports = [
-    ./input-output.nix
+    ./iodevice.nix
     ./keybind.nix
     ./power.nix
   ];
@@ -439,10 +489,9 @@ _:
 
 ```
 
-### input-output.nix
+### iodevice.nix
 ```nix
-_:
-{
+_: {
   programs.plasma = {
     input = {
       mice = [
@@ -451,7 +500,7 @@ _:
           productId = "c077";
           name = "Logitech USB Optical Mouse";
           enable = true;
-          acceleration = -0.2;
+          acceleration = 1;
           accelerationProfile = "none";
           leftHanded = false;
           middleButtonEmulation = false;
@@ -468,8 +517,7 @@ _:
 
 ### keybind.nix
 ```nix
-_:
-{
+_: {
   programs.plasma = {
     shortcuts = {
       kwin = {
@@ -487,8 +535,7 @@ _:
 
 ### power.nix
 ```nix
-_:
-{
+_: {
   programs.plasma = {
     powerdevil = {
       AC = {
@@ -552,6 +599,7 @@ _:
 ```
 
 ## ./home-manager/modules/plasma-manager/interface
+
 ### desktop.nix
 ```nix
 _:
@@ -637,8 +685,7 @@ in
 
 ### index.nix
 ```nix
-_:
-{
+_: {
   imports = [
     ./desktop.nix
     ./panels.nix
@@ -708,8 +755,7 @@ in
 
 ### window.nix
 ```nix
-_:
-{
+_: {
   programs.plasma = {
     kwin.titlebarButtons = {
       left = [
@@ -725,166 +771,101 @@ _:
 ```
 
 ## ./home-manager/modules/plasma-manager
+
 ### plasma.nix
 ```nix
-_:
-{
-  # Quick Catppuccin Frappe Mauve config
-  # Once generated, cannot be configured. stick with plasma management in the long term
-  # xdg.configFile = {
-  #   "kdeglobals".source = ./config/kdeglobals;
-  #   "kwinrc".source = ./config/kwinrc;
-  # };
-
-  programs = {
-    kate.enable = false; # we have zeditor
-    okular.enable = false; # we have libreoffice
-    konsole.enable = false; # we have kitty
-
-    plasma = {
-      enable = true;
-      overrideConfig = true;
-      session = {
-        general.askForConfirmationOnLogout = false;
-        sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
-      };
-      kscreenlocker = {
-        lockOnResume = true; # resume = after sleep
-        timeout = 5; # minutes before screen is locked
-      };
-      krunner = {
-        activateWhenTypingOnDesktop = true;
-        historyBehavior = "disabled";
-        position = "top";
-      };
-
-      configFile.kdeglobals = {
-        General = {
-          TerminalApplication = "kitty";
-          TerminalService = "kitty.desktop";
-        };
-      };
-    };
+_: {
+  programs.plasma = {
+    enable = true;
+    overrideConfig = true;
   };
   imports = [
     ./controlling/index.nix
     ./interface/index.nix
+    ./workflow/session.nix
   ];
 }
 
 ```
 
-## ./home-manager/modules/programs
-### fastfetch.nix
+## ./home-manager/modules/plasma-manager/workflow
+
+### index.nix
 ```nix
-{ dotconfig, ... }:
-{
+_: { import = [ ./session.nix ]; }
+
+```
+
+### session.nix
+```nix
+_: {
+  programs.plasma = {
+    session = {
+      general.askForConfirmationOnLogout = false;
+      sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
+    };
+    kscreenlocker = {
+      lockOnResume = true; # resume = after sleep
+      timeout = 5; # minutes before screen is locked
+    };
+    krunner = {
+      activateWhenTypingOnDesktop = true;
+      historyBehavior = "disabled";
+      position = "top";
+    };
+    configFile.kdeglobals = {
+      General = {
+        TerminalApplication = "kitty";
+        TerminalService = "kitty.desktop";
+      };
+    };
+  };
+}
+
+```
+
+## ./home-manager/modules/programs
+
+### direnv.nix
+```nix
+_: {
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+}
+
+```
+
+## ./home-manager/modules/programs/fastfetch
+
+### index.nix
+```nix
+_: {
+  programs.fastfetch.enable = true;
   xdg.configFile = {
     "fastfetch" = {
-      source = dotconfig + /fastfetch;
+      source = ./config;
       recursive = true;
     };
   };
+}
 
-  programs.fastfetch = {
+```
+
+## ./home-manager/modules/programs
+
+### git.nix
+```nix
+_: {
+  programs.git = {
     enable = true;
-
     settings = {
-      logo = {
-        source = "~/.config/fastfetch/nix.txt";
-        padding = {
-          top = 0;
-          left = 0;
-          right = 2;
-        };
-        color = {
-          "1" = "#ffffff";
-        };
+      user = {
+        name = "Axel";
+        email = "axelmychro@gmail.com";
       };
-
-      display = {
-        color = {
-          keys = "#ACB0BE";
-          output = "#eeeeee";
-        };
-        separator = "";
-        key = {
-          width = 12;
-          type = "string";
-        };
-        percent = {
-          color = {
-            green = "#8CAAEE";
-            yellow = "#dada00";
-            red = "#F4B8E4";
-          };
-        };
-      };
-
-      modules = [
-        {
-          type = "kernel";
-          format = "{1} {2} {4}";
-        }
-        {
-          type = "os";
-          format = "{2} {8}";
-        }
-        {
-          type = "wm";
-          format = "{2} ({3})";
-        }
-        {
-          type = "terminal";
-          format = "{1} {6}";
-        }
-        {
-          type = "display";
-          key = "Display";
-          format = "{1}×{2} {3}Hz";
-        }
-        {
-          type = "cpu";
-          keyIcon = " ";
-          format = " {name}";
-        }
-        {
-          type = "gpu";
-          hideType = "integrated";
-          keyIcon = " ";
-          format = "󰈈 {name}";
-        }
-        # If you ever want to show the discrete GPU instead / additionally:
-        # {
-        #   type = "gpu";
-        #   hideType = "discrete";
-        #   keyIcon = " ";
-        #   format = "   󰈈 {name}";
-        # }
-        {
-          type = "memory";
-          format = " {3} {1} of {2}";
-        }
-        {
-          type = "disk";
-          key = "Storage";
-          format = " {3} {1} of {2}";
-        }
-        {
-          type = "battery";
-          key = "Battery";
-          format = " {4} {5}";
-        }
-        # The commented one with progress bar style:
-        # {
-        #   type = "battery";
-        #   keyIcon = " ";
-        #   percent = {
-        #     type = 2;
-        #   };
-        #   format = "    {10}";
-        # }
-      ];
+      init.defaultBranch = "main";
     };
   };
 }
@@ -893,13 +874,14 @@ _:
 
 ### index.nix
 ```nix
-_:
-{
+_: {
   imports = [
+    ./fastfetch/index.nix
+    ./oh-my-posh/index.nix
     ./zed/index.nix
-    ./fastfetch.nix
+    ./direnv.nix
+    ./git.nix
     ./kitty.nix
-    ./oh-my-posh.nix
   ];
 }
 
@@ -907,13 +889,13 @@ _:
 
 ### kitty.nix
 ```nix
-_:
-{
+_: {
   programs.kitty = {
     enable = true;
-    shellIntegration.enableBashIntegration = false;
+    shellIntegration.enableBashIntegration = false; # let oh-my-posh handle the window title
 
     settings = {
+      shell = "bash";
       foreground = "#c6d0f5";
       background = "#303446";
       selection_foreground = "#303446";
@@ -969,97 +951,34 @@ _:
 
 ```
 
-### oh-my-posh.nix
+## ./home-manager/modules/programs/oh-my-posh
+
+### index.nix
 ```nix
-_:
-{
+_: {
   programs.oh-my-posh = {
     enable = true;
-
-    settings = {
-      palette = {
-        os = "#ffffff";
-        closer = "p:os";
-        blue = "#8CAAEE";
-        mauve = "#ca9ee6";
-        lavender = "#BABBF1";
-      };
-
-      blocks = [
-        {
-          alignment = "left";
-          type = "prompt";
-
-          segments = [
-            # {
-            #   type = "os";
-            #   style = "plain";
-            #   foreground = "p:os";
-            #   template = " ";
-            # }
-
-            {
-              type = "session";
-              style = "plain";
-              foreground = "p:os";
-              template = "PRTS ";
-            }
-
-            {
-              type = "path";
-              style = "plain";
-              foreground = "p:mauve";
-              template = "{{ .Path }} ";
-              options = {
-                folder_icon = " ";
-                home_icon = "~";
-                style = "agnoster_short";
-              };
-            }
-
-            {
-              type = "git";
-              style = "plain";
-              foreground = "p:lavender";
-              template = "{{ .HEAD }} ";
-              options = {
-                branch_icon = " ";
-                cherry_pick_icon = " ";
-                commit_icon = " ";
-                fetch_status = false;
-                fetch_upstream_icon = false;
-                merge_icon = " ";
-                no_commits_icon = " ";
-                rebase_icon = " ";
-                revert_icon = " ";
-                tag_icon = " ";
-              };
-            }
-
-            {
-              type = "text";
-              style = "plain";
-              foreground = "p:closer";
-              template = " ";
-            }
-          ];
-        }
-      ];
-
-      console_title_template = "PRTS";
-      final_space = true;
-      version = 5;
-    };
+    configFile = ./config.json;
   };
 }
 
 ```
 
+## ./home-manager/modules/programs/wakatime
+
+### index.nix
+```nix
+_: {
+  home.file.".wakatime.cfg".source = ./wakatime.cfg;
+}
+
+```
+
 ## ./home-manager/modules/programs/zed
+
 ### editor.nix
 ```nix
-_:
-{
+_: {
   programs.zed-editor.userSettings = {
     show_whitespaces = "all";
 
@@ -1084,8 +1003,7 @@ _:
 
 ### index.nix
 ```nix
-_:
-{
+_: {
   programs.zed-editor = {
     enable = true;
 
@@ -1147,6 +1065,7 @@ _:
     ./editor.nix
     ./languages.nix
     ./layout.nix
+    ./terminal.nix
     ./theme.nix
   ];
 }
@@ -1155,8 +1074,7 @@ _:
 
 ### languages.nix
 ```nix
-_:
-{
+_: {
   programs.zed-editor = {
     extensions = [
       "nix"
@@ -1206,8 +1124,7 @@ _:
 
 ### layout.nix
 ```nix
-_:
-{
+_: {
   programs.zed-editor.userSettings = {
     title_bar = {
       show_menus = false;
@@ -1235,9 +1152,20 @@ _:
       git_status = true;
     };
     toolbar.breadcrumbs = true;
+  };
+}
 
+```
+
+### terminal.nix
+```nix
+_: {
+  programs.zed-editor.userSettings = {
     bottom_dock_layout = "full";
     terminal = {
+      shell = {
+        program = "bash";
+      };
       toolbar.breadcrumbs = false;
       font_family = "FiraCode Nerd Font";
       cursor_shape = "underline";
@@ -1249,8 +1177,7 @@ _:
 
 ### theme.nix
 ```nix
-_:
-{
+_: {
   programs.zed-editor = {
     extensions = [
       "catppuccin"
@@ -1278,22 +1205,41 @@ _:
 ```
 
 ## ./nixos
+
 ### configuration.nix
 ```nix
 {
-  pkgs,
   username,
+  pkgs,
   ...
 }:
 {
-  imports = [
-    ./hardware-configuration.nix
+  system = {
+    stateVersion = "25.11";
+    nixos.label = "fallen-angel";
+  };
 
-    ./modules/hardware/index.nix
-    ./modules/programs/index.nix
-    ./modules/services/index.nix
-    ./modules/workspace/index.nix
-  ];
+  boot = {
+    kernelPackages = pkgs.linuxPackages_6_12;
+    kernelModules = [ "ideapad_laptop" ];
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+  };
+
+  networking = {
+    hostName = "mychro";
+    networkmanager.enable = true;
+  };
+  time.timeZone = "Asia/Jakarta";
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  nixpkgs.config.allowUnfree = true;
+  programs = {
+    nix-ld.enable = true;
+    appimage.enable = true;
+  };
 
   nix = {
     settings = {
@@ -1306,66 +1252,36 @@ _:
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 7d";
+      options = "--delete-older-than 3d";
     };
   };
+  services.fwupd.enable = true; # linux FOSS firmware update daemon
+  zramSwap.enable = true; # 50% by default
 
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
-    kernelModules = [ "ideapad_laptop" ];
-  };
+  imports = [
+    ./hardware-configuration.nix
 
-  zramSwap.enable = true;
-  # 50% by default
-
-  services.fwupd.enable = true;
-  #fwupd is an open-source daemon for managing the installation of firmware updates on Linux-based systems
-
-  networking = {
-    hostName = "mychro";
-    networkmanager.enable = true;
-  };
-  time.timeZone = "Asia/Jakarta";
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  nixpkgs.config.allowUnfree = true;
-
-  programs = {
-    nix-ld.enable = true;
-    appimage.enable = true;
-  };
-  environment.systemPackages = with pkgs; [
-    direnv
-    just
-    xdg-utils
+    ./modules/hardware/index.nix
+    ./modules/programs/index.nix
+    ./modules/services/index.nix
+    ./modules/workspace/index.nix
   ];
 
-  users = {
-    motd = "drop windows rn before it drop you twin";
-    users.${username} = {
-      isNormalUser = true;
-      extraGroups = [
-        "wheel"
-      ];
-    };
-  };
-
-  system = {
-    stateVersion = "25.11";
-    nixos.label = "fallen-angel";
+  users.users.${username} = {
+    isNormalUser = true;
+    extraGroups = [
+      "wheel"
+    ];
   };
 }
 
 ```
 
 ## ./nixos/modules/hardware
+
 ### audio.nix
 ```nix
-_:
-{
+_: {
   services.pipewire = {
     enable = true;
     audio.enable = true;
@@ -1411,6 +1327,7 @@ _:
   };
   environment.systemPackages = with pkgs; [
     nvtopPackages.nvidia
+    vulkan-tools
   ];
 }
 
@@ -1418,8 +1335,7 @@ _:
 
 ### index.nix
 ```nix
-_:
-{
+_: {
   imports = [
     ./audio.nix
     ./graphics.nix
@@ -1431,13 +1347,10 @@ _:
 
 ### profiling.nix
 ```nix
-{
-  ...
-}:
-{
+_: {
   services = {
     thermald.enable = true;
-    power-profiles-daemon.enable = true;
+    power-profiles-daemon.enable = true; # pp daemon conflicts with tlp
     # tlp = {
     #   enable = true;
     #   settings = {
@@ -1451,6 +1364,7 @@ _:
 ```
 
 ## ./nixos/modules/programs
+
 ### cli.nix
 ```nix
 { pkgs, ... }:
@@ -1493,9 +1407,7 @@ _:
     nodejs_20
     pnpm
 
-    # nil
     nixd
-    # nixfmt
     nixfmt-rfc-style
 
     shfmt
@@ -1507,7 +1419,6 @@ _:
     python3
     pyright
     ruff
-
   ];
 }
 
@@ -1520,6 +1431,9 @@ _:
   ...
 }:
 {
+  services.flatpak.packages = [
+    "com.vysp3r.ProtonPlus"
+  ];
   programs = {
     steam = {
       enable = true;
@@ -1532,17 +1446,13 @@ _:
     heroic
     osu-lazer-bin
   ];
-  services.flatpak.packages = [
-    "com.vysp3r.ProtonPlus"
-  ];
 }
 
 ```
 
 ### index.nix
 ```nix
-_:
-{
+_: {
   imports = [
     ./cli.nix
     ./development.nix
@@ -1569,6 +1479,7 @@ _:
 
     libreoffice
     zathura
+
     spotify
   ];
 }
@@ -1607,10 +1518,10 @@ _:
 ```
 
 ## ./nixos/modules/services
+
 ### index.nix
 ```nix
-_:
-{
+_: {
   imports = [
     ./internet.nix
     ./package-manager.nix
@@ -1621,15 +1532,11 @@ _:
 
 ### internet.nix
 ```nix
-{
-  pkgs,
-  ...
-}:
-{
+_: {
   networking = {
     firewall = {
       enable = true;
-      allowPing = false;
+      allowPing = true;
       logReversePathDrops = true;
     };
     nameservers = [
@@ -1637,16 +1544,16 @@ _:
     ];
   };
 
-  services.cloudflare-warp.enable = true;
-  systemd.user.services.warp-connect = {
-    description = "Connect to Cloudflare WARP on login";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.cloudflare-warp}/bin/warp-cli --accept-tos connect";
-      RemainderAfterExit = true;
-    };
-    wantedBy = [ "default.target" ];
-    after = [ "network.target" ];
+  services.resolved = {
+    enable = true;
+    extraConfig = ''
+      [Resolve]
+      DNS=1.1.1.1#cloudflare-dns.com 1.0.0.1#cloudflare-dns.com
+      FallbackDNS=9.9.9.9#dns.quad9.net
+      DNSOverTLS=yes
+      DNSSEC=yes
+      Domains=~.
+    '';
   };
 }
 
@@ -1670,17 +1577,29 @@ _:
 ```
 
 ## ./nixos/modules/workspace
+
 ### desktop.nix
 ```nix
 { pkgs, ... }:
 {
   services.desktopManager.plasma6.enable = true;
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
-    # kate
+    aurorae
+    plasma-browser-integration
+    plasma-workspace-wallpapers
+    ark
+    konsole
+    elisa
+    gwenview
+    okular
+    kate
+    ktexteditor
     khelpcenter
-    # okular
-    # konsole
+    baloo
+    baloo-widgets
+    dolphin-plugins
   ];
+  services.xserver.excludePackages = [ pkgs.xterm ];
 }
 
 ```
@@ -1696,7 +1615,6 @@ _:
     xserver = {
       enable = true;
       videoDrivers = [
-        "intel"
         "nvidia"
       ];
     };
@@ -1719,8 +1637,8 @@ _:
       font = "UbuntuSans Nerd Font";
       fontSize = "16";
       userIcon = true;
-      loginBackground = true;
       background = ./assets/login.png;
+      loginBackground = true;
     })
   ];
 }
@@ -1729,8 +1647,7 @@ _:
 
 ### index.nix
 ```nix
-_:
-{
+_: {
   imports = [
     ./desktop.nix
     ./display.nix

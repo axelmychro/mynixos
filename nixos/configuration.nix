@@ -1,5 +1,6 @@
 {
   username,
+  pkgs,
   ...
 }:
 {
@@ -50,14 +51,12 @@
   services.fwupd.enable = true; # linux FOSS firmware update daemon
   zramSwap.enable = true; # 50% by default
 
-  users = {
-    motd = "drop windows rn before it drop you twin";
-    users.${username} = {
-      isNormalUser = true;
-      extraGroups = [
-        "wheel"
-      ];
-    };
+  users.users.${username} = {
+    isNormalUser = true;
+    extraGroups = [
+      "wheel"
+    ];
+    shell = pkgs.bash;
   };
 
   system = {

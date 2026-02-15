@@ -60,6 +60,7 @@ _: {
     ./editor.nix
     ./languages.nix
     ./layout.nix
+    ./terminal.nix
     ./theme.nix
   ];
 }

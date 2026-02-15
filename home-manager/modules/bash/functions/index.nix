@@ -4,5 +4,7 @@ _: {
 
     ${builtins.readFile ./cpprun.sh}
     ${builtins.readFile ./crun.sh}
+    ${builtins.readFile ./mcd.sh}
+    ${builtins.readFile ./rm.sh}
   '';
 }

@@ -26,12 +26,5 @@ _: {
       git_status = true;
     };
     toolbar.breadcrumbs = true;
-
-    bottom_dock_layout = "full";
-    terminal = {
-      toolbar.breadcrumbs = false;
-      font_family = "FiraCode Nerd Font";
-      cursor_shape = "underline";
-    };
   };
 }

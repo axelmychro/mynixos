@@ -1,9 +1,10 @@
 _: {
   programs.kitty = {
     enable = true;
-    shellIntegration.enableBashIntegration = false;
+    shellIntegration.enableBashIntegration = false; # let oh-my-posh handle the window title
 
     settings = {
+      shell = "bash";
       foreground = "#c6d0f5";
       background = "#303446";
       selection_foreground = "#303446";

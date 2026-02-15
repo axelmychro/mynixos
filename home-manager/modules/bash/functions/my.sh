@@ -27,11 +27,9 @@ EOF
     switch)
       git add /etc/nixos &&
         fd -e nix -E hardware-configuration.nix -x nixfmt {} &&
-        nix run nixpkgs#deadnix -- /etc/nixos &&
-        nix run nixpkgs#statix -- check /etc/nixos &&
         sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
-        my overview
-      reboot
+        my overview &&
+        reboot
       ;;
     drun)
       sudo nixos-rebuild dry-run --flake /etc/nixos#mychro
@@ -115,7 +113,10 @@ EOF
   esac
 }
 _my_complete() {
-  local cmds="status switch test drun undo update purge overview"
-  mapfile -t COMPREPLY < <(compgen -W "$cmds" -- "${COMP_WORDS[1]}")
+  if [[ $COMP_CWORD -ne 1 ]]; then
+    return 0
+  fi
+  local cmds="status switch test drun undo update prune purge overview"
+  mapfile -t COMPREPLY < <(compgen -W "$cmds" -- "$2")
 }
 complete -F _my_complete my

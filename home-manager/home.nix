@@ -1,6 +1,5 @@
 {
   username,
-  dotconfig,
   ...
 }:
 {
@@ -8,8 +7,6 @@
     homeDirectory = "/home/${username}";
     shell.enableBashIntegration = true;
     stateVersion = "24.11";
-
-    file.".wakatime.cfg".source = dotconfig + /wakatime/wakatime.cfg;
   };
   xdg.enable = true;
   imports = [

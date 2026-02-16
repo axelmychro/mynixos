@@ -1,5 +1,4 @@
 _: {
-  home.shell.enableBashIntegration = true;
   imports = [ ./functions/index.nix ];
   programs.bash = {
     enable = true;
@@ -12,4 +11,5 @@ _: {
     };
     initExtra = builtins.readFile ./init.sh;
   };
+  home.shell.enableBashIntegration = true;
 }

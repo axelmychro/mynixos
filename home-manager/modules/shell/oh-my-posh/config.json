@@ -4,10 +4,10 @@
   "palette": {
     "crust": "#232634",
     "mantle": "#292c3c",
-    "pink": "#F4B8E4",
-    "peach": "#ef9f76",
     "mauve": "#ca9ee6",
-    "closer": "p:mauve"
+    "peach": "#ef9f76",
+    "plain": "#c6d0f5",
+    "closer": "p:plain"
   },
   "blocks": [
     {
@@ -15,14 +15,14 @@
       "segments": [
         {
           "background": "p:crust",
-          "foreground": "p:mauve",
+          "foreground": "p:plain",
           "style": "plain",
-          "template": " {{ .UserName }} ",
-          "type": "session"
+          "template": " {{ .Shell }} ",
+          "type": "shell"
         },
         {
           "background": "p:mantle",
-          "foreground": "p:pink",
+          "foreground": "p:mauve",
           "options": {
             "folder_icon": "\ue5fe",
             "home_icon": "~",

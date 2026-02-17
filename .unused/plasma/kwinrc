@@ -1,7 +1,0 @@
-[org.kde.kdecoration2]
-BorderSize=None
-BorderSizeAuto=false
-ButtonsOnLeft=XAI
-ButtonsOnRight=
-library=org.kde.breeze
-theme=Breeze

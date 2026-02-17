@@ -26,7 +26,6 @@ EOF
       ;;
     switch)
       git add /etc/nixos &&
-        fd -e nix -E flake.lock -E hardware-configuration.nix -x nixfmt {} &&
         sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
         reboot
       ;;

@@ -14,11 +14,18 @@
       "alignment": "left",
       "segments": [
         {
+          "background": "p:mantle",
+          "foreground": "p:plain",
+          "template": "{{ .CurrentDate | date .Format }}",
+          "type": "time",
+          "style": "plain"
+        },
+        {
           "background": "p:crust",
           "foreground": "p:plain",
-          "style": "plain",
           "template": " {{ .Shell }} ",
-          "type": "shell"
+          "type": "shell",
+          "style": "plain"
         },
         {
           "background": "p:mantle",
@@ -28,9 +35,9 @@
             "home_icon": "~",
             "style": "folder"
           },
-          "style": "plain",
           "template": "\ue5fe {{ .Folder }}",
-          "type": "path"
+          "type": "path",
+          "style": "plain"
         },
         {
           "background": "p:mantle",
@@ -48,15 +55,16 @@
             "tag_icon": "\uf412 "
           },
           "template": " {{ .HEAD }}",
-          "style": "plain",
-          "type": "git"
+
+          "type": "git",
+          "style": "plain"
         },
         {
-          "style": "plain",
           "background": "p:crust",
           "foreground": "p:closer",
           "template": " 󰜌 ",
-          "type": "text"
+          "type": "text",
+          "style": "plain"
         }
       ],
       "type": "prompt"

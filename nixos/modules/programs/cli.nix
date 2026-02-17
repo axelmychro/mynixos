@@ -20,6 +20,5 @@
     gdu
 
     cmatrix
-    wakatime-cli
   ];
 }

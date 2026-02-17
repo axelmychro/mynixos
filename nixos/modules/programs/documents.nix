@@ -4,8 +4,7 @@
 }:
 {
   environment.systemPackages = with pkgs; [
-    qview
-    haruna
-    spotify
+    libreoffice
+    zathura
   ];
 }

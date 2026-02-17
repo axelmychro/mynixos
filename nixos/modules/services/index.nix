@@ -1,6 +1,6 @@
 _: {
   imports = [
-    ./internet.nix
+    ./network.nix
     ./package-manager.nix
   ];
 }

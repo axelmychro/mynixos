@@ -4,23 +4,17 @@
     "source": "~/.config/fastfetch/nix.txt",
     "padding": {
       "top": 0,
-      "left": 0,  
+      "left": 0,
       "right": 2
-    },
-    "color": {
-      "1": "#ffffff"
     }
   },
   "display": {
-    "color": {
-      "keys": "#ACB0BE",
-      "output": "#eeeeee"
-    },
     "separator": "",
     "key": {
-      "width": 12,
+      "width": 8,
       "type": "string"
     },
+    "color": { "keys": "#a5adce" },
     "percent": {
       "color": {
         "green": "#8CAAEE",
@@ -31,50 +25,60 @@
   },
   "modules": [
     {
+      "type": "title",
+      "format": "[{1}@{2}]"
+    },
+    {
       "type": "kernel",
-      "format": "{1} {2} {4}"
+      "key": "kernel",
+      "format": "{release} {arch}"
     },
     {
       "type": "os",
-      "format": "{2} {8}"
+      "key": "os",
+      "format": "{name} {version}"
     },
     {
       "type": "wm",
-      "format": "{2} ({3})"
+      "key": "wm",
+      "format": "{pretty-name} on {protocol-name}"
     },
     {
       "type": "terminal",
-      "format": "{1} {6}"
+      "key": "term",
+      "format": "{process-name} {version}"
     },
+    { "type": "shell", "key": "shell", "format": "{process-name} {version}" },
     {
       "type": "display",
-      "key": "Display",
-      "format": "{1}×{2} {3}Hz"
+      "key": "screen",
+      "format": "{width}×{height} {refresh-rate}Hz"
     },
     {
       "type": "cpu",
-      "keyIcon": " ",
-      "format": " {name}"
+      "key": "cpu",
+      "format": "{name}"
     },
     {
       "type": "gpu",
+      "key": "card",
       "hideType": "integrated",
-      "keyIcon": " ",
-      "format": "󰈈 {name}"
+      "format": "{name}"
     },
     {
       "type": "memory",
-      "format": " {3} {1} of {2}"
+      "key": "memory",
+      "format": "{percentage} {used}/{total}"
     },
     {
       "type": "disk",
-      "key": "Storage",
-      "format": " {3} {1} of {2}"
+      "key": "stored",
+      "format": "{size-percentage} {size-used}/{size-total}"
     },
     {
       "type": "battery",
-      "key": "Battery",
-      "format": " {4} {5}"
+      "key": "power",
+      "format": "{capacity} {status}"
     }
   ]
 }

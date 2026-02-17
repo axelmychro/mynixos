@@ -29,7 +29,7 @@
             "style": "folder"
           },
           "style": "plain",
-          "template": "\ue5fe {{ .Folder }} ",
+          "template": "\ue5fe {{ .Folder }}",
           "type": "path"
         },
         {
@@ -47,7 +47,7 @@
             "revert_icon": "\uf0e2 ",
             "tag_icon": "\uf412 "
           },
-          "template": "{{ .HEAD }}",
+          "template": " {{ .HEAD }}",
           "style": "plain",
           "type": "git"
         },

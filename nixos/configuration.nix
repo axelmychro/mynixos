@@ -62,7 +62,7 @@
     extraGroups = [
       "wheel"
     ];
-    shell = pkgs.fish;
-    ignoreShellProgramCheck = true;
+    shell = pkgs.bash;
+    ignoreShellProgramCheck = false;
   };
 }

@@ -3,5 +3,6 @@ _: {
     ./iodevice.nix
     ./keybind.nix
     ./power.nix
+    ./session.nix
   ];
 }

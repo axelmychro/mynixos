@@ -1,1 +1,0 @@
-_: { import = [ ./session.nix ]; }

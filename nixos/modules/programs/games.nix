@@ -10,7 +10,7 @@
     steam = {
       enable = true;
       package = pkgs.millennium-steam;
-      gamescopeSession.enable = true;
+      gamescopeSession.enable = false;
     };
     gamemode.enable = true;
   };

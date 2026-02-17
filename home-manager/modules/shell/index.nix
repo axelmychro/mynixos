@@ -4,7 +4,6 @@ _: {
     ./fish/index.nix
 
     ./fastfetch/index.nix
-    ./kitty/index.nix
     ./oh-my-posh/index.nix
   ];
 }

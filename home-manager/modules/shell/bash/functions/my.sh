@@ -19,16 +19,15 @@ commands:
 EOF
       ;;
     status)
-      fd -e nix -E hardware-configuration.nix -x nixfmt {}
+      fd -e nix -E flake.lock -E hardware-configuration.nix -x nixfmt {}
       nix run nixpkgs#deadnix -- /etc/nixos
       nix run nixpkgs#statix -- check /etc/nixos
       echo "my: status: done"
       ;;
     switch)
       git add /etc/nixos &&
-        fd -e nix -E hardware-configuration.nix -x nixfmt {} &&
+        fd -e nix -E flake.lock -E hardware-configuration.nix -x nixfmt {} &&
         sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
-        my overview &&
         reboot
       ;;
     drun)
@@ -76,7 +75,6 @@ EOF
         echo
         echo "Generated on: $(date)"
         echo
-
         fd -t f -e nix -e sh . "$root" \
           -E hardware-configuration.nix -E flake.lock | sort |
           while read -r file; do

@@ -6,6 +6,5 @@ _: {
   imports = [
     ./controlling/index.nix
     ./interface/index.nix
-    ./workflow/session.nix
   ];
 }

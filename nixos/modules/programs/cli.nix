@@ -1,13 +1,8 @@
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    tldr
-
     wget
     curl
-
-    zip
-    unzip
 
     tree
     fd
@@ -18,7 +13,5 @@
     btop
     ncdu
     gdu
-
-    cmatrix
   ];
 }

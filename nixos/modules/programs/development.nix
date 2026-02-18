@@ -1,9 +1,6 @@
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    micro
-    vim
-
     git
     nodejs_20
     pnpm

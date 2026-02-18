@@ -2,7 +2,7 @@
 
 rm() {
   for arg in "$@"; do
-    [[ "$arg" == "/" ]] && {
+    [[ $arg == "/" ]] && {
       echo "idiot."
       return 1
     }

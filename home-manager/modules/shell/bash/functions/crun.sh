@@ -9,7 +9,7 @@ crun() {
     echo "crun: file not found: $1"
     return 1
   }
-  [[ "$1" != *.c ]] && {
+  [[ $1 != *.c ]] && {
     echo "crun: only .c files allowed"
     return 1
   }

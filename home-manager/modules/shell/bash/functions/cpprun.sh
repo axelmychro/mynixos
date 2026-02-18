@@ -9,7 +9,7 @@ cpprun() {
     echo "cpprun: file not found: $1"
     return 1
   }
-  [[ "$1" != *.cpp ]] && {
+  [[ $1 != *.cpp ]] && {
     echo "cpprun: only .cpp files allowed"
     return 1
   }

@@ -3,7 +3,7 @@ _: {
     thermald.enable = true;
 
     # major options below all conflict with each other
-    power-profiles-daemon.enable = false;
+    power-profiles-daemon.enable = true;
 
     tlp = {
       enable = false;
@@ -14,7 +14,7 @@ _: {
     };
 
     auto-cpufreq = {
-      enable = true;
+      enable = false;
       settings = {
         battery = {
           governor = "powersave";

@@ -19,9 +19,9 @@ commands:
 EOF
       ;;
     status)
-      fd -e nix -E flake.lock -E hardware-configuration.nix -x nixfmt {}
-      nix run nixpkgs#deadnix -- /etc/nixos
-      nix run nixpkgs#statix -- check /etc/nixos
+      fd . /etc/nixos -e nix -E flake.lock -E hardware-configuration.nix \
+        -x sh -c 'nixfmt "{}" && nix run nixpkgs#deadnix -- --edit "{}" && nix run nixpkgs#statix -- fix "{}"'
+      fd . /etc/nixos -e sh -x shfmt -w -s -i 2 -ci -sr {}
       echo "my: status: done"
       ;;
     switch)
@@ -81,10 +81,10 @@ EOF
             filename=$(basename "$file")
             ext="${file##*.}"
             lang="nix"
-            [[ "$ext" == "sh" ]] && lang="bash"
+            [[ $ext == "sh" ]] && lang="bash"
 
-            if [[ "$rel_dir" != "$last_dir" ]]; then
-              if [[ "$rel_dir" == "." ]]; then
+            if [[ $rel_dir != "$last_dir" ]]; then
+              if [[ $rel_dir == "." ]]; then
                 echo "## mynixos"
                 echo
               else
@@ -97,7 +97,7 @@ EOF
             echo "\`\`\`$lang"
             cat "$file"
             echo ""
-            echo "\`\`\`"
+            echo '```'
             echo ""
           done
       } > "$out"

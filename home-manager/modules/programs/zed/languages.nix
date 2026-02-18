@@ -16,6 +16,7 @@ _: {
         formatter.external = {
           command = "shfmt";
           arguments = [
+            "-s"
             "-i"
             "2"
             "-ci"

@@ -57,6 +57,8 @@
     ./modules/programs/index.nix
     ./modules/services/index.nix
     ./modules/workspace/index.nix
+
+    ./modules/extra/index.nix
   ];
 
   users.users.${username} = {

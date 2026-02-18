@@ -14,16 +14,19 @@
       "alignment": "left",
       "segments": [
         {
+          "type": "time",
+          "style": "plain",
           "background": "p:mantle",
           "foreground": "p:plain",
-          "template": "{{ .CurrentDate | date .Format }}",
-          "type": "time",
-          "style": "plain"
+          "properties": {
+            "time_format": "02/01 03:04pm"
+          },
+          "template": "{{ .CurrentDate | date .Format }}"
         },
         {
           "background": "p:crust",
           "foreground": "p:plain",
-          "template": " {{ .Shell }} ",
+          "template": " {{ if eq .Shell \"fish\" }}f{{ else if eq .Shell \"zsh\" }}z{{ else if eq .Shell \"bash\" }}b{{ else }}?{{ end }} ",
           "type": "shell",
           "style": "plain"
         },

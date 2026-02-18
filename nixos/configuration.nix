@@ -12,10 +12,6 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_6_12;
     kernelModules = [ "ideapad_laptop" ];
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
   };
 
   networking = {
@@ -53,12 +49,11 @@
   imports = [
     ./hardware-configuration.nix
 
+    ./modules/boot/index.nix
     ./modules/hardware/index.nix
     ./modules/programs/index.nix
     ./modules/services/index.nix
     ./modules/workspace/index.nix
-
-    ./modules/extra/index.nix
   ];
 
   users.users.${username} = {

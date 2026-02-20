@@ -1,5 +1,7 @@
 # axelmychro/mynixos#mychro
 
+to use: `sudo nixos-rebuild switch --flake github:axelmychro/mynixos#mychro`
+
 ## credits
 
 ### modules
@@ -16,12 +18,8 @@
 
 ### theming
 
-- [Catppuccin](https://catppuccin.com/)
+- [Catppuccin](https://catppuccin.com/) (GRUB, login, lock, home, Zed)
 - [Arknights](https://www.arknights.global) (login screen)
 - [ﾒｰﾍﾞ](https://www.pixiv.net/en/artworks/118789197) (lock screen)
-- [T4B4Ko](https://x.com/t4b4ko/status/1968375351547204009) (desktop)
+- [T4B4Ko](https://x.com/t4b4ko/status/1968375351547204009) (home screen)
 - [4DBug](https://github.com/4DBug/nix-ansi) (nix ansi fastfetch logo)
-
-## note
-
-if forgor: git commit --amend --date="Tue Feb 3 22:54 2026 +0700" --no-edit

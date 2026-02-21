@@ -1,13 +1,11 @@
 {
   username,
+  hostname,
   pkgs,
   ...
 }:
 {
-  system = {
-    stateVersion = "25.11";
-    nixos.label = "fallen-angel";
-  };
+  system.stateVersion = "25.11";
 
   boot = {
     kernelPackages = pkgs.linuxPackages_6_12;
@@ -15,7 +13,7 @@
   };
 
   networking = {
-    hostName = "mychro";
+    hostName = hostname;
     networkmanager.enable = true;
   };
   time.timeZone = "Asia/Jakarta";
@@ -46,15 +44,7 @@
   services.fwupd.enable = true; # linux FOSS firmware update daemon
   zramSwap.enable = true; # 50% by default
 
-  imports = [
-    ./hardware-configuration.nix
-
-    ./modules/boot/index.nix
-    ./modules/hardware/index.nix
-    ./modules/programs/index.nix
-    ./modules/services/index.nix
-    ./modules/workspace/index.nix
-  ];
+  imports = [ ./hardware-configuration.nix ];
 
   users.users.${username} = {
     isNormalUser = true;

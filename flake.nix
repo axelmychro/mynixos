@@ -29,32 +29,33 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       username = "axel";
+      hostname = "mychro";
     in
     {
-      nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit username; };
+      nixosConfigurations = {
+        cube = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit hostname username; };
 
-        modules = [
-          ./nixos/configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              sharedModules = [ plasma-manager.homeModules.plasma-manager ];
-              backupFileExtension = "backup";
-              users.${username} = import ./home-manager/home.nix;
-              extraSpecialArgs = {
-                inherit username;
+          modules = [
+            ./icing/cube/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                extraSpecialArgs = { inherit username; };
+                users.${username} = import ./icing/cube/home.nix;
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                sharedModules = [ plasma-manager.homeModules.plasma-manager ];
+                backupFileExtension = "backup";
               };
-            };
-          }
-          nix-flatpak.nixosModules.nix-flatpak
-          {
-            nixpkgs.overlays = [ inputs.millennium.overlays.default ];
-          }
-        ];
+            }
+            nix-flatpak.nixosModules.nix-flatpak
+            {
+              nixpkgs.overlays = [ inputs.millennium.overlays.default ];
+            }
+          ];
+        };
       };
       formatter.${system} = pkgs.nixfmt-rfc-style;
     };

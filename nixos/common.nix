@@ -17,7 +17,10 @@
     networkmanager.enable = true;
   };
   time.timeZone = "Asia/Jakarta";
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n = {
+    defaultLocale = "en_SG.UTF-8";
+    extraLocales = [ "en_US.UTF-8/UTF-8" ];
+  };
 
   nixpkgs.config.allowUnfree = true;
   programs = {

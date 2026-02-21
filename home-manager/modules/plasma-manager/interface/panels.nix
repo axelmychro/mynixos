@@ -6,12 +6,12 @@ in
 {
   programs.plasma.panels = [
     {
-      alignment = "right";
+      location = "top";
+      alignment = "center";
       floating = false;
-      height = 32;
+      height = 36;
       hiding = "none";
       lengthMode = "fill";
-      location = "right";
       widgets = [
         {
           kickoff = {
@@ -39,10 +39,10 @@ in
               shown = [
                 "org.kde.plasma.networkmanagement"
                 "org.kde.plasma.battery"
+                "org.kde.plasma.volume"
               ];
               hidden = [
                 "org.kde.plasma.clipboard"
-                "org.kde.plasma.volume"
                 "org.kde.plasma.bluetooth"
                 "org.kde.plasma.mediacontrol"
                 "org.kde.plasma.brightness"

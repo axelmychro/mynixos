@@ -17,5 +17,4 @@
     baloo-widgets
     dolphin-plugins
   ];
-  services.xserver.excludePackages = [ pkgs.xterm ];
 }

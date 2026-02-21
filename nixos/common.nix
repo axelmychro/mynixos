@@ -44,7 +44,14 @@
   services.fwupd.enable = true; # linux FOSS firmware update daemon
   zramSwap.enable = true; # 50% by default
 
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ./modules/boot/index.nix
+    ./modules/hardware/index.nix
+    ./modules/programs/index.nix
+    ./modules/services/index.nix
+    ./modules/workspace/index.nix
+  ];
 
   users.users.${username} = {
     isNormalUser = true;

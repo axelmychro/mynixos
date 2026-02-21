@@ -1,11 +1,11 @@
 _: {
   imports = [
+    ./games.nix
+    ./utilities/index.nix
     ./cli.nix
     ./development.nix
     ./documents.nix
-    ./games.nix
     ./internet.nix
     ./multimedia.nix
-    ./utilities.nix
   ];
 }

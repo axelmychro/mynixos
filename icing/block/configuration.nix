@@ -1,11 +1,11 @@
 _: {
-  system.nixos.label = "fallen-angel";
+  system.nixos.label = "block";
 
   imports = [
     ../../nixos/common.nix
     ../../nixos/modules/workspace/desktop/plasma6.nix
     ../../nixos/modules/workspace/display/sddm.nix
 
-    ../../nixos/modules/programs/utilities/alacritty.nix
+    ../../nixos/modules/programs/utilities/kitty.nix
   ];
 }

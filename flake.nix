@@ -33,6 +33,30 @@
     in
     {
       nixosConfigurations = {
+        block = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit hostname username; };
+
+          modules = [
+            ./icing/block/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                extraSpecialArgs = { inherit username; };
+                users.${username} = import ./icing/block/home.nix;
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                sharedModules = [ plasma-manager.homeModules.plasma-manager ];
+                backupFileExtension = "backup";
+              };
+            }
+            nix-flatpak.nixosModules.nix-flatpak
+            {
+              nixpkgs.overlays = [ inputs.millennium.overlays.default ];
+            }
+          ];
+        };
+
         cube = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit hostname username; };
@@ -44,6 +68,27 @@
               home-manager = {
                 extraSpecialArgs = { inherit username; };
                 users.${username} = import ./icing/cube/home.nix;
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                sharedModules = [ plasma-manager.homeModules.plasma-manager ];
+                backupFileExtension = "backup";
+              };
+            }
+            nix-flatpak.nixosModules.nix-flatpak
+          ];
+        };
+
+        dice = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit hostname username; };
+
+          modules = [
+            ./icing/dice/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                extraSpecialArgs = { inherit username; };
+                users.${username} = import ./icing/dice/home.nix;
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 sharedModules = [ plasma-manager.homeModules.plasma-manager ];

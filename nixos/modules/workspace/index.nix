@@ -1,6 +1,6 @@
 _: {
   imports = [
-    ./desktop.nix
-    ./display.nix
+    ./desktop/index.nix
+    ./display/index.nix
   ];
 }

@@ -24,29 +24,28 @@ in
       };
       soundTheme = "ocean";
     };
-    desktop.widgets = [
-      {
-        digitalClock = {
-          position = {
-            horizontal = 16;
-            vertical = 16;
-          };
-          size = {
-            width = 128;
-            height = 128;
-          };
-          date.format = {
-            custom = "ddd, d MMM";
-          };
-          calendar.firstDayOfWeek = "monday";
-        };
-      }
-    ];
-
     kscreenlocker.appearance = {
       wallpaper = ../assets/lock.jpg;
       alwaysShowClock = true;
       showMediaControls = true; # for spotify too
+    };
+    kwin = {
+      nightLight = {
+        enable = true;
+        mode = "times";
+        time = {
+          evening = "17:30";
+          morning = "06:30";
+        };
+      };
+      effects = {
+        hideCursor = {
+          hideOnInactivity = 10;
+          hideOnTyping = true;
+        };
+        shakeCursor.enable = true;
+        wobblyWindows.enable = true;
+      };
     };
     fonts = {
       general = {

@@ -28,6 +28,12 @@ in
           };
         }
         {
+          digitalClock = {
+            date.format.custom = "ddd, d MMM";
+            calendar.firstDayOfWeek = "monday";
+          };
+        }
+        {
           systemTray = {
             items = {
               shown = [

@@ -23,6 +23,10 @@ in
         theme = "Breeze_Light";
       };
       soundTheme = "ocean";
+      splashScreen = {
+        engine = "none";
+        theme = "None";
+      };
     };
     kscreenlocker.appearance = {
       wallpaper = ../assets/lock.jpg;
@@ -30,6 +34,15 @@ in
       showMediaControls = true; # for spotify too
     };
     kwin = {
+      scripts = {
+        polonium = {
+          enable = true;
+          settings = {
+            enableDebug = true;
+            borderVisibility = "borderAll";
+          };
+        };
+      };
       nightLight = {
         enable = true;
         mode = "times";

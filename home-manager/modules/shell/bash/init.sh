@@ -1,5 +1,5 @@
 # !/usr/bin/env bash
 
-[[ $- == *i* ]] && clear
+[[ $- == *i* ]] && clear -x
 [[ $SHLVL -eq 1 ]] && fastfetch
 # eval "$(oh-my-posh init bash --config ~/.config/oh-my-posh/config.json)" # already handled by integration option

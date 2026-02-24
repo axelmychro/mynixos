@@ -6,19 +6,18 @@ _: {
     settings = {
       font_family = "FiraCode Nerd Font";
       font_size = "12.0";
-
       cursor_shape = "underline";
+      scrollback_lines = 32000;
 
-      scrollback_lines = 10000;
-
-      repaint_delay = 30;
-      input_delay = 5;
+      repaint_delay = 5;
+      input_delay = 0;
+      sync_to_monitor = "no";
 
       remember_window_size = "no";
       initial_window_width = "128c";
       initial_window_height = "32c";
 
-      window_padding_width = 0;
+      window_padding_width = 8;
       background_opacity = "0.9";
 
       foreground = "#c6d0f5";

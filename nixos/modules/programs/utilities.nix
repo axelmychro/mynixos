@@ -2,7 +2,8 @@
 {
   virtualisation.waydroid.enable = true;
   environment.systemPackages = with pkgs; [
-    alacritty
+    kitty
+    ghostty
     keyd
     peazip
   ];

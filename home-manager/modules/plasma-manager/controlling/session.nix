@@ -4,14 +4,14 @@ _: {
       number = 8;
       rows = 2;
       names = [
-        "Home"
-        "Web"
-        "Code"
-        "Docs"
-        "Media"
-        "Chat"
-        "Term"
-        "Temp"
+        "󰜌"
+        ""
+        ""
+        ""
+        ""
+        "󰭹"
+        ""
+        "󰏗"
       ];
     };
     session = {
@@ -23,9 +23,10 @@ _: {
       timeout = 5; # minutes before screen is locked
     };
     krunner = {
-      activateWhenTypingOnDesktop = true;
+      shortcuts.launch = [ "Meta+R" ];
+      activateWhenTypingOnDesktop = false;
       historyBehavior = "disabled";
-      position = "top";
+      position = "center";
     };
     configFile.kdeglobals = {
       General = {

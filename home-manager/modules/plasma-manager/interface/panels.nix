@@ -13,11 +13,7 @@ _:
       hiding = "none";
       lengthMode = "fill";
       widgets = [
-        {
-          kickoff = {
-            icon = "nix-snowflake";
-          };
-        }
+        "org.kde.plasma.showdesktop"
         {
           pager = {
             general = {
@@ -37,9 +33,6 @@ _:
         #     ];
         #   };
         # }
-        "org.kde.plasma.systemmonitor.cpu"
-        "org.kde.plasma.systemmonitor.memory"
-        "org.kde.plasma.systemmonitor.diskactivity"
         "org.kde.plasma.panelspacer"
         {
           digitalClock = {
@@ -65,7 +58,11 @@ _:
             };
           };
         }
-        "org.kde.plasma.showdesktop"
+        {
+          kickoff = {
+            icon = "nix-snowflake";
+          };
+        }
       ];
     }
   ];

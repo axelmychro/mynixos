@@ -15,6 +15,11 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak";
 
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
+
+    silentSDDM = {
+      url = "github:uiriansan/SilentSDDM";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -53,6 +58,9 @@
           nix-flatpak.nixosModules.nix-flatpak
           {
             nixpkgs.overlays = [ inputs.millennium.overlays.default ];
+          }
+          {
+            imports = [ inputs.silentSDDM.nixosModules.default ];
           }
         ];
       };

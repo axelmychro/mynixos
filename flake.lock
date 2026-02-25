@@ -75,11 +75,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1770260404,
-        "narHash": "sha256-3iVX1+7YUIt23hBx1WZsUllhbmP2EnXrV8tCRbLxHc8=",
+        "lastModified": 1772020340,
+        "narHash": "sha256-aqBl3GNpCadMoJ/hVkWTijM1Aeilc278MjM+LA3jK6g=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "0d782ee42c86b196acff08acfbf41bb7d13eed5b",
+        "rev": "36e38ca0d9afe4c55405fdf22179a5212243eecc",
         "type": "github"
       },
       "original": {
@@ -196,11 +196,11 @@
       },
       "locked": {
         "dir": "packages/nix",
-        "lastModified": 1771479030,
-        "narHash": "sha256-rRrepLV6/X2fJ4sQNEN4RKURILBd3MOpwr26ORp1+Ow=",
+        "lastModified": 1771985657,
+        "narHash": "sha256-wAnrrFZxuHrITZAfyUyuIItYW/2gjO+gm3TCupExdt4=",
         "owner": "SteamClientHomebrew",
         "repo": "Millennium",
-        "rev": "24e66bd75de3a635a6e36257e7f39dbe79bbc04c",
+        "rev": "dbbb365d32725022041caa2d2211f7934ca8ef58",
         "type": "github"
       },
       "original": {
@@ -311,11 +311,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1771419570,
-        "narHash": "sha256-bxAlQgre3pcQcaRUm/8A0v/X8d2nhfraWSFqVmMcBcU=",
+        "lastModified": 1771903837,
+        "narHash": "sha256-sdaqdnsQCv3iifzxwB22tUwN/fSHoN7j2myFW5EIkGk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6d41bc27aaf7b6a3ba6b169db3bd5d6159cfaa47",
+        "rev": "e764fc9a405871f1f6ca3d1394fb422e0a0c3951",
         "type": "github"
       },
       "original": {
@@ -371,7 +371,28 @@
         "millennium": "millennium",
         "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs_2",
-        "plasma-manager": "plasma-manager"
+        "plasma-manager": "plasma-manager",
+        "silentSDDM": "silentSDDM"
+      }
+    },
+    "silentSDDM": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1771956684,
+        "narHash": "sha256-+EtzmEzGA2xqwIvKrP0euYaOzrmTQWEWAiWV+k2WBEM=",
+        "owner": "uiriansan",
+        "repo": "SilentSDDM",
+        "rev": "34f82e1fb8412fff78b82a0dcce763492b36054c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "uiriansan",
+        "repo": "SilentSDDM",
+        "type": "github"
       }
     },
     "websocketpp-src": {

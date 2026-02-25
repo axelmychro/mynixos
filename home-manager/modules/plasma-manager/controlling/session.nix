@@ -1,5 +1,19 @@
 _: {
   programs.plasma = {
+    kwin.virtualDesktops = {
+      number = 8;
+      rows = 2;
+      names = [
+        "Home"
+        "Web"
+        "Code"
+        "Docs"
+        "Media"
+        "Chat"
+        "Term"
+        "Temp"
+      ];
+    };
     session = {
       general.askForConfirmationOnLogout = false;
       sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";

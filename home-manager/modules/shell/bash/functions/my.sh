@@ -30,7 +30,8 @@ EOF
         reboot
       ;;
     drun)
-      sudo nixos-rebuild dry-run --flake /etc/nixos#mychro
+      git add /etc/nixos &&
+        sudo nixos-rebuild dry-run --flake /etc/nixos#mychro
       ;;
     test)
       git add /etc/nixos &&

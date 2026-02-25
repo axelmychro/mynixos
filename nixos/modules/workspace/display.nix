@@ -37,17 +37,20 @@
   #
   programs.silentSDDM = {
     enable = true;
-    theme = "default-right";
+    theme = "rei";
     backgrounds = {
-      live = ./assets/login.mp4;
+      "rei.mp4" = ./assets/rei.mp4;
     };
 
     settings = {
-      "LockScreen" = {
-        background = "login.mp4";
-      };
       "LoginScreen" = {
-        background = "login.mp4";
+        background = "rei.mp4";
+      };
+      "LockScreen" = {
+        background = "rei.mp4";
+      };
+      "LockScreen.Message" = {
+        text = "Welcome back, Oracle.";
       };
     };
   };

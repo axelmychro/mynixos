@@ -1,5 +1,5 @@
 _: {
-  system.nixos.label = "fallen-angel";
+  system.nixos.label = "fahrenheit";
 
   imports = [
     ../../nixos/common.nix

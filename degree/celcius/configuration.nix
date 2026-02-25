@@ -1,5 +1,5 @@
 _: {
-  system.nixos.label = "block";
+  system.nixos.label = "celcius";
 
   imports = [
     ../../nixos/common.nix
@@ -7,5 +7,6 @@ _: {
     ../../nixos/modules/workspace/display/sddm.nix
 
     ../../nixos/modules/programs/utilities/kitty.nix
+    ../../nixos/modules/programs/games/steam/millennium-steam.nix
   ];
 }

@@ -1,5 +1,5 @@
 _: {
-  system.nixos.label = "dice";
+  system.nixos.label = "kelvin";
 
   imports = [
     ../../nixos/common.nix

@@ -33,17 +33,17 @@
     in
     {
       nixosConfigurations = {
-        block = nixpkgs.lib.nixosSystem {
+        celcius = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit hostname username; };
 
           modules = [
-            ./icing/block/configuration.nix
+            ./degree/celcius/configuration.nix
             home-manager.nixosModules.home-manager
             {
               home-manager = {
                 extraSpecialArgs = { inherit username; };
-                users.${username} = import ./icing/block/home.nix;
+                users.${username} = import ./degree/celcius/home.nix;
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 sharedModules = [ plasma-manager.homeModules.plasma-manager ];
@@ -57,17 +57,17 @@
           ];
         };
 
-        cube = nixpkgs.lib.nixosSystem {
+        fahrenheit = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit hostname username; };
 
           modules = [
-            ./icing/cube/configuration.nix
+            ./degree/fahrenheit/configuration.nix
             home-manager.nixosModules.home-manager
             {
               home-manager = {
                 extraSpecialArgs = { inherit username; };
-                users.${username} = import ./icing/cube/home.nix;
+                users.${username} = import ./degree/fahrenheit/home.nix;
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 sharedModules = [ plasma-manager.homeModules.plasma-manager ];
@@ -78,17 +78,17 @@
           ];
         };
 
-        dice = nixpkgs.lib.nixosSystem {
+        kelvin = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit hostname username; };
 
           modules = [
-            ./icing/dice/configuration.nix
+            ./degree/kelvin/configuration.nix
             home-manager.nixosModules.home-manager
             {
               home-manager = {
                 extraSpecialArgs = { inherit username; };
-                users.${username} = import ./icing/dice/home.nix;
+                users.${username} = import ./degree/kelvin/home.nix;
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 sharedModules = [ plasma-manager.homeModules.plasma-manager ];

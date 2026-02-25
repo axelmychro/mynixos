@@ -1,7 +1,7 @@
 _: {
   imports = [
     ./iodevice.nix
-    ./keybind.nix
+    ./shortcuts.nix
     ./power.nix
     ./session.nix
   ];

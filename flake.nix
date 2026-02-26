@@ -68,7 +68,7 @@
           }
           inputs.spicetify-nix.nixosModules.default
         ];
-        };
+      };
       formatter.${system} = pkgs.nixfmt-rfc-style;
     };
 }

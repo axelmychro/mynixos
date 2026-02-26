@@ -6,7 +6,7 @@
 {
   system = {
     stateVersion = "25.11";
-    nixos.label = "fallen-angel";
+    nixos.label = "lemuen";
   };
 
   boot = {

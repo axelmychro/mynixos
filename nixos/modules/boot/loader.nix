@@ -11,8 +11,8 @@ _: {
       gfxmodeEfi = "1920x1080";
       gfxpayloadEfi = "keep";
 
-      splashImage = ./assets/splashImage.png;
       theme = ./assets/catppuccin-frappe-grub-theme;
+      splashImage = ./assets/splashImage.png;
     };
   };
 }

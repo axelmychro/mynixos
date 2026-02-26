@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,6 +21,7 @@
       url = "github:uiriansan/SilentSDDM";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
   };
 
   outputs =
@@ -34,11 +36,13 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       username = "axel";
+
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
     in
     {
       nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit username; };
+        specialArgs = { inherit username spicePkgs; };
 
         modules = [
           ./nixos/configuration.nix
@@ -62,8 +66,9 @@
           {
             imports = [ inputs.silentSDDM.nixosModules.default ];
           }
+          inputs.spicetify-nix.nixosModules.default
         ];
-      };
+        };
       formatter.${system} = pkgs.nixfmt-rfc-style;
     };
 }

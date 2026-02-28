@@ -35,9 +35,9 @@ _: {
       theme = "catppuccin-frappe";
 
       font-family = "FiraCode Nerd Font";
-      font-size = 20;
+      font-size = 16;
       cursor-style = "underline";
-      hide-mouse-while-typing = true;
+      mouse-hide-while-typing = true;
       mouse-scroll-multiplier = 3;
 
       title = "PRTS";

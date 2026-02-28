@@ -5,7 +5,7 @@ _: {
 
     settings = {
       font_family = "FiraCode Nerd Font";
-      font_size = "12.0";
+      font_size = "20";
 
       cursor_shape = "underline";
       cursor_trail = 1;
@@ -13,14 +13,14 @@ _: {
 
       scrollback_lines = 32000;
 
-      repaint_delay = 30;
-      input_delay = 5;
+      repaint_delay = 0;
+      input_delay = 0;
 
-      background_opacity = "0.9";
-      remember_window_size = "no";
+      background_opacity = "1";
       initial_window_width = "128c";
       initial_window_height = "32c";
-      window_padding_width = 8;
+      remember_window_size = "no";
+      window_padding_width = 0;
 
       foreground = "#c6d0f5";
       background = "#303446";

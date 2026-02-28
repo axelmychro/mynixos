@@ -1,6 +1,6 @@
 _: {
   imports = [
-    ./kitty.nix
+    ./ghostty.nix
 
     ./git/index.nix
     ./zed/index.nix

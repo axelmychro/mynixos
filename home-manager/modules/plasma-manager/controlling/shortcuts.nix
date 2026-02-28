@@ -2,7 +2,7 @@ _: {
   programs.plasma = {
     shortcuts = {
       kwin = {
-        "Window Fullscreen" = "";
+        "Window Fullscreen" = "Shift+F11";
         "Window Maximize" = "F11";
 
         "Switch to Desktop 1" = "Meta+1";
@@ -24,7 +24,7 @@ _: {
         "Window to Desktop 8" = "Meta+Shift+8";
       };
 
-      "services/kitty.desktop" = {
+      "services/com.mitchellh.ghostty.desktop" = {
         "_launch" = "Meta+Return";
       };
     };

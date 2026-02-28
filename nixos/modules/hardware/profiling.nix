@@ -27,11 +27,6 @@
           turbo = "never";
           energy_performance_preference = "power";
           scaling_max_freq = 1600000;
-
-          ideapad_laptop_conservation_mode = true;
-          enable_thresholds = true;
-          start_threshold = 60;
-          stop_threshold = 80;
         };
         charger = {
           governor = "powersave";

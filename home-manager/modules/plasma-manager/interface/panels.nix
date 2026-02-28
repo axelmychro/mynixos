@@ -1,9 +1,4 @@
-_:
-# let
-#   browser = "app.zen_browser.zen.desktop";
-#   editor = "dev.zed.Zed.desktop";
-# in
-{
+_: {
   programs.plasma.panels = [
     {
       location = "top";
@@ -25,14 +20,6 @@ _:
             };
           };
         }
-        # {
-        #   iconTasks = {
-        #     launchers = [
-        #       "applications:${browser}"
-        #       "applications:${editor}"
-        #     ];
-        #   };
-        # }
         "org.kde.plasma.panelspacer"
         {
           digitalClock = {

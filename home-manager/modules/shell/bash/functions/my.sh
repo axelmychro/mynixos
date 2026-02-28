@@ -26,8 +26,7 @@ EOF
       ;;
     switch)
       git add /etc/nixos &&
-        sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
-        reboot
+        sudo nixos-rebuild switch --flake /etc/nixos#mychro
       ;;
     drun)
       git add /etc/nixos &&
@@ -38,13 +37,12 @@ EOF
         sudo nixos-rebuild test --flake /etc/nixos#mychro
       ;;
     undo)
-      sudo nixos-rebuild switch --rollback && reboot
+      sudo nixos-rebuild switch --rollback
       ;;
     update)
       git add /etc/nixos &&
         nix flake update &&
-        sudo nixos-rebuild switch --flake /etc/nixos#mychro &&
-        reboot
+        sudo nixos-rebuild switch --flake /etc/nixos#mychro
       ;;
     prune)
       echo "my: prune: delete generations older than 3 days"

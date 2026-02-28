@@ -34,15 +34,6 @@ in
       showMediaControls = true; # for spotify too
     };
     kwin = {
-      scripts = {
-        polonium = {
-          enable = true;
-          settings = {
-            enableDebug = true;
-            borderVisibility = "borderAll";
-          };
-        };
-      };
       nightLight = {
         enable = true;
         mode = "times";

@@ -30,8 +30,8 @@ _: {
     };
     configFile.kdeglobals = {
       General = {
-        TerminalApplication = "kitty";
-        TerminalService = "kitty.desktop";
+        TerminalApplication = "ghostty";
+        TerminalService = "com.mitchellh.ghostty.desktop";
       };
     };
   };

@@ -8,18 +8,19 @@ _: {
       font_size = "12.0";
 
       cursor_shape = "underline";
+      cursor_trail = 1;
+      cursor_trail_decay = "0.1 0.4";
 
-      scrollback_lines = 10000;
+      scrollback_lines = 32000;
 
       repaint_delay = 30;
       input_delay = 5;
 
+      background_opacity = "0.9";
       remember_window_size = "no";
       initial_window_width = "128c";
       initial_window_height = "32c";
-
-      window_padding_width = 0;
-      background_opacity = "0.9";
+      window_padding_width = 8;
 
       foreground = "#c6d0f5";
       background = "#303446";

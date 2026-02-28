@@ -12,7 +12,7 @@ _: {
     "application/x-compressed-tar" = [ "peazip.desktop" ];
     "application/x-cpio" = [ "peazip.desktop" ];
     "application/x-cpio-compressed" = [ "peazip.desktop" ];
-    "application/x-docbook+xml" = [ " dev.zed.Zed.desktop" ];
+    "application/x-docbook+xml" = [ "dev.zed.Zed.desktop" ];
     "application/x-iso9660-appimage" = [ "peazip.desktop" ];
     "application/x-lha" = [ "peazip.desktop" ];
     "application/x-lrzip-compressed-tar" = [ "peazip.desktop" ];

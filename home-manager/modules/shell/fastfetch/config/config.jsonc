@@ -1,18 +1,20 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "source": "~/.config/fastfetch/nix.txt",
+    "source": "~/.config/fastfetch/darling.jpg",
     "padding": {
-      "top": 0,
-      "left": 0,
-      "right": 2
-    }
+      "top": 1,
+      "left": 2,
+      "right": 2,
+      "bottom": 1
+    },
+    "height": 8
   },
   "display": {
     "separator": "",
     "key": {
-      "width": 8,
-      "type": "string"
+      "width": 12,
+      "type": "none"
     },
     "color": { "keys": "#a5adce" },
     "percent": {
@@ -24,61 +26,22 @@
     }
   },
   "modules": [
+    "break",
     {
-      "type": "title",
-      "format": "[{1}@{2}]"
+      "type": "title"
     },
+    "break",
     {
       "type": "kernel",
-      "key": "kernel",
       "format": "{release} {arch}"
     },
     {
       "type": "os",
-      "key": "os",
       "format": "{name} {version}"
     },
-    {
-      "type": "wm",
-      "key": "wm",
-      "format": "{pretty-name} on {protocol-name}"
-    },
-    {
-      "type": "terminal",
-      "key": "term",
-      "format": "{process-name} {version}"
-    },
-    { "type": "shell", "key": "shell", "format": "{process-name} {version}" },
-    {
-      "type": "display",
-      "key": "screen",
-      "format": "{width}×{height} {refresh-rate}Hz"
-    },
-    {
-      "type": "cpu",
-      "key": "cpu",
-      "format": "{name}"
-    },
-    {
-      "type": "gpu",
-      "key": "card",
-      "hideType": "integrated",
-      "format": "{name}"
-    },
-    {
-      "type": "memory",
-      "key": "memory",
-      "format": "{percentage} {used}/{total}"
-    },
-    {
-      "type": "disk",
-      "key": "stored",
-      "format": "{size-percentage} {size-used}/{size-total}"
-    },
-    {
-      "type": "battery",
-      "key": "power",
-      "format": "{capacity} {status}"
-    }
+    "packages",
+    "wm",
+    "terminal",
+    "uptime"
   ]
 }

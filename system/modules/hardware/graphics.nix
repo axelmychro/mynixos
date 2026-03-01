@@ -11,13 +11,8 @@
     };
     nvidia = {
       package = config.boot.kernelPackages.nvidiaPackages.stable;
-      modesetting.enable = true;
       open = true;
-      nvidiaSettings = true;
-      powerManagement = {
-        enable = true;
-        finegrained = true;
-      };
+      modesetting.enable = true;
       prime = {
         offload = {
           enable = true;
@@ -25,6 +20,12 @@
         };
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
+        sync.enable = false; # only enable if you hate your laptop
+        reverseSync.enable = false; # this is a laptop, please NEVER enable
+      };
+      powerManagement = {
+        enable = true;
+        finegrained = true;
       };
     };
   };

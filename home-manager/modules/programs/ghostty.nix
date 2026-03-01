@@ -37,6 +37,7 @@ _: {
       font-family = "FiraCode Nerd Font";
       font-size = 16;
       cursor-style = "underline";
+      shell-integration-features = "no-cursor";
       mouse-hide-while-typing = true;
       mouse-scroll-multiplier = 3;
 

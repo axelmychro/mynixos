@@ -22,6 +22,7 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   nixpkgs.config.allowUnfree = true;
+  programs.nix-ld.enable = true;
 
   nix = {
     settings = {

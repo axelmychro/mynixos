@@ -40,7 +40,6 @@
     in
     {
       nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
-        inherit system;
         specialArgs = { inherit spicePkgs; };
 
         modules = [
@@ -66,6 +65,5 @@
           inputs.spicetify-nix.nixosModules.default
         ];
       };
-      formatter.${system} = pkgs.nixfmt-rfc-style;
     };
 }

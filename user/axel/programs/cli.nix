@@ -1,6 +1,11 @@
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    peazip
+    bat
+    imagemagick
+
+    btop
+    ncdu
+    gdu
   ];
 }

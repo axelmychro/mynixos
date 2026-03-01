@@ -7,11 +7,5 @@
     tree
     fd
     ripgrep
-    bat
-    imagemagick
-
-    btop
-    ncdu
-    gdu
   ];
 }

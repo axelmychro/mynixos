@@ -8,4 +8,5 @@
     shell = pkgs.bash;
     ignoreShellProgramCheck = false;
   };
+  imports = [ ./programs/index.nix ];
 }

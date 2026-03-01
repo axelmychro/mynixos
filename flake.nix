@@ -1,5 +1,5 @@
 {
-  description = "my chemical rebuild";
+  description = "Like a phoe-nix, cry and rise up from the ash!";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";

@@ -6,7 +6,6 @@
     plasma-browser-integration
     plasma-workspace-wallpapers
     ark
-    konsole
     elisa
     gwenview
     okular

@@ -5,7 +5,8 @@
 {
   system = {
     stateVersion = "25.11";
-    nixos.label = "lemuen";
+    # boot label depends on my mood, on which arknights character i feel fluffy with :3
+    nixos.label = "gilberta";
   };
 
   boot = {
@@ -21,10 +22,6 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   nixpkgs.config.allowUnfree = true;
-  programs = {
-    nix-ld.enable = true;
-    appimage.enable = true;
-  };
 
   nix = {
     settings = {
@@ -51,7 +48,6 @@
     ./modules/boot/index.nix
     ./modules/hardware/index.nix
     ./modules/programs/index.nix
-    ./modules/services/index.nix
     ./modules/workspace/index.nix
   ];
 }

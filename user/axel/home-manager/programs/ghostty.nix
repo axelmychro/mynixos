@@ -43,8 +43,8 @@ _: {
 
       title = "PRTS";
       window-decoration = "auto";
-      window-height = 32;
-      window-width = 128;
+      window-height = 24;
+      window-width = 80;
       window-save-state = "never";
     };
   };

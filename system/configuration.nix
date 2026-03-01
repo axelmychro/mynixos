@@ -1,5 +1,4 @@
 {
-  username,
   pkgs,
   ...
 }:
@@ -55,13 +54,4 @@
     ./modules/services/index.nix
     ./modules/workspace/index.nix
   ];
-
-  users.users.${username} = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-    ];
-    shell = pkgs.bash;
-    ignoreShellProgramCheck = false;
-  };
 }

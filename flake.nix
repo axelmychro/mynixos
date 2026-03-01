@@ -35,17 +35,17 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-      username = "axel";
 
       spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
     in
     {
       nixosConfigurations.mychro = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit username spicePkgs; };
+        specialArgs = { inherit spicePkgs; };
 
         modules = [
-          ./nixos/configuration.nix
+          ./system/configuration.nix
+          ./user/axel/index.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -53,10 +53,7 @@
               useUserPackages = true;
               sharedModules = [ plasma-manager.homeModules.plasma-manager ];
               backupFileExtension = "backup";
-              users.${username} = import ./home-manager/home.nix;
-              extraSpecialArgs = {
-                inherit username;
-              };
+              users.axel = import ./user/axel/home-manager/home.nix;
             };
           }
           nix-flatpak.nixosModules.nix-flatpak

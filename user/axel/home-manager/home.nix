@@ -8,9 +8,9 @@
   };
   xdg.enable = true;
   imports = [
-    ./modules/default-apps/index.nix
-    ./modules/shell/index.nix
-    ./modules/programs/index.nix
+    ./default-apps/index.nix
+    ./shell/index.nix
+    ./programs/index.nix
     ./plasma-manager/plasma.nix
   ];
 }

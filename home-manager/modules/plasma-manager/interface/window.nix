@@ -18,7 +18,7 @@ _: {
           };
           enableDebug = true;
           borderVisibility = "noBorderAll";
-          maximizeSingleWindow = false;
+          maximizeSingleWindow = true;
           tilePopups = false;
         };
       };

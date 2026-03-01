@@ -6,7 +6,10 @@
     auto-cpufreq
   ];
   services = {
-    thermald.enable = true;
+    thermald = {
+      enable = true;
+      debug = true;
+    };
 
     # major options below all conflict with each other
     power-profiles-daemon.enable = false;

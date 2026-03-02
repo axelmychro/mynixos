@@ -3,3 +3,4 @@ overview.md
 .unused
 result
 *.qcow2
+.env*

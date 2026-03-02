@@ -93,6 +93,7 @@ EOF
               last_dir="$rel_dir"
             fi
             echo "### $filename"
+            echo
             echo "\`\`\`$lang"
             cat "$file"
             echo ""

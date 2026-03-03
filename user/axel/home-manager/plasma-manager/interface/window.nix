@@ -9,19 +9,6 @@ _: {
         ];
         right = [ ]; # note: null value is actually default. leave an empty string instead
       };
-      scripts.polonium = {
-        enable = true;
-        settings = {
-          layout = {
-            engine = "binaryTree";
-            insertionPoint = "activeWindow";
-          };
-          enableDebug = true;
-          borderVisibility = "noBorderAll";
-          maximizeSingleWindow = true;
-          tilePopups = false;
-        };
-      };
     };
     configFile.kwinrc.Windows = {
       FocusPolicy = "FocusFollowsMouse";

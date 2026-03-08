@@ -33,6 +33,9 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    niri = {
+      url = "github:sodiboo/niri-flake";
+    };
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -57,6 +60,7 @@
       silentSDDM,
       plasma-manager,
 
+      niri,
       noctalia,
       ...
     }:
@@ -107,7 +111,12 @@
 
             home-manager.nixosModules.home-manager
             nix-flatpak.nixosModules.nix-flatpak
-            { nixpkgs.overlays = [ millennium.overlays.default ]; }
+            {
+              nixpkgs.overlays = [
+                millennium.overlays.default
+                niri.overlays.niri
+              ];
+            }
             aagl.nixosModules.default
             spicetify-nix.nixosModules.default
           ];

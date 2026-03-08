@@ -1,4 +1,8 @@
 { noctalia, ... }:
+let
+  face = ../../assets/face.jpg;
+  wallpaper = ../../assets/desktop.jpg;
+in
 {
   # import the home manager module
   imports = [
@@ -12,8 +16,8 @@
       # configure noctalia here
       bar = {
         density = "compact";
-        position = "right";
-        showCapsule = false;
+        position = "bottom";
+        showCapsule = true;
         widgets = {
           left = [
             {
@@ -61,5 +65,16 @@
       };
     };
     # this may also be a string or a path to a JSON file.
+  };
+  home.file = {
+    ".face".source = face;
+    ".cache/noctalia/wallpapers.json" = {
+      text = builtins.toJSON {
+        defaultWallpaper = wallpaper;
+        wallpapers = {
+          "DP-1" = wallpaper;
+        };
+      };
+    };
   };
 }

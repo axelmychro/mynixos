@@ -75,22 +75,15 @@
               zenPkgs
               spicePkgs
               aagl
+              plasma-manager
               ;
           };
           modules = [
             ./system/configuration.nix
             ./user/axel/index.nix
+            ./ecosystem/feline/index.nix
 
             home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                users.axel = import ./user/axel/home-manager/home.nix;
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                sharedModules = [ plasma-manager.homeModules.plasma-manager ];
-                backupFileExtension = "backup";
-              };
-            }
             nix-flatpak.nixosModules.nix-flatpak
             { nixpkgs.overlays = [ millennium.overlays.default ]; }
             aagl.nixosModules.default

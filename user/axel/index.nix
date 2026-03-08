@@ -11,5 +11,6 @@
   imports = [
     ./modules/programs/index.nix
     ./modules/services/index.nix
+    ./home-manager/home.nix
   ];
 }

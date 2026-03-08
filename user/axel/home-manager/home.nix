@@ -1,6 +1,4 @@
-{
-  ...
-}:
+_:
 {
   home-manager = {
     users.axel = {

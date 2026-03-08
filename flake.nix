@@ -56,8 +56,6 @@
 
       silentSDDM,
       plasma-manager,
-
-      noctalia,
       ...
     }:
     let

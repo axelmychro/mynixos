@@ -9,6 +9,9 @@
     mako
     swayidle
     noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+    nnn
+    nautilus
+    brightnessctl
   ];
   imports = [ ./niri/index.nix ];
   services.displayManager.ly.enable = true;

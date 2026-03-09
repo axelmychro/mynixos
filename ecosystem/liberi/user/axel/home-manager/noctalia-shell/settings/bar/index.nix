@@ -1,6 +1,6 @@
 _: {
   programs.noctalia-shell.settings.bar = {
-    type = "framed";
+    barType = "framed";
     position = "bottom";
 
     backgroundOpacity = 1;

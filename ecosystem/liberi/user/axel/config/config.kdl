@@ -39,12 +39,13 @@ input {
 }
 output "eDP-1" {
     // off
-    mode "1920x1080@60"
+    mode "1920x1080@60.001"
     scale 1
     transform "normal"
     // position x=1280 y=0
 }
 layout {
+    background-color "#2e3440"
     gaps 16
     center-focused-column "never"
     preset-column-widths {
@@ -55,12 +56,12 @@ layout {
     }
     // preset-window-heights { }
     default-column-width { proportion 0.5; }
-    // `draw-border-with-background`.
+    draw-border-with-background true
     focus-ring {
         // off
         width 4
-        active-color "#7fc8ff"
-        inactive-color "#505050"
+        active-color "#b48ead"
+        inactive-color "#2e3440"
         // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
@@ -119,9 +120,8 @@ window-rule {
 }
 /-window-rule {
     geometry-corner-radius 12
-    clip-to-geometry true
+    clip-to-geometry false
 }
-
 binds {
     // Mod-Shift-/, which is usually the same as Mod-?,
     Mod+Shift+Slash { show-hotkey-overlay; }

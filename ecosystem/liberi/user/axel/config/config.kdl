@@ -74,11 +74,11 @@ layout {
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
     shadow {
-        // on
-        // draw-behind-window true
+        on
+        draw-behind-window true
         softness 30
         spread 5
-        offset x=0 y=5
+        offset x=0 y=0
         color "#0007"
     }
     struts {
@@ -120,7 +120,7 @@ window-rule {
 window-rule {
     geometry-corner-radius 8
     clip-to-geometry true
-    draw-border-with-background false
+    draw-border-with-background true
 }
 binds {
     // Mod-Shift-/, which is usually the same as Mod-?,

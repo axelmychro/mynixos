@@ -1,8 +1,9 @@
 _: {
   programs.noctalia-shell.settings.general = {
     telemetryEnabled = false;
+    language = "en";
     avatarImage = "/home/axel/.face";
-    dimmerOpacity = 0.2;
+    dimmerOpacity = 0.1;
 
     scaleRatio = 1;
     radiusRatio = 0.25;
@@ -16,53 +17,52 @@ _: {
     animationSpeed = 1;
     animationDisabled = false;
 
-    # compactLockScreen = false;
-    # lockScreenAnimations = true;
-    # lockOnSuspend = true;
+    compactLockScreen = true;
+    lockScreenAnimations = true;
+    lockOnSuspend = true;
 
-    # showSessionButtonsOnLockScreen = true;
-    # showHibernateOnLockScreen = false;
-    # enableLockScreenMediaControls = true;
+    showSessionButtonsOnLockScreen = false;
+    showHibernateOnLockScreen = false;
+    enableLockScreenMediaControls = true;
 
-    # enableBlurBehind = false;
-    # enableShadows = false;
-    # shadowDirection = "bottom_right";
-    # shadowOffsetX = 2;
-    # shadowOffsetY = 3;
+    enableBlurBehind = false;
+    enableShadows = false;
+    shadowDirection = "bottom_right";
+    shadowOffsetX = 2;
+    shadowOffsetY = 3;
 
-    # language = "en";
+    allowPanelsOnScreenWithoutBar = true;
+    showChangelogOnStartup = true;
 
-    # allowPanelsOnScreenWithoutBar = true;
-    # showChangelogOnStartup = true;
+    enableLockScreenCountdown = true;
+    lockScreenCountdownDuration = 10000;
 
-    # enableLockScreenCountdown = true;
-    # lockScreenCountdownDuration = 10000;
+    autoStartAuth = false;
+    allowPasswordWithFprintd = false;
 
-    # autoStartAuth = false;
-    # allowPasswordWithFprintd = false;
+    clockStyle = "custom";
+    clockFormat = "hh\nmm a";
 
-    # clockStyle = "custom";
-    # clockFormat = "hh\nmm";
+    passwordChars = "triangle-filled";
+    # "circle-filled", "pentagon-filled", "michelin-star-filled", "square-rounded-filled", "guitar-pick-filled", "blob-filled", "triangle-filled"
 
-    # passwordChars = false;
+    lockScreenMonitors = [ ];
 
-    # lockScreenMonitors = [ ];
+    lockScreenBlur = 0.1;
+    lockScreenTint = 0.1;
 
-    # lockScreenBlur = 0.0;
-    # lockScreenTint = 0.0;
-
-    # keybinds = {
-    #   keyUp = [ "Up" ];
-    #   keyDown = [ "Down" ];
-    #   keyLeft = [ "Left" ];
-    #   keyRight = [ "Right" ];
-    #   keyEnter = [
-    #     "Return"
-    #     "Enter"
-    #   ];
-    #   keyEscape = [ "Esc" ];
-    #   keyRemove = [ "Del" ];
-    # };
-    # reverseScroll = false;
+    keybinds = {
+      keyUp = [ "Up" ];
+      keyDown = [ "Down" ];
+      keyLeft = [ "Left" ];
+      keyRight = [ "Right" ];
+      keyEnter = [
+        "Return"
+        "Enter"
+      ];
+      keyEscape = [ "Esc" ];
+      keyRemove = [ "Del" ];
+    };
+    reverseScroll = false;
   };
 }

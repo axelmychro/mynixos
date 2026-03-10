@@ -1,5 +1,16 @@
 { config, ... }:
 {
+  home.file = {
+    "Pictures/Wallpapers/orca.jpg".source = ../../../assets/orca.jpg;
+    ".cache/noctalia/wallpapers.json" = {
+      text = builtins.toJSON {
+        defaultWallpaper = "${config.home.homeDirectory}/Pictures/Wallpapers/orca.jpg";
+        wallpapers = {
+          "DP-1" = "${config.home.homeDirectory}/Pictures/Wallpapers/orca.jpg";
+        };
+      };
+    };
+  };
   programs.noctalia-shell.settings.wallpaper = {
     enabled = true;
     overviewEnabled = true;

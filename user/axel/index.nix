@@ -4,7 +4,11 @@
     defaultUserShell = pkgs.bash;
     users.axel = {
       isNormalUser = true;
-      extraGroups = [ "wheel" ];
+      extraGroups = [
+        "wheel"
+        "video"
+        "render"
+      ];
       shell = pkgs.bash;
     };
   };

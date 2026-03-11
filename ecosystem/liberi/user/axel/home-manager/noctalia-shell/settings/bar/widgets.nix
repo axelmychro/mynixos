@@ -1,10 +1,13 @@
-_: {
+{ config, ... }:
+{
+  home.file.".icon".source = ../../../../assets/icon.png;
   programs.noctalia-shell.settings.bar.widgets = {
     left = [
       {
         id = "ControlCenter";
-        useDistroLogo = false;
         enableColorization = true;
+        useDistroLogo = false;
+        customIconPath = "${config.home.homeDirectory}/.icon";
       }
       {
         id = "Network";
@@ -12,15 +15,25 @@ _: {
       {
         id = "Bluetooth";
       }
+      {
+        id = "PowerProfile";
+      }
     ];
     center = [
       {
-        hideUnoccupied = false;
         id = "Workspace";
-        labelMode = "none";
+        hideUnoccupied = false;
+        labelMode = "name";
       }
     ];
     right = [
+      {
+        formatHorizontal = "dd MMM, hh:mm a";
+        formatVertical = "dd MMM hh mm";
+        id = "Clock";
+        useMonospacedFont = true;
+        usePrimaryColor = true;
+      }
       {
         id = "Brightness";
       }
@@ -28,22 +41,15 @@ _: {
         id = "Volume";
       }
       {
-        alwaysShowPercentage = false;
         id = "Battery";
+        showPercentageText = true;
         warningThreshold = 50;
       }
       {
-        formatHorizontal = "hh:mm a, dd MMM";
-        formatVertical = "hh mm";
-        id = "Clock";
-        useMonospacedFont = true;
-        usePrimaryColor = true;
+        id = "Tray";
       }
       {
         id = "NotificationHistory";
-      }
-      {
-        id = "Tray";
       }
     ];
   };

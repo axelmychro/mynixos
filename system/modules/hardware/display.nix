@@ -46,6 +46,7 @@
       mesa-demos
       nvtopPackages.nvidia
       vulkan-tools
+      pciutils
     ];
   };
   boot.kernelParams = [ "i915.enable_guc=3" ];

@@ -13,7 +13,7 @@
   };
   programs.noctalia-shell.settings.wallpaper = {
     enabled = true;
-    overviewEnabled = true;
+    overviewEnabled = false;
     directory = "${config.home.homeDirectory}/Pictures/Wallpapers";
 
     showHiddenFiles = false;

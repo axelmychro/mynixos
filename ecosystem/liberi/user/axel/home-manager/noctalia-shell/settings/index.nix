@@ -7,6 +7,7 @@ _: {
     ./controlCenter.nix
     ./general/index.nix
     ./location.nix
+    ./network.nix
     ./systemMonitor.nix
     ./ui.nix
     ./wallpaper.nix

@@ -4,6 +4,7 @@ _: {
     ./applauncher.nix
     ./calendar.nix
     ./colors.nix
+    ./controlCenter.nix
     ./general/index.nix
     ./location.nix
     ./ui.nix

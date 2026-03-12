@@ -75,7 +75,7 @@ animations {
   slowdown 2
 }
 window-rule {
-  geometry-corner-radius 12
+  geometry-corner-radius 16
   clip-to-geometry true
   draw-border-with-background true
   open-focused false

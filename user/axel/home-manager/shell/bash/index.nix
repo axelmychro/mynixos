@@ -11,5 +11,4 @@ _: {
     };
     initExtra = builtins.readFile ./init.sh;
   };
-  home.shell.enableBashIntegration = true;
 }

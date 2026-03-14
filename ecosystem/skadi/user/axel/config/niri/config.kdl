@@ -49,9 +49,9 @@ layout {
   }
   focus-ring {
     width 4
-    active-color "#b48ead"
+    active-color "#8fbcbb"
     inactive-color "#5e81ac"
-    active-gradient from="#b48ead" to="#a3be8c" angle=45 relative-to="workspace-view"
+    active-gradient from="#8fbcbb" to="#88c0d0" angle=45 relative-to="workspace-view"
     inactive-gradient from="#5e81ac" to="#81a1c1" angle=45 relative-to="workspace-view"
   }
   border {
@@ -352,3 +352,4 @@ binds {
     power-off-monitors
   }
 }
+

@@ -1,6 +1,6 @@
 _: {
   programs.noctalia-shell.settings.nightLight = {
-    enabled = true;
+    enabled = false;
     forced = false;
     autoSchedule = false;
     nightTemp = "4000";

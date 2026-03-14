@@ -14,6 +14,8 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixcord.url = "github:FlameFlag/nixcord";
+
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
 
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
@@ -50,6 +52,7 @@
       home-manager,
       nix-flatpak,
       zen-browser,
+      nixcord,
       millennium,
       spicetify-nix,
       aagl,
@@ -96,6 +99,7 @@
           specialArgs = {
             inherit
               zenPkgs
+              nixcord
               spicePkgs
               aagl
               noctalia
@@ -115,11 +119,6 @@
             }
             aagl.nixosModules.default
             spicetify-nix.nixosModules.default
-            {
-              systemd.settings.Manager = {
-                DefaultLimitNOFILE = 1048576;
-              };
-            }
           ];
         };
       };

@@ -1,4 +1,5 @@
-_: {
+{ nixcord, ... }:
+{
   home-manager = {
     users.axel = {
       home = {
@@ -7,6 +8,7 @@ _: {
       };
       xdg.enable = true;
       imports = [
+        nixcord.homeModules.nixcord
         ./default-apps/index.nix
         ./shell/index.nix
         ./programs/index.nix

@@ -4,5 +4,6 @@ _: {
     ./zed/index.nix
     ./direnv.nix
     ./micro.nix
+    ./nixcord.nix
   ];
 }

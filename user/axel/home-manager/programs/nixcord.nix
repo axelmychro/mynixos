@@ -4,8 +4,8 @@ _: {
 
     discord = {
       enable = false;
-      vencord.enable = true;
-      equicord.enable = false;
+      vencord.enable = false;
+      equicord.enable = true;
     };
     vesktop = {
       enable = true;
@@ -13,14 +13,14 @@ _: {
     };
     dorion.enable = false;
 
-    useQuickCss = true;
     quickCss = "/* css goes here */";
     config = {
+      useQuickCss = false;
       frameless = true;
 
       autoUpdate = false;
       autoUpdateNotification = false;
-      notifyAboutUpdates = true;
+      notifyAboutUpdates = false;
 
       plugins = {
         noTypingAnimation.enable = true;
@@ -36,11 +36,6 @@ _: {
         CopyUserURLs.enable = true;
         MutualGroupDMs.enable = true;
         CustomRPC.enable = true;
-        ignoreActivities = {
-          enable = true;
-          ignorePlaying = true;
-          ignoredActivities = { };
-        };
       };
     };
   };

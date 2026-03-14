@@ -11,7 +11,11 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak";
 
     zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixcord.url = "github:FlameFlag/nixcord";
@@ -52,6 +56,7 @@
       home-manager,
       nix-flatpak,
       zen-browser,
+      firefox-addons,
       nixcord,
       millennium,
       spicetify-nix,
@@ -67,7 +72,6 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
-      zenPkgs = zen-browser.packages.${system};
       spicePkgs = spicetify-nix.legacyPackages.${pkgs.system};
     in
     {
@@ -76,7 +80,8 @@
         priestess = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit
-              zenPkgs
+              zen-browser
+              firefox-addons
               spicePkgs
               aagl
               plasma-manager
@@ -89,16 +94,18 @@
 
             home-manager.nixosModules.home-manager
             nix-flatpak.nixosModules.nix-flatpak
+            zen-browser.packages.${system}.twilight
             { nixpkgs.overlays = [ millennium.overlays.default ]; }
-            aagl.nixosModules.default
             spicetify-nix.nixosModules.default
+            aagl.nixosModules.default
             silentSDDM.nixosModules.default
           ];
         };
         skadi = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit
-              zenPkgs
+              zen-browser
+              firefox-addons
               nixcord
               spicePkgs
               aagl
@@ -113,9 +120,7 @@
             home-manager.nixosModules.home-manager
             nix-flatpak.nixosModules.nix-flatpak
             {
-              nixpkgs.overlays = [
-                millennium.overlays.default
-              ];
+              nixpkgs.overlays = [ millennium.overlays.default ];
             }
             aagl.nixosModules.default
             spicetify-nix.nixosModules.default

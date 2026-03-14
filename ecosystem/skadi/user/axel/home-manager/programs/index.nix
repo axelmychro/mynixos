@@ -3,5 +3,6 @@ _: {
     ./zed/index.nix
     ./ghostty.nix
     ./nixcord.nix
+    ./zen-browser.nix
   ];
 }

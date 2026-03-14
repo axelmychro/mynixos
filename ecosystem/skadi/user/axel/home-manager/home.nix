@@ -1,14 +1,17 @@
 {
   noctalia,
+  zen-browser,
+  firefox-addons,
   pkgs,
   ...
 }:
 {
   home-manager = {
-    extraSpecialArgs = { inherit noctalia; };
+    extraSpecialArgs = { inherit noctalia firefox-addons; };
     users.axel = {
       xdg.configFile."niri/config.kdl".source = ../config/niri/config.kdl;
       imports = [
+        zen-browser.homeModules.twilight
         ./noctalia-shell/index.nix
         ./programs/index.nix
         ./shell/index.nix

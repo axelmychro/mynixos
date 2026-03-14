@@ -68,6 +68,7 @@
       spicePkgs = spicetify-nix.legacyPackages.${pkgs.system};
     in
     {
+      formatter.${system} = pkgs.nixfmt-rfc-style;
       nixosConfigurations = {
         priestess = nixpkgs.lib.nixosSystem {
           specialArgs = {

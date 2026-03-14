@@ -1,3 +1,7 @@
 _: {
-  programs.bash.initExtra = builtins.readFile ./init.sh;
+  programs.bash = {
+    enable = true;
+    initExtra = builtins.readFile ./init.sh;
+  };
+  shell.enableBashIntegration = true;
 }

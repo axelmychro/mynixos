@@ -4,7 +4,7 @@
   "palette": {
     "crust": "#d8dee9",
     "mantle": "#e5e9f0",
-    "mauve": "#b48ead",
+    "blue": "#5e81ac",
     "peach": "#d08770",
     "plain": "#2e3440",
     "closer": "p:plain"
@@ -22,7 +22,7 @@
         },
         {
           "background": "p:mantle",
-          "foreground": "p:mauve",
+          "foreground": "p:blue",
           "options": {
             "folder_icon": "\ue5fe",
             "home_icon": "~",

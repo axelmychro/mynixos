@@ -69,7 +69,7 @@
     in
     {
       nixosConfigurations = {
-        feline = nixpkgs.lib.nixosSystem {
+        priestess = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit
               zenPkgs
@@ -82,7 +82,7 @@
             { system.nixos.label = "priestess"; }
             ./system/configuration.nix
             ./user/axel/index.nix
-            ./ecosystem/feline/index.nix
+            ./ecosystem/priestess/index.nix
 
             home-manager.nixosModules.home-manager
             nix-flatpak.nixosModules.nix-flatpak
@@ -92,7 +92,7 @@
             silentSDDM.nixosModules.default
           ];
         };
-        liberi = nixpkgs.lib.nixosSystem {
+        skadi = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit
               zenPkgs
@@ -105,7 +105,7 @@
             { system.nixos.label = "skadi"; }
             ./system/configuration.nix
             ./user/axel/index.nix
-            ./ecosystem/liberi/index.nix
+            ./ecosystem/skadi/index.nix
 
             home-manager.nixosModules.home-manager
             nix-flatpak.nixosModules.nix-flatpak

@@ -27,23 +27,23 @@ EOF
     switch)
       git add /etc/nixos &&
         systemd-inhibit --what=idle:sleep --why="nixos switch rebuild" \
-          sudo nixos-rebuild switch --flake /etc/nixos#feline
+          sudo nixos-rebuild switch --flake /etc/nixos#priestess
       ;;
     drun)
       git add /etc/nixos &&
         systemd-inhibit --what=idle:sleep --why="nixos dry-run rebuild" \
-          sudo nixos-rebuild dry-run --flake /etc/nixos#feline
+          sudo nixos-rebuild dry-run --flake /etc/nixos#priestess
       ;;
     test)
       git add /etc/nixos &&
         systemd-inhibit --what=idle:sleep --why="nixos test rebuild" \
-          sudo nixos-rebuild test --flake /etc/nixos#feline
+          sudo nixos-rebuild test --flake /etc/nixos#priestess
       ;;
     update)
       git add /etc/nixos &&
         nix flake update &&
         systemd-inhibit --what=idle:sleep --why="nixos update rebuild" \
-          sudo nixos-rebuild switch --flake /etc/nixos#feline
+          sudo nixos-rebuild switch --flake /etc/nixos#priestess
       ;;
     undo)
       sudo nixos-rebuild switch --rollback

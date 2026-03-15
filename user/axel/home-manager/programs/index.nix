@@ -5,5 +5,6 @@ _: {
     ./direnv.nix
     ./micro.nix
     ./nixcord.nix
+    ./zen-browser.nix
   ];
 }

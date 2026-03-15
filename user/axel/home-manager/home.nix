@@ -1,12 +1,22 @@
-{ nixcord, ... }:
+{
+  lib,
+  pkgs,
+  zen-browser,
+  nixcord,
+  firefox-addons,
+  ...
+}:
 {
   home-manager = {
+    extraSpecialArgs = { inherit firefox-addons; };
     users.axel = {
       home = {
         homeDirectory = "/home/axel";
         stateVersion = "24.11";
         pointerCursor = {
           enable = true;
+          package = lib.mkDefault pkgs.vanilla-dmz;
+          name = lib.mkDefault "Vanilla-DMZ";
           size = 48;
 
           x11 = {
@@ -18,6 +28,7 @@
       };
       xdg.enable = true;
       imports = [
+        zen-browser.homeModules.twilight
         nixcord.homeModules.nixcord
         ./default-apps/index.nix
         ./programs/index.nix

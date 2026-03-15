@@ -354,7 +354,7 @@ binds {
 }
 cursor {
   hide-when-typing
-  hide-after-inactive-ms 1000
-  xcursor-theme "Nordzy-cursors-white"
+  hide-after-inactive-ms 3000
+  xcursor-theme "skadi-pixel-cursors"
   xcursor-size 48
 }

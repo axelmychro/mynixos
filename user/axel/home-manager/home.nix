@@ -1,4 +1,4 @@
-{ pkgs, nixcord, ... }:
+{ nixcord, ... }:
 {
   home-manager = {
     users.axel = {
@@ -7,8 +7,6 @@
         stateVersion = "24.11";
         pointerCursor = {
           enable = true;
-          package = pkgs.nordzy-cursor-theme;
-          name = "Nordzy-cursors-white";
           size = 48;
 
           x11 = {

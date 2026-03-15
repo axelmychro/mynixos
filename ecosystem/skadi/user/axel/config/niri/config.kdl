@@ -48,7 +48,7 @@ layout {
     proportion 0.75
   }
   focus-ring {
-    width 4
+    width 2
     active-color "#8fbcbb"
     inactive-color "#5e81ac"
     active-gradient from="#8fbcbb" to="#88c0d0" angle=45 relative-to="workspace-view"
@@ -75,9 +75,9 @@ animations {
   slowdown 2
 }
 window-rule {
-  geometry-corner-radius 16
+  geometry-corner-radius 2
   clip-to-geometry true
-  draw-border-with-background true
+  draw-border-with-background false
   open-focused false
 }
 binds {
@@ -358,3 +358,4 @@ cursor {
   xcursor-theme "skadi-pixel-cursors"
   xcursor-size 48
 }
+

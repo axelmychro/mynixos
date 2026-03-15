@@ -1,1 +1,6 @@
-_: { imports = [ ./theme.nix ]; }
+_: {
+  imports = [
+    ./languages.nix
+    ./theme.nix
+  ];
+}

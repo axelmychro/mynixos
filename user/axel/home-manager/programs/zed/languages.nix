@@ -2,9 +2,6 @@ _: {
   programs.zed-editor = {
     extensions = [
       "nix"
-      "toml"
-      "ini"
-      "kdl"
     ];
 
     userSettings.languages = {
@@ -41,16 +38,6 @@ _: {
           "ruff"
         ];
         formatter.language_server.name = "ruff";
-      };
-
-      "Kdl" = {
-        formatter.external = {
-          command = "kdlfmt";
-          arguments = [
-            "format"
-            "-"
-          ];
-        };
       };
     };
   };

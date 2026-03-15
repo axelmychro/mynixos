@@ -83,6 +83,7 @@
               zen-browser
               firefox-addons
               nixcord
+              spicetify-nix
               spicePkgs
               aagl
               plasma-manager

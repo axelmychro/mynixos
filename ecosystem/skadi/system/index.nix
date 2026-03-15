@@ -7,7 +7,6 @@
     xwayland-satellite
     wl-clipboard
     kdlfmt
-    swayidle
     noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
     nnn
     nautilus

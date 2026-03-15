@@ -2,14 +2,13 @@
   description = "Like a phoe-nix, cry and rise up from the ash!";
 
   inputs = {
+    # core
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
-
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -19,16 +18,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixcord.url = "github:FlameFlag/nixcord";
-
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
-
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-
     aagl = {
       url = "github:ezKEa/aagl-gtk-on-nix/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # priestess
     silentSDDM = {
       url = "github:uiriansan/SilentSDDM";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,6 +36,7 @@
       inputs.home-manager.follows = "home-manager";
     };
 
+    # skadi
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -8,8 +8,8 @@
     dimmerOpacity = 0.2;
 
     scaleRatio = 1.0;
-    radiusRatio = 0.5;
-    iRadiusRatio = 1.0;
+    radiusRatio = 0.08;
+    iRadiusRatio = 0.08;
     boxRadiusRatio = 1.0;
 
     showScreenCorners = false;

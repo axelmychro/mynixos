@@ -19,7 +19,7 @@ _: {
     widgetSpacing = 16;
     contentPadding = 0;
     frameThickness = 8;
-    frameRadius = 20;
+    frameRadius = 8;
     outerCorners = true;
     marginVertical = 0;
     marginHorizontal = 0;

@@ -4,7 +4,7 @@ _: {
     shellIntegration.enableBashIntegration = false; # let oh-my-posh handle the window title
 
     settings = {
-      font_family = "FiraCode Nerd Font";
+      font_family = "ZedMono Nerd Font";
       font_size = "16";
 
       cursor_shape = "underline";

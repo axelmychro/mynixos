@@ -1,6 +1,6 @@
 _:
 let
-  sans = "FiraCode Nerd Font";
+  sans = "ZedMono Nerd Font";
   code = "FiraCode Nerd Font";
 in
 {

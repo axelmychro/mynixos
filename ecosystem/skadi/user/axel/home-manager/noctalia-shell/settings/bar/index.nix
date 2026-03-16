@@ -1,10 +1,10 @@
 _: {
   programs.noctalia-shell.settings.bar = {
-    barType = "framed";
-    position = "bottom";
+    barType = "simple";
+    position = "top";
 
     backgroundOpacity = 1;
-    useSeparateOpacity = true;
+    useSeparateOpacity = false;
 
     density = "default";
     displayMode = "always_visible";
@@ -14,13 +14,13 @@ _: {
     capsuleOpacity = 1;
     capsuleColorKey = "none";
 
+    outerCorners = false;
     floating = false;
     fontScale = 1;
     widgetSpacing = 16;
     contentPadding = 0;
     frameThickness = 8;
     frameRadius = 8;
-    outerCorners = true;
     marginVertical = 0;
     marginHorizontal = 0;
 

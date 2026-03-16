@@ -1,6 +1,7 @@
 spawn-at-startup "noctalia-shell"
 workspace "1"
 workspace "2"
+workspace "3"
 hotkey-overlay {
   skip-at-startup
 }
@@ -63,7 +64,7 @@ layout {
   }
   shadow {
     on
-    draw-behind-window true
+    draw-behind-window false
     softness 30
     spread 5
     offset x=0 y=0
@@ -72,10 +73,10 @@ layout {
 }
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 animations {
-  slowdown 2
+  slowdown 0.7
 }
 window-rule {
-  geometry-corner-radius 2 2 2 2
+  geometry-corner-radius 2
   clip-to-geometry true
   draw-border-with-background false
   open-focused false

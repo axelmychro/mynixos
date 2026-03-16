@@ -8,7 +8,7 @@ _: {
     gds = "git diff --staged";
 
     gl = "git log";
-    glog = "git log --oneline --graph --decorate --all";
+    gll = "git log --oneline --graph --decorate --all";
 
     ga = "git add";
     gaa = "git add .";
@@ -26,6 +26,9 @@ _: {
     gsha = "git stash apply";
     gshp = "git stash pop";
     gshl = "git stash list";
+
+    gcn = "git clean";
+    gcnn = "git clean -fd";
 
     gr = "git rebase";
     gri = "git rebase -i";

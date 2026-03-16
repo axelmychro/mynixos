@@ -13,7 +13,7 @@
   };
   programs.noctalia-shell.settings.wallpaper = {
     enabled = true;
-    panelPosition = "follow_bar";
+    panelPosition = "center";
     directory = "${config.home.homeDirectory}/Pictures/Wallpapers";
 
     showHiddenFiles = false;

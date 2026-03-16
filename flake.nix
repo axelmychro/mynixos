@@ -89,7 +89,7 @@
           };
           modules = [
             ./system/configuration.nix
-            ./user/axel/index.nix
+            ./user/axel/configuration.nix
             ./ecosystem/priestess/index.nix
 
             home-manager.nixosModules.home-manager
@@ -115,7 +115,7 @@
           };
           modules = [
             ./system/configuration.nix
-            ./user/axel/index.nix
+            ./user/axel/configuration.nix
             ./ecosystem/skadi/index.nix
 
             home-manager.nixosModules.home-manager

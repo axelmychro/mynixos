@@ -1,19 +1,25 @@
-argparse r/reboot u/update w/wipe -- $argv
+argparse r/reboot u/update p/purge -- $argv
 or return
 
-if set -q _flag_wipe
-    echo "generate: wipe history, clean garbage, optimise store"
-    nix profile wipe-history --verbose
+if set -q _flag_purge
+    set_color blue
+    echo "skadi: purge history, clean garbage, optimise store"
+    set_color normal
+    nix profile purge-history --verbose
     nix store gc --verbose
     nix store optimise --verbose
 end
 
 if set -q _flag_update
-    echo "generate: update flake"
+    set_color blue
+    echo "skadi: update flake"
+    set_color normal
     nix flake update --verbose
 end
 
-echo "generate: format nix, kdl, and fish"
+set_color blue
+echo "skadi: format nix, kdl, and fish"
+set_color normal
 fd -e nix -x nixfmt {}
 fd -e kdl -x kdlfmt format {}
 fd -e fish -x fish_indent -w {}
@@ -71,10 +77,12 @@ begin
 end >"$out"
 
 set_color blue
-echo "generate: created $out"
+echo "skadi: created $out"
 set_color normal
 
-echo "generate: switch"
+set_color blue
+echo "skadi: rebuild switch"
+set_color normal
 if sudo nixos-rebuild switch --verbose --flake .#skadi
     if set -q _flag_reboot
         set_color yellow
@@ -86,7 +94,7 @@ if sudo nixos-rebuild switch --verbose --flake .#skadi
     return 0
 else
     set_color red
-    echo "generate failed"
+    echo "skadi: rebuild switch failed"
     set_color normal
     return 1
 end

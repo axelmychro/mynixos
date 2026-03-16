@@ -1,5 +1,6 @@
 _: {
   programs.fish.functions = {
-    generate = builtins.readFile ./generate.fish;
+    # kya = builtins.readFile ./kya.fish;
+    skadi = builtins.readFile ./skadi.fish;
   };
 }

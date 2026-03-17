@@ -1,5 +1,5 @@
 _: {
   programs.nixcord.config.themeLinks = [
-    "https://raw.githubusercontent.com/orblazer/discord-nordic/refs/heads/master/nordic.vencord.css"
+    "https://raw.githubusercontent.com/refact0r/system24/refs/heads/main/theme/flavors/system24-nord.theme.css"
   ];
 }

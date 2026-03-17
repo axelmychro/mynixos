@@ -4,7 +4,7 @@
 }:
 {
   programs.spicetify = {
-    theme = spicePkgs.themes.comfy;
+    theme = spicePkgs.themes.text;
     colorScheme = "Nord";
   };
 }

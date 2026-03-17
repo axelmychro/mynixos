@@ -13,9 +13,8 @@ _: {
     };
     dorion.enable = false;
 
-    quickCss = "/* css goes here */";
     config = {
-      useQuickCss = false;
+      useQuickCss = true;
       frameless = true;
 
       autoUpdate = false;

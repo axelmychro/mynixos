@@ -1,4 +1,6 @@
 spawn-at-startup "noctalia-shell"
+workspace "1"
+workspace "2"
 hotkey-overlay {
   skip-at-startup
 }
@@ -371,3 +373,4 @@ cursor {
   xcursor-theme "skadi-pixel-cursors"
   xcursor-size 48
 }
+

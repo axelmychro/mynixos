@@ -1,7 +1,7 @@
 _: {
   xdg.configFile = {
     "fastfetch" = {
-      source = ./config;
+      source = ./src;
       recursive = true;
     };
   };

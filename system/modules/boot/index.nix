@@ -1,6 +1,6 @@
 _: {
   imports = [
     ./loader.nix
-    ./extra.nix
+    ./extra/entries.nix
   ];
 }

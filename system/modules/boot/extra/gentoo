@@ -1,0 +1,8 @@
+menuentry "Gentoo" --class gentoo {
+  insmod gzio
+  insmod part_gpt
+  insmod ext2
+  search --no-floppy --fs-uuid --set=root 22f59fe2-506c-40d4-b451-3474b9dcfefc
+  linux /boot/kernel-6.18.18-gentoo-dist root=/dev/nvme0n1p3 rw nvidia_drm.modeset=1
+  initrd /boot/intel-uc.img /boot/initramfs-6.18.18-gentoo-dist.img
+}

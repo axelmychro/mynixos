@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, systemAssets, ... }:
 {
   boot = {
     loader = {
@@ -21,7 +21,7 @@
         gfxmodeBios = "1920x1080";
         gfxpayloadBios = "keep";
 
-        font = ./assets/FiraCodeNerdFont-Regular.ttf;
+        font = "${systemAssets}/FiraCodeNerdFont-Regular.ttf";
         fontSize = 16;
 
         backgroundColor = "#ff000";

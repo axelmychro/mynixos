@@ -10,7 +10,7 @@ _: {
       logReversePathDrops = true;
     };
     nameservers = [
-      "1.1.1.1"
+      "9.9.9.9"
     ];
   };
 
@@ -20,5 +20,5 @@ _: {
     dnssec = "true";
     domains = [ "~." ];
   };
-  services.cloudflare-warp.enable = false; # conflicts with resolved
+  services.cloudflare-warp.enable = true; # conflicts with resolved
 }

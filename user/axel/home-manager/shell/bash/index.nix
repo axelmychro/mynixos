@@ -4,11 +4,8 @@ _: {
     enable = true;
 
     shellAliases = {
-      bb = "exec bash";
-      x = "exit";
-
-      wd = "waydroid show-full-ui";
-      wdx = "waydroid session stop";
+      x = "exec bash";
+      xx = "exit";
     };
     initExtra = builtins.readFile ./init.bash;
     profileExtra = builtins.readFile ./login.bash;

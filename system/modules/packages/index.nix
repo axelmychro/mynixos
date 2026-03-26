@@ -1,6 +1,13 @@
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    peazip
+    git
+
+    wget
+    curl
+
+    tree
+    fd
+    ripgrep
   ];
 }

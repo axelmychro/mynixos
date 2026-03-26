@@ -48,7 +48,7 @@
 
     ./modules/boot/index.nix
     ./modules/hardware/index.nix
-    ./modules/programs/index.nix
+    ./modules/packages/index.nix
     ./modules/services/index.nix
   ];
 }

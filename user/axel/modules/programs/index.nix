@@ -6,6 +6,5 @@ _: {
     ./cli.nix
     ./development.nix
     ./documents.nix
-    ./utilities.nix
   ];
 }

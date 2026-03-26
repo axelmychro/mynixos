@@ -12,10 +12,6 @@
     nixcord.url = "github:FlameFlag/nixcord";
     millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    aagl = {
-      url = "github:ezKEa/aagl-gtk-on-nix/release-25.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # priestess
     silentSDDM = {
@@ -48,7 +44,6 @@
       nixcord,
       millennium,
       spicetify-nix,
-      aagl,
 
       silentSDDM,
       plasma-manager,
@@ -71,7 +66,6 @@
               nixcord
               spicetify-nix
               spicePkgs
-              aagl
               plasma-manager
               ;
           };
@@ -88,7 +82,6 @@
               ];
             }
             spicetify-nix.nixosModules.default
-            aagl.nixosModules.default
             silentSDDM.nixosModules.default
           ];
         };
@@ -99,7 +92,6 @@
               nixcord
               spicetify-nix
               spicePkgs
-              aagl
               noctalia
               ;
           };
@@ -115,7 +107,6 @@
                 millennium.overlays.default
               ];
             }
-            aagl.nixosModules.default
             spicetify-nix.nixosModules.default
           ];
         };

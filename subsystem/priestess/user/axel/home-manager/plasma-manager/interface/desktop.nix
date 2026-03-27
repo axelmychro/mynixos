@@ -4,6 +4,7 @@ let
   code = "GeistMono Nerd Font";
 in
 {
+  xdg.dataFile."color-schemes/CatppuccinFrappe.colors".source = ../assets/CatppuccinFrappe.colors;
   programs.plasma = {
     workspace = {
       wallpaper = ../assets/desktop.jpg;
@@ -18,7 +19,7 @@ in
       cursor = {
         animationTime = 5;
         cursorFeedback = "Bouncing";
-        size = 36;
+        size = 48;
         taskManagerFeedback = true;
         theme = "Breeze_Light";
       };
@@ -44,7 +45,7 @@ in
       };
       effects = {
         hideCursor = {
-          hideOnInactivity = 10;
+          hideOnInactivity = 3;
           hideOnTyping = true;
         };
         shakeCursor.enable = true;

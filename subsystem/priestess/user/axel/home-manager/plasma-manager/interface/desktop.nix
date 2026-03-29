@@ -8,7 +8,7 @@ in
   programs.plasma = {
     workspace = {
       wallpaper = ../assets/desktop.jpg;
-      lookAndFeel = null;
+      lookAndFeel = "org.kde.breezedark.desktop";
       colorScheme = "CatppuccinFrappe";
       theme = null; # plasma style. null = default
       windowDecorations = {

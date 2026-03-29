@@ -7,6 +7,7 @@ _: {
         email = "axelmychro@gmail.com";
       };
       init.defaultBranch = "main";
+      pull.rebase = true;
     };
   };
 }

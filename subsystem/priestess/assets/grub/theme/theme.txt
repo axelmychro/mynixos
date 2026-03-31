@@ -15,8 +15,8 @@ terminal-height: "100%"
   top = 45%
   width = 21%
   height = 50%
-  item_color = "#cccccc"
-  selected_item_color = "#ffffff"
+  item_color = "#cdd6f4"
+  selected_item_color = "#cba6f7"
   item_icon_space = 18
   item_height = 30
   item_padding = 0
@@ -26,10 +26,10 @@ terminal-height: "100%"
 }
 
 + label {
+  id = "__timeout__"
+  align = "center"
   left = 5%
   top = 90%
-  align = "center"
-  id = "__timeout__"
   text = "Taking you with me in %d seconds..."
-  color = "#000000"
+  color = "#4c4f69"
 }

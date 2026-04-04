@@ -1,0 +1,7 @@
+menuentry 'CRUX' --class crux --class gnu-linux --class gnu --class os {
+	insmod part_gpt
+	insmod ext2
+	search --no-floppy --fs-uuid --set=root 4bee52b7-3091-488c-b18a-6087fd399cb0
+	linux /boot/vmlinuz root=/dev/nvme0n1p4 rw quiet
+	initrd /boot/initramfs-6.12.23.img
+}

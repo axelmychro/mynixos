@@ -1,6 +1,6 @@
 _: {
   boot.loader.grub.extraEntries = ''
     ${builtins.readFile ./gentoo}
-    ${builtins.readFile ./crux}
+    ${builtins.readFile ./artix}
   '';
 }

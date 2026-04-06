@@ -2,6 +2,6 @@ menuentry 'Gentoo' --class gentoo --class gnu-linux --class gnu --class os {
   insmod part_gpt
   insmod fat
   search --no-floppy --fs-uuid --set=root 800C-0267
-  linux /0a0ac100cb284be6b93a698020fe78e8/6.19.10-zen1/linux root=UUID=22f59fe2-506c-40d4-b451-3474b9dcfefc rw quiet systemd.machine_id=0a0ac100cb284be6b93a698020fe78e8
-  initrd /0a0ac100cb284be6b93a698020fe78e8/6.19.10-zen1/initrd
+  linux /6.18.21-cachyos0/vmlinuz root=/dev/nvme0n1p3 rw quiet
+  initrd /6.18.21-cachyos0/initramfs.img
 }

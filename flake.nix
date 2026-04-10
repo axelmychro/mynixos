@@ -8,8 +8,6 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixcord.url = "github:FlameFlag/nixcord";
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
 
     # priestess
     silentSDDM = {
@@ -38,8 +36,6 @@
     {
       nixpkgs,
       home-manager,
-      nixcord,
-      spicetify-nix,
 
       silentSDDM,
       plasma-manager,
@@ -51,7 +47,6 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
-      spicePkgs = spicetify-nix.legacyPackages.${pkgs.system};
     in
     {
       formatter.${system} = pkgs.nixfmt-rfc-style;
@@ -59,9 +54,6 @@
         priestess = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit
-              nixcord
-              spicetify-nix
-              spicePkgs
               plasma-manager
               ;
           };
@@ -71,7 +63,6 @@
             ./subsystem/priestess/index.nix
 
             home-manager.nixosModules.home-manager
-            spicetify-nix.nixosModules.default
             silentSDDM.nixosModules.default
           ];
         };
@@ -79,9 +70,6 @@
           specialArgs = {
             inherit
               nixpkgs
-              nixcord
-              spicetify-nix
-              spicePkgs
               noctalia
               ;
           };
@@ -91,7 +79,6 @@
             ./subsystem/skadi/index.nix
 
             home-manager.nixosModules.home-manager
-            spicetify-nix.nixosModules.default
           ];
         };
       };

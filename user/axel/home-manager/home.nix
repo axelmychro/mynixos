@@ -1,13 +1,10 @@
 {
   lib,
   pkgs,
-  nixcord,
-  spicetify-nix,
   ...
 }:
 {
   home-manager = {
-    extraSpecialArgs = { inherit spicetify-nix; };
     users.axel = {
       home = {
         homeDirectory = "/home/axel";
@@ -27,8 +24,6 @@
       };
       xdg.enable = true;
       imports = [
-        nixcord.homeModules.nixcord
-        spicetify-nix.homeManagerModules.spicetify
         ./default-apps/index.nix
         ./programs/index.nix
         ./shell/index.nix

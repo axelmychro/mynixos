@@ -1,11 +1,9 @@
 {
   plasma-manager,
-  spicePkgs,
   ...
 }:
 {
   home-manager = {
-    extraSpecialArgs = { inherit spicePkgs; };
     users.axel = {
       imports = [
         ./programs/index.nix

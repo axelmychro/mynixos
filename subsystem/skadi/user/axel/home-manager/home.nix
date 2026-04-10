@@ -1,8 +1,6 @@
 {
   pkgs,
   noctalia,
-  spicetify-nix,
-  spicePkgs,
   skadiAssets,
   ...
 }:
@@ -22,8 +20,6 @@ in
     extraSpecialArgs = {
       inherit
         noctalia
-        spicetify-nix
-        spicePkgs
         skadiAssets
         ;
     };

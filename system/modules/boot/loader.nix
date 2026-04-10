@@ -23,8 +23,10 @@
         font = "${systemAssets}/GeistMonoNerdFont-Regular.otf";
         fontSize = 24;
 
-        # backgroundColor = "#ff0000";
-        # splashMode = "normal";
+        backgroundColor = "#ff0000";
+        theme = "${systemAssets}/grub/theme";
+        splashImage = "${systemAssets}/grub/splash.png";
+        splashMode = "normal";
       };
     };
   };

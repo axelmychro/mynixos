@@ -6,7 +6,6 @@ _: {
   };
 
   imports = [
-    ./system/configuration.nix
     ./user/axel/configuration.nix
   ];
 }

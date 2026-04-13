@@ -1,7 +1,7 @@
 _: {
   programs.noctalia-shell.settings.bar = {
     barType = "simple";
-    position = "top";
+    position = "right";
 
     backgroundOpacity = 1;
     useSeparateOpacity = false;

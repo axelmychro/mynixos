@@ -5,7 +5,7 @@
     left = [
       {
         id = "Workspace";
-        hideUnoccupied = true;
+        hideUnoccupied = false;
         labelMode = "none";
       }
       {
@@ -26,6 +26,10 @@
     ];
     right = [
       {
+        id = "Tray";
+        chevronColorKey = "mSecondary";
+      }
+      {
         id = "Volume";
       }
       {
@@ -38,10 +42,6 @@
         showPowerProfiles = true;
         showNoctaliaPerformance = true;
         warningThreshold = 50;
-      }
-      {
-        id = "Tray";
-        chevronColorKey = "mSecondary";
       }
       {
         id = "NotificationHistory";

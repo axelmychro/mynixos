@@ -32,7 +32,6 @@ this is the flake i daily drive on my laptop
 
 - [Catppuccin](https://catppuccin.com/)
 - [Nord](https://www.nordtheme.com/)
-  - [system24](https://github.com/refact0r/system24)
 
 #### display manager
 

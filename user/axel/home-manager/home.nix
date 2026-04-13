@@ -42,7 +42,6 @@
       imports = [
         ./default-apps/index.nix
         ./programs/index.nix
-        ./shell/index.nix
       ];
     };
     useGlobalPkgs = true;

@@ -6,7 +6,6 @@ _: {
     ./fish/index.nix
     ./git/index.nix
     ./oh-my-posh/index.nix
-    ./wakatime/index.nix
     ./zed/index.nix
     ./alacritty.nix
     ./direnv.nix

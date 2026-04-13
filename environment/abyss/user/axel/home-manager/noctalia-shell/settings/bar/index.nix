@@ -1,6 +1,6 @@
 _: {
   programs.noctalia-shell.settings.bar = {
-    barType = "simple";
+    barType = "floating";
     position = "right";
 
     backgroundOpacity = 1;
@@ -15,14 +15,14 @@ _: {
     capsuleColorKey = "none";
 
     outerCorners = false;
-    floating = false;
+    floating = true;
     fontScale = 1;
     widgetSpacing = 16;
     contentPadding = 0;
     frameThickness = 8;
     frameRadius = 8;
-    marginVertical = 0;
-    marginHorizontal = 0;
+    marginVertical = 12;
+    marginHorizontal = 12;
 
     hideOnOverview = false;
     autoHideDelay = 500;

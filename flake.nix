@@ -1,28 +1,30 @@
+# {{{
+# HELLO $USER
+# }}}
 {
   description = "Like a phoe-nix, cry and rise up from the ash!";
 
   inputs = {
-    # core
+    # {{{
+    # CORE INPUTS
+    # }}}
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    # { $HOME }
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixcord.url = "github:FlameFlag/nixcord";
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
 
-    # priestess
+    # {{{
+    # DESKTOP ENVIRONMENT
+    # }}}
+
+    # { DISPLAY MANAGER }
     silentSDDM = {
       url = "github:uiriansan/SilentSDDM";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    plasma-manager = {
-      url = "github:nix-community/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
-
-    # skadi
+    # { BAR, NOTIFICATION, LAUNCHER, LOCK SCREEN, and IDLE DAEMON }
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,60 +40,31 @@
     {
       nixpkgs,
       home-manager,
-      nixcord,
-      spicetify-nix,
-
       silentSDDM,
-      plasma-manager,
-
       noctalia,
       ...
     }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-
-      spicePkgs = spicetify-nix.legacyPackages.${pkgs.system};
     in
     {
       formatter.${system} = pkgs.nixfmt-rfc-style;
       nixosConfigurations = {
-        priestess = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit
-              nixcord
-              spicetify-nix
-              spicePkgs
-              plasma-manager
-              ;
-          };
-          modules = [
-            ./system/configuration.nix
-            ./user/axel/configuration.nix
-            ./subsystem/priestess/index.nix
-
-            home-manager.nixosModules.home-manager
-            spicetify-nix.nixosModules.default
-            silentSDDM.nixosModules.default
-          ];
-        };
         skadi = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit
               nixpkgs
-              nixcord
-              spicetify-nix
-              spicePkgs
               noctalia
               ;
           };
           modules = [
             ./system/configuration.nix
             ./user/axel/configuration.nix
-            ./subsystem/skadi/index.nix
+            ./environment/abyss/index.nix
 
             home-manager.nixosModules.home-manager
-            spicetify-nix.nixosModules.default
+            silentSDDM.nixosModules.default
           ];
         };
       };

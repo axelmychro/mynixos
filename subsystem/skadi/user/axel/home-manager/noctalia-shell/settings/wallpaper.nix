@@ -1,12 +1,12 @@
 { config, skadiAssets, ... }:
 {
   home.file = {
-    "Pictures/Wallpapers/orca.jpg".source = "${skadiAssets}/orca.jpg";
+    "Pictures/Wallpapers/pries.jpg".source = "${skadiAssets}/pries.jpg";
     ".cache/noctalia/wallpapers.json" = {
       text = builtins.toJSON {
-        defaultWallpaper = "${config.home.homeDirectory}/Pictures/Wallpapers/orca.jpg";
+        defaultWallpaper = "${config.home.homeDirectory}/Pictures/Wallpapers/pries.jpg";
         wallpapers = {
-          "eDP-1" = "${config.home.homeDirectory}/Pictures/Wallpapers/orca.jpg";
+          "eDP-1" = "${config.home.homeDirectory}/Pictures/Wallpapers/pries.jpg";
         };
       };
     };

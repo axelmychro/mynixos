@@ -19,24 +19,24 @@ _: {
         keybind = "2";
       }
       {
-        action = "logout";
+        action = "suspend";
         enabled = true;
         keybind = "3";
       }
       {
-        action = "lock";
-        enabled = false;
-        keybind = "6";
-      }
-      {
-        action = "suspend";
-        enabled = false;
+        action = "logout";
+        enabled = true;
         keybind = "4";
       }
       {
         action = "hibernate";
         enabled = false;
         keybind = "5";
+      }
+      {
+        action = "lock";
+        enabled = false;
+        keybind = "6";
       }
       {
         action = "rebootToUefi";

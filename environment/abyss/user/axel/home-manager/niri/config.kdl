@@ -1,8 +1,9 @@
-spawn-at-startup "noctalia-shell"
 workspace "1"
 workspace "2"
 workspace "3"
 workspace "4"
+spawn-at-startup "noctalia-shell"
+spawn-at-startup "wl-clip-persist"
 hotkey-overlay {
     skip-at-startup
 }

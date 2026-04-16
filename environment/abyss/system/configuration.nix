@@ -11,6 +11,7 @@
     noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
     xwayland-satellite
     wl-clipboard
+    wl-clip-persist
     nautilus
   ];
 }

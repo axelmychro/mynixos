@@ -1,10 +1,10 @@
 _: {
   programs.bash.initExtra = ''
-    ${builtins.readFile ./my.sh}
+    ${builtins.readFile ./my.bash}
 
-    ${builtins.readFile ./cpprun.sh}
-    ${builtins.readFile ./crun.sh}
-    ${builtins.readFile ./mcd.sh}
-    ${builtins.readFile ./rm.sh}
+    ${builtins.readFile ./cpprun.bash}
+    ${builtins.readFile ./crun.bash}
+    ${builtins.readFile ./mcd.bash}
+    ${builtins.readFile ./rm.bash}
   '';
 }

@@ -4,6 +4,7 @@ _: {
 
     extensions = [
       "git-firefly"
+      "editorconfig"
       "wakatime"
     ];
 
@@ -39,14 +40,16 @@ _: {
       auto_indent_on_paste = true;
 
       cursor_blink = true;
-      cursor_shape = "underline";
+      cursor_shape = "block";
       hide_mouse = "on_typing_and_movement";
       multi_cursor_modifier = "alt";
 
       when_closing_with_no_tabs = "close_window";
       on_last_window_closed = "quit_app";
 
-      tab_size = 2;
+      vim_mode = true;
+      hard_tabs = true;
+      tab_size = 4;
       preferred_line_length = 80;
 
       redact_private_values = true;

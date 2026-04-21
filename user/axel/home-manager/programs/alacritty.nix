@@ -13,7 +13,7 @@ _: {
       };
       cursor = {
         style = {
-          shape = "Underline";
+          shape = "Block";
           blinking = "On";
         };
       };

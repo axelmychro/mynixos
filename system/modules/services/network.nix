@@ -20,5 +20,5 @@ _: {
     dnssec = "true";
     domains = [ "~." ];
   };
-  services.cloudflare-warp.enable = true; # conflicts with resolved
+  services.cloudflare-warp.enable = false; # conflicts with resolved
 }

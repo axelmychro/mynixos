@@ -23,19 +23,25 @@
     enable = true;
     theme = "rei";
     backgrounds = {
-      "rei.mp4" = ../../assets/rei.mp4;
+      "pries.mp4" = ../../assets/pries.mp4;
     };
 
     settings = {
       "LoginScreen" = {
-        background = "rei.mp4";
+        background = "pries.mp4";
       };
       "LockScreen" = {
-        background = "rei.mp4";
+        background = "pries.mp4";
       };
       "LockScreen.Message" = {
         text = "Welcome back, Oracle.";
       };
     };
+  };
+  system.activationScripts.face = {
+    text = ''
+      rm -f /var/lib/AccountsService/icons/*
+      ln -sfn ${../../assets/face.jpg} /var/lib/AccountsService/icons/axel
+    '';
   };
 }

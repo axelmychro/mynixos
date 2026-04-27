@@ -41,7 +41,7 @@ cursor {
     xcursor-size 48
 }
 layout {
-    gaps 16
+    gaps 12
     background-color "#2e3440"
     center-focused-column "never"
     preset-column-widths {
@@ -54,7 +54,7 @@ layout {
         proportion 1.0
     }
     default-column-width {
-        proportion 0.75
+        proportion 1.0
     }
     focus-ring {
         width 2
@@ -82,14 +82,10 @@ animations {
     slowdown 0.7
 }
 window-rule {
-    geometry-corner-radius 2
+    geometry-corner-radius 12
     clip-to-geometry true
-    draw-border-with-background false
+    draw-border-with-background true
     open-focused false
-}
-window-rule {
-    match app-id="vesktop"
-    open-on-workspace "1"
 }
 window-rule {
     match app-id="firefox"
@@ -97,7 +93,6 @@ window-rule {
 }
 window-rule {
     match app-id="dev.zed.Zed"
-    geometry-corner-radius 12
     open-on-workspace "3"
 }
 binds {

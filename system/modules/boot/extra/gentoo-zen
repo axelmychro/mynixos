@@ -1,7 +1,0 @@
-menuentry 'Gentoo (Zen)' --class gentoo --class gnu-linux --class gnu --class os {
-    insmod part_gpt
-    insmod fat
-    search --no-floppy --fs-uuid --set=root 800C-0267
-    linux /kernels-zen/vmlinuz-6.19.12-zen1 root=/dev/nvme0n1p3 rw quiet
-    initrd /kernels-zen/initramfs-6.19.12-zen1.img
-}

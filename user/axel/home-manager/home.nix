@@ -36,8 +36,8 @@
       };
       qt = {
         enable = true;
-        platformTheme.name = "gtk";
-        style.name = "Nordic";
+        # platformTheme.name = "gtk";
+        # style.name = "Nordic";
       };
       imports = [
         ./default-apps/index.nix

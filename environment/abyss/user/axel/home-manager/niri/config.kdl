@@ -15,7 +15,6 @@ input {
         numlock
     }
     touchpad {
-        disabled-on-external-mouse
         accel-profile "flat"
         tap
         dwt
@@ -174,9 +173,6 @@ binds {
     Mod+Ctrl+R {
         reset-window-height
     }
-    Mod+Equal {
-        set-column-width "+10%"
-    }
     Mod+F {
         toggle-window-floating
     }
@@ -191,6 +187,9 @@ binds {
     }
     Mod+L {
         focus-column-right
+    }
+    Mod+Equal {
+        set-column-width "+10%"
     }
     Mod+Minus {
         set-column-width "-10%"
@@ -207,7 +206,7 @@ binds {
     Mod+Shift+C {
         center-visible-columns
     }
-    Mod+Shift+E {
+    Mod+Alt+Q {
         quit
     }
     Mod+Shift+F {
@@ -219,7 +218,7 @@ binds {
     Mod+Shift+K {
         move-column-to-workspace-up
     }
-    Mod+Shift+Q repeat=false {
+    Mod+Ctrl+Q repeat=false {
         close-window
     }
     Mod+Shift+Slash {
@@ -294,14 +293,10 @@ binds {
     Mod+Ctrl+9 {
         move-column-to-workspace 9
     }
-    // --- SCREENSHOTS ---
     Print {
         screenshot-screen
     }
-    Ctrl+Print {
+    Shift+Print {
         screenshot
-    }
-    Mod+Print {
-        screenshot-window
     }
 }

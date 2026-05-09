@@ -3,9 +3,7 @@ let
   bootPartition = "800C-0267";
   gentooPartition = "/dev/nvme0n1p3";
   gentooKernelDir = "kernels-gentoo";
-  gentooKernelLabel = "7.0.5-gentoo-dist";
   zenKernelDir = "kernels-zen";
-  zenKernelLabel = "7.0.5-zen1";
 in
 {
   boot.loader.grub.extraEntries = ''
@@ -14,15 +12,15 @@ in
         insmod part_gpt
         insmod fat
         search --no-floppy --fs-uuid --set=root ${bootPartition}
-        linux /${gentooKernelDir}/vmlinuz-${gentooKernelLabel} root=${gentooPartition} rw quiet loglevel=3 nowatchdog fsck.mode=force fsck.repair=yes
-        # initrd /${gentooKernelDir}/initramfs-${gentooKernelLabel}.img
+        linux /${gentooKernelDir}/vmlinuz root=${gentooPartition} rw quiet loglevel=3 nowatchdog fsck.mode=force fsck.repair=yes
+        initrd /${gentooKernelDir}/initramfs.img
       }
       menuentry 'zen-sources' --class gentoo --class gnu-linux --class gnu --class os {
         insmod part_gpt
         insmod fat
         search --no-floppy --fs-uuid --set=root ${bootPartition}
-        linux /${zenKernelDir}/vmlinuz-${zenKernelLabel} root=${gentooPartition} rw quiet
-        # initrd /${zenKernelDir}/initramfs-${zenKernelLabel}.img
+        linux /${zenKernelDir}/vmlinuz root=${gentooPartition} rw quiet
+        initrd /${zenKernelDir}/initramfs.img
       }
     }
   '';

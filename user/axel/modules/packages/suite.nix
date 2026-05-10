@@ -7,5 +7,6 @@
     libreoffice
     zoom-us
     obsidian
+    pspp
   ];
 }
